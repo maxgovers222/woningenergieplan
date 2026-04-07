@@ -4,7 +4,7 @@ CREATE TABLE pseo_pages (
   provincie TEXT NOT NULL,
   stad TEXT NOT NULL,
   wijk TEXT,
-  straat TEXT NOT NULL,
+  straat TEXT,
   postcode_prefix TEXT,
   titel TEXT,
   meta_description TEXT,

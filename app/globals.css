@@ -8,7 +8,6 @@
   --color-background: #0f172a;      /* slate-900 */
   --color-surface: #1e293b;         /* slate-800 */
   --color-surface-2: #334155;       /* slate-700 */
-  --color-primary: #f59e0b;         /* amber-500 */
   --color-primary-hover: #d97706;   /* amber-600 */
   --color-primary-muted: #fbbf24;   /* amber-400 */
   --color-text: #f1f5f9;            /* slate-100 */
@@ -138,9 +137,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
     background-color: var(--color-background);
     color: var(--color-text);
+    font-family: var(--font-family-sans);
   }
   html {
     @apply font-sans;

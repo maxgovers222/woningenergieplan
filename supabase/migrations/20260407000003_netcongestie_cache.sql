@@ -16,3 +16,9 @@ CREATE TABLE b2b_partners (
   lead_filter JSONB DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Index for cache expiry cleanup queries
+CREATE INDEX netcongestie_expires_idx ON netcongestie_cache(expires_at);
+
+-- Add updated_at to b2b_partners for audit trail
+ALTER TABLE b2b_partners ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
