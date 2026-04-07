@@ -70,7 +70,13 @@ Antwoord uitsluitend in dit JSON formaat:
   if (!jsonMatch) throw new Error('Gemini response bevat geen geldig JSON')
 
   const parsed = JSON.parse(jsonMatch[0]) as PseoContent
-  if (!parsed.titel || !parsed.hoofdtekst || !parsed.faqItems) {
+  if (
+    !parsed.titel ||
+    !parsed.metaDescription ||
+    !parsed.hoofdtekst ||
+    !Array.isArray(parsed.faqItems) ||
+    parsed.faqItems.length === 0
+  ) {
     throw new Error('Gemini response mist vereiste velden')
   }
 
@@ -94,7 +100,8 @@ const TYPE_LABELS: Record<ImageType, string> = {
 
 export async function screenImage(
   imageBase64: string,
-  imageType: ImageType
+  imageType: ImageType,
+  mimeType: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg'
 ): Promise<ScreeningResult> {
   const model = getFlashModel()
 
@@ -110,7 +117,7 @@ Antwoord uitsluitend in dit JSON formaat:
   const imagePart = {
     inlineData: {
       data: imageBase64,
-      mimeType: 'image/jpeg' as const,
+      mimeType,
     },
   }
 

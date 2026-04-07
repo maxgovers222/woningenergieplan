@@ -35,7 +35,7 @@ export interface OmvormerAnalyse {
 
 const SCREENING_THRESHOLD = 0.7  // Minimum confidence for Tier 1 pass
 
-async function deepAnalyseMeterkast(imageBase64: string): Promise<MeterkastAnalyse> {
+async function deepAnalyseMeterkast(imageBase64: string, mimeType: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg'): Promise<MeterkastAnalyse> {
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 1024,
@@ -44,7 +44,7 @@ async function deepAnalyseMeterkast(imageBase64: string): Promise<MeterkastAnaly
       content: [
         {
           type: 'image',
-          source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 },
+          source: { type: 'base64', media_type: mimeType, data: imageBase64 },
         },
         {
           type: 'text',
@@ -87,7 +87,7 @@ Antwoord uitsluitend in dit JSON formaat:
   }
 }
 
-async function deepAnalysePlaatsing(imageBase64: string): Promise<PlaatsingsAnalyse> {
+async function deepAnalysePlaatsing(imageBase64: string, mimeType: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg'): Promise<PlaatsingsAnalyse> {
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 1024,
@@ -96,7 +96,7 @@ async function deepAnalysePlaatsing(imageBase64: string): Promise<PlaatsingsAnal
       content: [
         {
           type: 'image',
-          source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 },
+          source: { type: 'base64', media_type: mimeType, data: imageBase64 },
         },
         {
           type: 'text',
@@ -136,7 +136,7 @@ Antwoord uitsluitend in dit JSON formaat:
   }
 }
 
-async function deepAnalyseOmvormer(imageBase64: string): Promise<OmvormerAnalyse> {
+async function deepAnalyseOmvormer(imageBase64: string, mimeType: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg'): Promise<OmvormerAnalyse> {
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 1024,
@@ -145,7 +145,7 @@ async function deepAnalyseOmvormer(imageBase64: string): Promise<OmvormerAnalyse
       content: [
         {
           type: 'image',
-          source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 },
+          source: { type: 'base64', media_type: mimeType, data: imageBase64 },
         },
         {
           type: 'text',
@@ -201,26 +201,35 @@ export class VisionScreeningError extends Error {
   }
 }
 
-export async function analyseMeterkast(imageBase64: string): Promise<MeterkastAnalyse> {
-  const screening = await screenImage(imageBase64, 'meterkast')
+export async function analyseMeterkast(
+  imageBase64: string,
+  mimeType: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg'
+): Promise<MeterkastAnalyse> {
+  const screening = await screenImage(imageBase64, 'meterkast', mimeType)
   if (!screening.isCorrectType || screening.confidence < SCREENING_THRESHOLD) {
     throw new VisionScreeningError('meterkast', screening.confidence, screening.redenering)
   }
-  return deepAnalyseMeterkast(imageBase64)
+  return deepAnalyseMeterkast(imageBase64, mimeType)
 }
 
-export async function analysePlaatsing(imageBase64: string): Promise<PlaatsingsAnalyse> {
-  const screening = await screenImage(imageBase64, 'plaatsingslocatie')
+export async function analysePlaatsing(
+  imageBase64: string,
+  mimeType: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg'
+): Promise<PlaatsingsAnalyse> {
+  const screening = await screenImage(imageBase64, 'plaatsingslocatie', mimeType)
   if (!screening.isCorrectType || screening.confidence < SCREENING_THRESHOLD) {
     throw new VisionScreeningError('plaatsingslocatie', screening.confidence, screening.redenering)
   }
-  return deepAnalysePlaatsing(imageBase64)
+  return deepAnalysePlaatsing(imageBase64, mimeType)
 }
 
-export async function analyseOmvormer(imageBase64: string): Promise<OmvormerAnalyse> {
-  const screening = await screenImage(imageBase64, 'omvormer')
+export async function analyseOmvormer(
+  imageBase64: string,
+  mimeType: 'image/jpeg' | 'image/png' | 'image/webp' = 'image/jpeg'
+): Promise<OmvormerAnalyse> {
+  const screening = await screenImage(imageBase64, 'omvormer', mimeType)
   if (!screening.isCorrectType || screening.confidence < SCREENING_THRESHOLD) {
     throw new VisionScreeningError('omvormer', screening.confidence, screening.redenering)
   }
-  return deepAnalyseOmvormer(imageBase64)
+  return deepAnalyseOmvormer(imageBase64, mimeType)
 }

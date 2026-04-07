@@ -27,11 +27,21 @@ export async function POST(request: Request) {
     return Response.json({ error: 'imageBase64 is vereist' }, { status: 400 })
   }
 
+  // Strip data-URL prefix (e.g. "data:image/jpeg;base64,")
+  const base64Data = imageBase64.replace(/^data:[^;]+;base64,/, '')
+  const mimeMatch = imageBase64.match(/^data:([^;]+);base64,/)
+  const mimeType = (mimeMatch?.[1] ?? 'image/jpeg') as 'image/jpeg' | 'image/png' | 'image/webp'
+
+  // Validate it's actually base64 after stripping
+  if (base64Data.length < 100) {
+    return Response.json({ error: 'imageBase64 is te kort of ongeldig' }, { status: 400 })
+  }
+
   try {
     let result
-    if (type === 'meterkast') result = await analyseMeterkast(imageBase64)
-    else if (type === 'plaatsingslocatie') result = await analysePlaatsing(imageBase64)
-    else result = await analyseOmvormer(imageBase64)
+    if (type === 'meterkast') result = await analyseMeterkast(base64Data, mimeType)
+    else if (type === 'plaatsingslocatie') result = await analysePlaatsing(base64Data, mimeType)
+    else result = await analyseOmvormer(base64Data, mimeType)
 
     return Response.json({ type, analyse: result })
   } catch (err) {

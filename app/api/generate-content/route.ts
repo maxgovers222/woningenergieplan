@@ -16,6 +16,10 @@ export async function POST(request: Request) {
     return Response.json({ error: 'straat, stad en bouwjaar zijn verplicht' }, { status: 400 })
   }
 
+  if (typeof params.bouwjaar !== 'number' || params.bouwjaar < 1800 || params.bouwjaar > 2025) {
+    return Response.json({ error: 'bouwjaar moet een getal zijn tussen 1800 en 2025' }, { status: 400 })
+  }
+
   try {
     const content = await generatePseoContent(params)
     return Response.json(content)
