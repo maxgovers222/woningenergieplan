@@ -53,7 +53,7 @@ export interface ROIResult {
   shockEffect2027: ShockEffect2027
 
   // Aanbeveling
-  aanbeveling: 'panelen' | 'batterij' | 'beide'
+  aanbeveling: 'panelen' | 'beide'
   aanbevelingTekst: string
 
   // Subsidie pre-fill
@@ -133,7 +133,7 @@ export function berekenROI(input: ROIInput): ROIResult {
     geschatVerbruikKwh: verbruikKwh,
     aantalPanelen,
     productieKwh,
-    eigenGebruikPct: Math.round((eigenGebruikBasisKwh / productieKwh) * 100),
+    eigenGebruikPct: productieKwh > 0 ? Math.round((eigenGebruikBasisKwh / productieKwh) * 100) : 0,
 
     scenarioNu: {
       naam: 'Nu installeren',
