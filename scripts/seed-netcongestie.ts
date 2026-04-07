@@ -2,6 +2,7 @@
 // Run with: npx tsx scripts/seed-netcongestie.ts
 import { createClient } from '@supabase/supabase-js'
 import * as dotenv from 'dotenv'
+import { getSeedStatus, getNetbeheerderNaam } from '../lib/netcongestie'
 
 dotenv.config({ path: '.env.local' })
 
@@ -10,46 +11,19 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-// Same logic as netcongestie.ts but duplicated for standalone script
-const CONGESTION_SEED = [
-  { van: 1000, tot: 1109, status: 'ROOD' },
-  { van: 1110, tot: 1299, status: 'ORANJE' },
-  { van: 2490, tot: 2599, status: 'ROOD' },
-  { van: 3010, tot: 3099, status: 'ROOD' },
-  { van: 3500, tot: 3599, status: 'ORANJE' },
-  { van: 8200, tot: 8299, status: 'ROOD' },
-  { van: 8700, tot: 8799, status: 'ROOD' },
-  { van: 4600, tot: 4799, status: 'ROOD' },
-] as const
-
-function getSeedStatus(prefix: number): 'ROOD' | 'ORANJE' | 'GROEN' {
-  const match = CONGESTION_SEED.find(r => prefix >= r.van && prefix <= r.tot)
-  if (match) return match.status
-  if ((prefix >= 1000 && prefix <= 1999) || (prefix >= 2000 && prefix <= 3999)) return 'ORANJE'
-  return 'GROEN'
-}
-
-const NETBEHEERDER_MAP = [
-  { van: 1000, tot: 1999, naam: 'Liander' },
-  { van: 2000, tot: 3999, naam: 'Stedin' },
-  { van: 4000, tot: 9999, naam: 'Enexis' },
-]
-
-function getNetbeheerder(prefix: number): string {
-  return NETBEHEERDER_MAP.find(r => prefix >= r.van && prefix <= r.tot)?.naam ?? 'Onbekend'
-}
-
 async function seed() {
   console.log('Seeding netcongestie_cache for all Dutch postcode prefixes (1000-9999)...')
   const rows = []
+  const now = new Date().toISOString()
   const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
 
   for (let prefix = 1000; prefix <= 9999; prefix++) {
     rows.push({
       postcode_prefix: String(prefix),
-      status: getSeedStatus(prefix),
-      netbeheerder: getNetbeheerder(prefix),
+      status: getSeedStatus(String(prefix)),
+      netbeheerder: getNetbeheerderNaam(String(prefix)),
       capaciteit_details: { bron: 'seed_v1' },
+      cached_at: now,
       expires_at: expires,
     })
   }

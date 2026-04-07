@@ -13,7 +13,7 @@ export interface NetcongestieResult {
 
 // Map of postcode prefix ranges to netbeheerder
 // Source: https://www.netbeheernederland.nl/
-const NETBEHEERDER_MAP: Array<{ van: number; tot: number; naam: string }> = [
+export const NETBEHEERDER_MAP: Array<{ van: number; tot: number; naam: string }> = [
   { van: 1000, tot: 1999, naam: 'Liander' },   // Noord-Holland
   { van: 2000, tot: 2999, naam: 'Stedin' },    // Zuid-Holland/Zeeland
   { van: 3000, tot: 3999, naam: 'Stedin' },    // Utrecht/Zuid-Holland
@@ -25,7 +25,7 @@ const NETBEHEERDER_MAP: Array<{ van: number; tot: number; naam: string }> = [
   { van: 9000, tot: 9999, naam: 'Enexis' },    // Groningen/Drenthe
 ]
 
-function getNetbeheerder(postcodePrefix: string): string {
+export function getNetbeheerderNaam(postcodePrefix: string): string {
   const num = parseInt(postcodePrefix)
   return NETBEHEERDER_MAP.find(r => num >= r.van && num <= r.tot)?.naam ?? 'Onbekend'
 }
@@ -43,7 +43,7 @@ function getUitleg(status: NetcongestieStatus, netbeheerder: string): string {
 
 // Seed data: realistic congestion status per postcode prefix range (Q1 2026)
 // Based on public Netbeheer Nederland capacity maps
-const CONGESTION_SEED: Array<{ van: number; tot: number; status: NetcongestieStatus }> = [
+export const CONGESTION_SEED: Array<{ van: number; tot: number; status: NetcongestieStatus }> = [
   // Randstad areas: high congestion
   { van: 1000, tot: 1109, status: 'ROOD' },    // Amsterdam centrum
   { van: 1110, tot: 1299, status: 'ORANJE' },  // Amsterdam suburbs
@@ -57,7 +57,7 @@ const CONGESTION_SEED: Array<{ van: number; tot: number; status: NetcongestieSta
   // Default: most areas are orange or green
 ]
 
-function getSeedStatus(postcodePrefix: string): NetcongestieStatus {
+export function getSeedStatus(postcodePrefix: string): NetcongestieStatus {
   const num = parseInt(postcodePrefix)
   const match = CONGESTION_SEED.find(r => num >= r.van && num <= r.tot)
   if (match) return match.status
@@ -70,16 +70,18 @@ export async function getNetcongestie(postcode: string): Promise<NetcongestieRes
   const postcodePrefix = postcode.replace(/\s/g, '').substring(0, 4)
 
   // 1. Check cache (valid entries only)
-  const { data: cached } = await supabaseAdmin
+  const { data: cached, error: cacheError } = await supabaseAdmin
     .from('netcongestie_cache')
     .select('status, netbeheerder, capaciteit_details')
     .eq('postcode_prefix', postcodePrefix)
     .gt('expires_at', new Date().toISOString())
     .single()
 
+  if (cacheError) console.error('[netcongestie] cache lookup failed:', cacheError.message)
+
   if (cached) {
     const status = cached.status as NetcongestieStatus
-    const netbeheerder = cached.netbeheerder ?? getNetbeheerder(postcodePrefix)
+    const netbeheerder = cached.netbeheerder ?? getNetbeheerderNaam(postcodePrefix)
     return {
       status,
       netbeheerder,
@@ -91,10 +93,10 @@ export async function getNetcongestie(postcode: string): Promise<NetcongestieRes
 
   // 2. Cache miss: use seed data (in production, replace with live Netbeheer NL API)
   const status = getSeedStatus(postcodePrefix)
-  const netbeheerder = getNetbeheerder(postcodePrefix)
+  const netbeheerder = getNetbeheerderNaam(postcodePrefix)
 
   // 3. Write to cache (upsert, expires in 24h)
-  await supabaseAdmin
+  const { error: upsertError } = await supabaseAdmin
     .from('netcongestie_cache')
     .upsert({
       postcode_prefix: postcodePrefix,
@@ -104,6 +106,8 @@ export async function getNetcongestie(postcode: string): Promise<NetcongestieRes
       cached_at: new Date().toISOString(),
       expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     }, { onConflict: 'postcode_prefix' })
+
+  if (upsertError) console.error('[netcongestie] cache upsert failed:', upsertError.message)
 
   return {
     status,
