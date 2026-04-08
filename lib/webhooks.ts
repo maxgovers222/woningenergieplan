@@ -112,13 +112,14 @@ export async function dispatchToPartners(leadId: string): Promise<{ dispatched: 
   }
 
   // Mark as exported
-  await supabaseAdmin
+  const { error: updateError } = await supabaseAdmin
     .from('leads')
     .update({
       b2b_export_status: dispatched > 0 ? 'exported' : 'failed',
       b2b_exported_at: new Date().toISOString(),
     })
     .eq('id', leadId)
+  if (updateError) console.error('[webhooks] export status update failed:', updateError.message)
 
   return { dispatched }
 }

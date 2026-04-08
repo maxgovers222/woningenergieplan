@@ -90,6 +90,7 @@ export interface FunnelState {
     netbeheerder: string
     uitleg: string
     terugleveringBeperkt: boolean
+    postcodePrefix?: string
   } | null
   healthScore: HealthScoreResult | null
   roiResult: ROIResult | null
