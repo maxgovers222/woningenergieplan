@@ -258,7 +258,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
               </div>
             </div>
             <span className="text-xs font-mono text-slate-500 leading-relaxed">
-              Ja, ik ontvang graag mijn Persoonlijke 2027-Rapport. Ik geef toestemming om mijn scandata te laten valideren door een gecertificeerde energie-expert van Saldeerscan.nl in mijn regio voor een definitief configuratie-advies.{' '}
+              Ja, ik ontvang graag mijn Persoonlijke 2027-Rapport. Ik geef toestemming om mijn scandata te laten valideren door een gecertificeerde energie-expert van SaldeerScan.nl in mijn regio voor een definitief configuratie-advies.{' '}
               <a href="/privacy" className="text-amber-600 hover:text-amber-500 underline" target="_blank" rel="noopener noreferrer">Privacyverklaring →</a>
             </span>
           </label>

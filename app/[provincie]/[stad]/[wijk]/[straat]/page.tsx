@@ -35,12 +35,12 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return {
     title: page.titel ?? `Energiebesparing ${p.straat} ${p.stad}`,
     description: page.metaDescription ?? undefined,
-    alternates: { canonical: `https://woningenergieplan.nl${page.slug}` },
+    alternates: { canonical: `https://saldeerscan.nl${page.slug}` },
     openGraph: {
       title: page.titel ?? undefined,
       description: page.metaDescription ?? undefined,
-      url: `https://woningenergieplan.nl${page.slug}`,
-      siteName: 'WoningEnergiePlan.nl',
+      url: `https://saldeerscan.nl${page.slug}`,
+      siteName: 'SaldeerScan.nl',
       locale: 'nl_NL',
       type: 'website',
     },

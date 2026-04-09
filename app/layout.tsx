@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Saldeerscan.nl — Gratis 2027 saldeercheck voor uw woning",
+  title: "SaldeerScan.nl — Gratis 2027 saldeercheck voor uw woning",
   description: "Ontdek in 3 minuten wat de afschaffing van salderen op 1 januari 2027 voor uw woning betekent. Gratis AI-scan, BAG-data en persoonlijk investeringsrapport.",
 };
 

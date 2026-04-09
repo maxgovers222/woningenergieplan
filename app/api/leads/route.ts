@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       gdpr_consent: true,
       consent_timestamp: new Date().toISOString(),
       consent_ip: ip,
-      consent_tekst: 'Ja, ik ontvang graag mijn Persoonlijke 2027-Rapport. Ik geef toestemming om mijn scandata te laten valideren door een gecertificeerde energie-expert van Saldeerscan.nl in mijn regio voor een definitief configuratie-advies.',
+      consent_tekst: 'Ja, ik ontvang graag mijn Persoonlijke 2027-Rapport. Ik geef toestemming om mijn scandata te laten valideren door een gecertificeerde energie-expert van SaldeerScan.nl in mijn regio voor een definitief configuratie-advies.',
 
       // Funnel metadata
       funnel_step: 6,

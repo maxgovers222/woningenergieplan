@@ -1,5 +1,5 @@
 /**
- * Golden Batch Seed — Saldeerscan.nl
+ * Golden Batch Seed — SaldeerScan.nl
  *
  * Fase 1 — Golden Batch (27 focus-wijken):
  *   Gemini 2.5 Flash genereert rijke content (titel + meta + 600w + 3 FAQs + JSON-LD)
@@ -121,7 +121,7 @@ async function generateRichContent(e: WijkEntry): Promise<RichContent> {
       ? 'de groeiende netdruk — batterijopslag optimaliseert de teruglevering nu al'
       : 'de gunstige groene netstatus — ideale omstandigheden voor maximale teruglevering'
 
-  const prompt = `Je bent een SEO-expert voor de Nederlandse energiemarkt. Schrijf een SEO-artikel van precies 600 woorden voor Saldeerscan.nl.
+  const prompt = `Je bent een SEO-expert voor de Nederlandse energiemarkt. Schrijf een SEO-artikel van precies 600 woorden voor SaldeerScan.nl.
 
 Onderwerp: Zonnepanelen en energiebesparing voor woningen in de wijk ${e.wijk} in ${e.stad} (${e.provincie.replace(/-/g, ' ')}).
 
@@ -175,7 +175,7 @@ function generateTemplateContent(e: WijkEntry): RichContent {
     bouwjaar >= 2005
       ? `Woningen uit ${bouwjaar} hebben doorgaans een uitstekende dakisolatie en een moderne groepenkast die zonnepanelen ondersteunt zonder extra aanpassingen.`
       : bouwjaar >= 1995
-      ? `Woningen uit ${bouwjaar} voldoen in de meeste gevallen aan de minimale eisen voor zonnepanelen. Een snelle check via Saldeerscan.nl bevestigt de specifieke situatie.`
+      ? `Woningen uit ${bouwjaar} voldoen in de meeste gevallen aan de minimale eisen voor zonnepanelen. Een snelle check via SaldeerScan.nl bevestigt de specifieke situatie.`
       : `Woningen uit ${bouwjaar} vereisen soms een dakcheck of groepenkast-upgrade. Dit verlaagt de netto-investering minimaal en de terugverdientijd blijft marktconform.`
 
   return {
@@ -189,7 +189,7 @@ ${bouwjaarKarakter}
 
 Met een gemiddeld dakoppervlak van 40–60 m² en een jaarlijkse opbrengst van 900–1.100 kWh per geïnstalleerd kWp is de businesscase voor zonnepanelen in ${wijk} sterk. Een investering van €6.000–€9.000 levert bij huidige tarieven een terugverdientijd van 7–10 jaar — maar die rekensommen veranderen drastisch na 2027. Wie nú handelt, pakt nog drie volle salderingsjaren mee.
 
-Bereken uw persoonlijke ROI via de gratis Saldeerscan op deze pagina. U heeft in vijf minuten uitsluitsel over het dakpotentieel, de exacte besparing en de optimale systeemgrootte voor uw woning in ${wijk}.`,
+Bereken uw persoonlijke ROI via de gratis SaldeerScan op deze pagina. U heeft in vijf minuten uitsluitsel over het dakpotentieel, de exacte besparing en de optimale systeemgrootte voor uw woning in ${wijk}.`,
     faqItems: [
       {
         vraag: `Wanneer eindigt het salderen voor woningen in ${wijk}?`,
@@ -197,11 +197,11 @@ Bereken uw persoonlijke ROI via de gratis Saldeerscan op deze pagina. U heeft in
       },
       {
         vraag: `Zijn woningen in ${wijk} geschikt voor zonnepanelen?`,
-        antwoord: `${bouwjaarKarakter} Een gratis Saldeerscan geeft op basis van uw daktype, oriëntatie en bouwjaar in vijf minuten uitsluitsel over het individuele potentieel.`,
+        antwoord: `${bouwjaarKarakter} Een gratis SaldeerScan geeft op basis van uw daktype, oriëntatie en bouwjaar in vijf minuten uitsluitsel over het individuele potentieel.`,
       },
       {
         vraag: `Wat is de netcongestiestatus in ${wijk}?`,
-        antwoord: `De huidige netcongestiestatus voor ${wijk} is ${netcongestie}. ${netwerkTekst} Via de Saldeerscan ziet u welke combinatie van zonnepanelen en eventuele batterijopslag voor uw adres het meest rendabel is.`,
+        antwoord: `De huidige netcongestiestatus voor ${wijk} is ${netcongestie}. ${netwerkTekst} Via de SaldeerScan ziet u welke combinatie van zonnepanelen en eventuele batterijopslag voor uw adres het meest rendabel is.`,
       },
     ],
   }
@@ -533,7 +533,7 @@ async function run() {
     return
   }
 
-  console.log('\nSaldeerscan.nl — pSEO Wijk Seeder')
+  console.log('\nSaldeerScan.nl — pSEO Wijk Seeder')
   console.log(`Modus:  ${onlyGolden ? 'alleen Golden Batch' : 'Golden + Extended'}${dryRun ? ' [DRY RUN]' : ''}`)
   console.log(`Golden: ${GOLDEN_BATCH.length} wijken → published`)
   if (!onlyGolden) console.log(`Extended: ${EXTENDED_BATCH.length} wijken → draft`)

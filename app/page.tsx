@@ -31,7 +31,7 @@ function NavBar() {
             </svg>
           </div>
           <span className="font-bold text-[#0e352e] tracking-tight text-lg" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
-            Saldeerscan<span style={{ color: G }}>.nl</span>
+            SaldeerScan<span style={{ color: G }}>.nl</span>
           </span>
         </a>
         <div className="flex items-center gap-3">
@@ -254,7 +254,7 @@ function UspSection() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: G, fontFamily: 'var(--font-heading)' }}>
-            Waarom WoningEnergiePlan
+            Waarom SaldeerScan
           </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
             Alles in één gratis analyse
@@ -321,7 +321,7 @@ function Footer() {
                 </svg>
               </div>
               <span className="font-bold text-white text-base" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
-                WoningEnergiePlan.nl
+                SaldeerScan.nl
               </span>
             </div>
             <p className="text-sm max-w-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
@@ -338,7 +338,7 @@ function Footer() {
             <a href="/privacy" className="hover:text-white/50 transition-colors">Privacyverklaring</a>
             <a href="/check" className="hover:text-white/50 transition-colors">Analyseer uw woning</a>
           </div>
-          <p className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.15)' }}>© 2026 WoningEnergiePlan.nl</p>
+          <p className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.15)' }}>© 2026 SaldeerScan.nl</p>
         </div>
       </div>
     </footer>

@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { provincie, stad, wijk } = await params
   const page = await getCachedWijkPage({ provincie, stad, wijk })
 
-  const title = page?.titel ?? `Saldeerscan ${wijk} ${stad} — 2027 check`
+  const title = page?.titel ?? `SaldeerScan ${wijk} ${stad} — 2027 check`
   const description = page?.metaDescription ?? `Gratis 2027 saldeercheck voor woningen in ${wijk}, ${stad}. AI-scan, ROI en investeringsrapport.`
 
   return {
@@ -72,7 +72,7 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
             </svg>
           </div>
           <span className="font-bold text-white text-sm" style={{ fontFamily: 'var(--font-heading)' }}>
-            Saldeerscan<span style={{ color: '#00aa65' }}>.nl</span>
+            SaldeerScan<span style={{ color: '#00aa65' }}>.nl</span>
           </span>
         </a>
       </nav>
@@ -167,7 +167,7 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
 
       {/* Footer */}
       <footer className="border-t px-6 py-8 text-center" style={{ borderColor: 'rgba(255,255,255,0.06)', background: '#020617' }}>
-        <p className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.2)' }}>© 2026 Saldeerscan.nl</p>
+        <p className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.2)' }}>© 2026 SaldeerScan.nl</p>
       </footer>
     </div>
   )

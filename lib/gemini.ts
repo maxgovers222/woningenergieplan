@@ -32,7 +32,7 @@ export interface PseoContentParams {
 export async function generatePseoContent(params: PseoContentParams): Promise<PseoContent> {
   const model = getFlashModel()
 
-  const prompt = `Je bent een SEO-expert voor de Nederlandse energiemarkt. Schrijf een SEO-artikel van precies 600 woorden voor WoningEnergiePlan.nl.
+  const prompt = `Je bent een SEO-expert voor de Nederlandse energiemarkt. Schrijf een SEO-artikel van precies 600 woorden voor SaldeerScan.nl.
 
 Onderwerp: Energiebesparing voor woningen op ${params.straat} in ${params.stad}, ${params.provincie}.
 

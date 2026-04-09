@@ -9,10 +9,10 @@ export function buildLocalBusinessSchema(params: {
   const graph: unknown[] = [
     {
       '@type': 'LocalBusiness',
-      '@id': `https://woningenergieplan.nl/${params.provincie}/${params.stad}`,
-      name: `WoningEnergiePlan — ${params.straat}, ${params.stad}`,
+      '@id': `https://saldeerscan.nl/${params.provincie}/${params.stad}`,
+      name: `SaldeerScan — ${params.straat}, ${params.stad}`,
       description: `Energieadvies en zonnepanelen planning voor woningen op ${params.straat} in ${params.stad}.`,
-      url: 'https://woningenergieplan.nl',
+      url: 'https://saldeerscan.nl',
       telephone: '+31-800-ENERGIE',
       address: {
         '@type': 'PostalAddress',

@@ -42,7 +42,7 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
   }
 
   return pages.map(p => ({
-    url: `https://woningenergieplan.nl${p.slug}`,
+    url: `https://saldeerscan.nl${p.slug}`,
     lastModified: p.generated_at ? new Date(p.generated_at) : new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
