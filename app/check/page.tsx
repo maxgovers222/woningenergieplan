@@ -41,6 +41,9 @@ function CheckPageInner() {
           </h1>
           <p className="text-white/50 text-sm mt-1.5">6 stappen naar uw persoonlijk investeringsrapport</p>
         </div>
+        <p className="text-xs font-mono text-amber-500/75 uppercase tracking-widest text-center mb-4 leading-relaxed">
+          ⚠️ Per 1 jan 2027 stopt de salderingsregeling volledig — uw voordeel van 28% (2026) vervalt
+        </p>
         <FunnelContainer initialAdres={initialAdres} initialWijk={initialWijk} initialStad={initialStad} />
       </div>
     </main>

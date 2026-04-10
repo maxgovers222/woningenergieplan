@@ -10,7 +10,7 @@ interface Step1AdresProps {
   dispatch: Dispatch<FunnelAction>
 }
 
-const amberBtnCls = 'bg-[#f59e0b] text-slate-950 font-bold rounded-full transition-all duration-200 shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:brightness-110 active:scale-[0.98] disabled:bg-transparent disabled:border disabled:border-amber-500/30 disabled:text-amber-500/40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100 disabled:brightness-100'
+const amberBtnCls = 'bg-[#f59e0b] text-slate-950 font-bold rounded-full transition-all duration-200 shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:brightness-110 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100 disabled:brightness-100'
 
 function HealthScoreGauge({ score, label }: { score: number; label: string }) {
   const colorClass =

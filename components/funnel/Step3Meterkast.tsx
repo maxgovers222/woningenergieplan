@@ -10,7 +10,7 @@ interface Step3MeterkastProps {
   dispatch: Dispatch<FunnelAction>
 }
 
-const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:opacity-90 active:scale-105 disabled:bg-transparent disabled:border disabled:border-amber-500/30 disabled:text-amber-500/40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
+const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_35px_rgba(245,158,11,0.5)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
 
 function MeterkastResultaat({ analyse }: { analyse: MeterkastAnalyse }) {
   return (
