@@ -41,10 +41,36 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
     return []
   }
 
-  return pages.map(p => ({
+  const now = new Date()
+
+  // Provincie-overzichtspagina
+  const provincieUrl = [{
+    url: `https://saldeerscan.nl/${resolvedId}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.9,
+  }]
+
+  // Stad-overzichtspagina's (unieke stads uit de wijk-slugs)
+  const stadSlugs = new Set(
+    pages
+      .map(p => p.slug.split('/').slice(0, 3).join('/'))
+      .filter(s => s.split('/').length === 3)
+  )
+  const stadUrls = Array.from(stadSlugs).map(s => ({
+    url: `https://saldeerscan.nl${s}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.85,
+  }))
+
+  // Wijk-pagina's
+  const wijkUrls = pages.map(p => ({
     url: `https://saldeerscan.nl${p.slug}`,
-    lastModified: p.generated_at ? new Date(p.generated_at) : new Date(),
+    lastModified: p.generated_at ? new Date(p.generated_at) : now,
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
+
+  return [...provincieUrl, ...stadUrls, ...wijkUrls]
 }

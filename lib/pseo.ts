@@ -119,3 +119,68 @@ export async function getPseoPagesByProvincie(provincie: string) {
     .eq('provincie', provincie)
   return data ?? []
 }
+
+export async function getWijkenByStad(provincie: string, stad: string) {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('wijk, gem_bouwjaar, gem_health_score, netcongestie_status, aantal_woningen')
+    .eq('provincie', provincie)
+    .eq('stad', stad)
+    .is('straat', null)
+    .not('wijk', 'is', null)
+    .eq('status', 'published')
+    .order('aantal_woningen', { ascending: false, nullsFirst: false })
+  return (data ?? []) as {
+    wijk: string
+    gem_bouwjaar: number | null
+    gem_health_score: number | null
+    netcongestie_status: string | null
+    aantal_woningen: number | null
+  }[]
+}
+
+export async function getStaddenByProvincie(provincie: string) {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('stad, aantal_woningen')
+    .eq('provincie', provincie)
+    .is('straat', null)
+    .not('wijk', 'is', null)
+    .eq('status', 'published')
+  if (!data) return []
+
+  // Deduplicate stads, sum woningen per stad
+  const map = new Map<string, number>()
+  for (const row of data) {
+    if (!row.stad) continue
+    map.set(row.stad, (map.get(row.stad) ?? 0) + (row.aantal_woningen ?? 0))
+  }
+  return Array.from(map.entries())
+    .map(([stad, totalWoningen]) => ({ stad, totalWoningen }))
+    .sort((a, b) => b.totalWoningen - a.totalWoningen)
+}
+
+export async function getTopStadden(limit = 100) {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('provincie, stad, aantal_woningen')
+    .is('straat', null)
+    .not('wijk', 'is', null)
+    .eq('status', 'published')
+  if (!data) return []
+
+  const map = new Map<string, { provincie: string; totalWoningen: number }>()
+  for (const row of data) {
+    if (!row.stad || !row.provincie) continue
+    const key = `${row.provincie}/${row.stad}`
+    const prev = map.get(key)
+    map.set(key, {
+      provincie: row.provincie,
+      totalWoningen: (prev?.totalWoningen ?? 0) + (row.aantal_woningen ?? 0),
+    })
+  }
+  return Array.from(map.entries())
+    .map(([key, val]) => ({ stad: key.split('/')[1], provincie: val.provincie, totalWoningen: val.totalWoningen }))
+    .sort((a, b) => b.totalWoningen - a.totalWoningen)
+    .slice(0, limit)
+}

@@ -148,8 +148,21 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
         </div>
       </nav>
 
+      {/* ── Breadcrumb ────────────────────────────────────────────── */}
+      <div className="max-w-4xl mx-auto px-6 pt-5">
+        <p className="text-xs font-mono text-white/30">
+          <a href="/" className="hover:text-white/60 transition-colors">Home</a>
+          {' · '}
+          <a href={`/${provincie}`} className="hover:text-white/60 transition-colors">{toDisplay(provincie)}</a>
+          {' · '}
+          <a href={`/${provincie}/${stad}`} className="hover:text-white/60 transition-colors">{stadDisplay}</a>
+          {' · '}
+          <span className="text-white/50">{wijkDisplay}</span>
+        </p>
+      </div>
+
       {/* ── Hero ──────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden px-6 pt-14 pb-10" style={{ background: N1 }}>
+      <section className="relative overflow-hidden px-6 pt-10 pb-10" style={{ background: N1 }}>
         {/* Grid overlay */}
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
