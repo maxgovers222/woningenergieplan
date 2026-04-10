@@ -4,6 +4,7 @@ import { useState, type Dispatch } from 'react'
 import type { FunnelState, FunnelAction } from './types'
 import { StepHeader } from './StepHeader'
 import { PDFDownloadButton } from './PDFDownloadButton'
+import { ResultsDashboard } from './ResultsDashboard'
 
 function extractStad(adres: string): string {
   const parts = adres.split(/[,\s]+/)
@@ -68,8 +69,8 @@ function IsdeSummaryCard({ bedragEur, apparaatType, vermogenKwp }: { bedragEur: 
 function SuccessState({ state }: { state: FunnelState }) {
   return (
     <div className="space-y-5 py-4">
-      {/* Bevestiging */}
-      <div className="text-center">
+      {/* Bevestiging header */}
+      <div className="text-center pb-2">
         <div className="w-14 h-14 bg-emerald-950/30 border border-emerald-500/40 rounded-full flex items-center justify-center mx-auto mb-3">
           <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
             <path d="M6 16l6 6L26 8" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -79,30 +80,8 @@ function SuccessState({ state }: { state: FunnelState }) {
         <p className="text-sm text-white/50 mt-1.5 font-mono">Een bevestiging is verstuurd naar uw e-mail</p>
       </div>
 
-      {/* PDF download — hoofdactie */}
-      <div className="bg-slate-900/40 border border-amber-500/20 rounded-2xl p-5">
-        <p className="text-[10px] font-mono uppercase tracking-widest text-amber-400/70 mb-1.5">Uw rapport staat klaar</p>
-        <p className="text-sm text-white/60 font-mono mb-4">
-          Download hieronder uw persoonlijk 2027-rapport met ROI-berekening, subsidie check en 2027-tijdlijn.
-        </p>
-        <PDFDownloadButton state={state} />
-      </div>
-
-      {/* Volgende stappen */}
-      <div className="bg-slate-900/40 border border-white/10 rounded-xl p-4 space-y-2">
-        <div className="text-[10px] font-mono text-white/40 uppercase tracking-widest mb-1">Wat gebeurt er verder?</div>
-        {[
-          'Installateur bekijkt uw energiedossier',
-          'U ontvangt een persoonlijke offerte',
-          'Gratis inspectie op locatie',
-          'ISDE subsidie aanvraag begeleiding',
-        ].map((step, i) => (
-          <div key={i} className="flex items-center gap-2 text-xs font-mono text-white/60">
-            <span className="text-emerald-400 font-bold">{i + 1}.</span>
-            {step}
-          </div>
-        ))}
-      </div>
+      {/* Full results dashboard */}
+      <ResultsDashboard state={state} />
     </div>
   )
 }
