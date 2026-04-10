@@ -161,13 +161,27 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
 
   return (
     <div className="p-6 space-y-6">
-      <StepHeader stap="// STAP 06 — AANVRAAG" title="Persoonlijk 2027-Rapport" subtitle="Ontvang uw investeringsrapport van een gecertificeerde energie-expert" />
+      <StepHeader stap="// STAP 06 — RAPPORT" title="Ontvang uw gratis PDF-rapport" subtitle="Vul uw gegevens in — wij sturen het rapport direct naar uw e-mail" />
 
       {isde && <IsdeSummaryCard {...isde} />}
 
+      {/* PDF delivery promise */}
+      <div className="flex items-center gap-3 bg-emerald-950/30 border border-emerald-600/30 rounded-xl px-4 py-3">
+        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M14 2v6h6M9 13h6M9 17h4" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-emerald-400">U ontvangt gratis een PDF-rapport</p>
+          <p className="text-xs font-mono text-white/40 mt-0.5">Direct naar uw e-mail · Geen verplichtingen · Binnen 24 uur</p>
+        </div>
+      </div>
+
       {/* Floating report preview card */}
       <div className="bg-slate-900/40 border border-white/10 rounded-2xl p-5">
-        <div className="text-[10px] font-mono text-amber-400 uppercase tracking-widest mb-3">📄 Persoonlijk Investeringsrapport 2027</div>
+        <div className="text-[10px] font-mono text-amber-400 uppercase tracking-widest mb-3">📄 Dit staat in uw PDF-rapport</div>
         <div className="space-y-1.5 mb-3">
           {[
             { label: 'ROI-berekening', value: state.roiResult ? `€${state.roiResult.scenarioNu.besparingJaarEur.toLocaleString('nl-NL')}/jaar` : '—', done: !!state.roiResult },
@@ -260,7 +274,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
               </div>
             </div>
             <span className="text-xs font-mono text-white/50 leading-relaxed">
-              Ja, ik ontvang graag mijn Persoonlijke 2027-Rapport. Ik geef toestemming om mijn scandata te laten valideren door een gecertificeerde energie-expert van SaldeerScan.nl in mijn regio voor een definitief configuratie-advies.{' '}
+              Ja, stuur mij het gratis PDF-rapport. Ik geef toestemming om mijn scandata te laten valideren door een gecertificeerde energie-expert van SaldeerScan.nl in mijn regio.{' '}
               <a href="/privacy" className="text-amber-400 hover:text-amber-300 underline" target="_blank" rel="noopener noreferrer">Privacyverklaring →</a>
             </span>
           </label>
@@ -277,7 +291,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
           className={`w-full font-mono text-sm py-3.5 px-6 flex items-center justify-center gap-2 ${amberBtnCls}`}>
           {loading ? (
             <><div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />Indienen...</>
-          ) : 'Offerte aanvragen →'}
+          ) : '📄 Stuur mij het gratis PDF-rapport →'}
         </button>
 
         <p className="text-[10px] font-mono text-white/30 text-center">
