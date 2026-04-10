@@ -113,23 +113,29 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
       {page.jsonLd && Object.keys(page.jsonLd).length > 0 && <LocalSchema jsonLd={page.jsonLd} />}
 
       {/* ── Nav ───────────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-white/5 px-6 h-14 flex items-center justify-between backdrop-blur-md"
-        style={{ background: 'rgba(2,6,23,0.92)' }}>
-        <a href="/" className="flex items-center gap-2.5">
-          <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: '#00aa65' }}>
-            <svg width="12" height="12" viewBox="0 0 18 18" fill="none">
-              <path d="M9 2L15.5 6V13L9 17L2.5 13V6L9 2Z" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="1.3" strokeLinejoin="round" />
-              <path d="M9 6.5L12 8.5V12L9 14L6 12V8.5L9 6.5Z" fill="white" />
-            </svg>
+      <nav className="sticky top-0 z-50 bg-white border-b border-slate-100">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <a href="/" className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: '#00aa65' }}>
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                <path d="M9 2L15.5 6V13L9 17L2.5 13V6L9 2Z" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="1.3" strokeLinejoin="round" />
+                <path d="M9 6.5L12 8.5V12L9 14L6 12V8.5L9 6.5Z" fill="white" />
+              </svg>
+            </div>
+            <span className="font-bold text-[#0e352e] tracking-tight text-lg" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+              SaldeerScan<span style={{ color: '#00aa65' }}>.nl</span>
+            </span>
+          </a>
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:block text-sm text-slate-500 font-medium">
+              {wijkDisplay}, {stadDisplay}
+            </span>
+            <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
+              className="text-sm font-bold px-5 py-2.5 rounded-full bg-amber-500 text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.35)] hover:brightness-110 transition-all">
+              Gratis analyseren
+            </a>
           </div>
-          <span className="font-bold text-white text-sm" style={{ fontFamily: 'var(--font-heading)' }}>
-            SaldeerScan<span style={{ color: '#00aa65' }}>.nl</span>
-          </span>
-        </a>
-        <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
-          className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-full bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:brightness-110 transition-all">
-          Start Saldeercheck →
-        </a>
+        </div>
       </nav>
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
