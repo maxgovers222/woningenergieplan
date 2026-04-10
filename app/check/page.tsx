@@ -32,7 +32,7 @@ function CheckPageInner() {
   const initialStad = searchParams.get('stad') ?? ''
 
   return (
-    <main className="min-h-screen bg-command-center">
+    <main className="min-h-screen" style={{ background: '#020617' }}>
       <Header />
       <div className="max-w-xl mx-auto px-4 py-8">
         <div className="mb-6 text-center">
@@ -48,7 +48,7 @@ function CheckPageInner() {
 }
 
 const FallbackPage = (
-  <main className="min-h-screen bg-command-center">
+  <main className="min-h-screen" style={{ background: '#020617' }}>
     <div className="max-w-xl mx-auto px-4 py-8">
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
