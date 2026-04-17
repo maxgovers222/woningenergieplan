@@ -5,6 +5,7 @@ import { getWijkPage, getTopWijken } from '@/lib/pseo'
 import { LocalSchema } from '@/components/pseo/LocalSchema'
 import { WijkSaldeerChart } from '@/components/pseo/WijkSaldeerChart'
 import { CountdownTimer } from '@/components/CountdownTimer'
+import { AddressAutocomplete } from '@/components/AddressAutocomplete'
 
 const getCachedWijkPage = cache(getWijkPage)
 
@@ -82,13 +83,26 @@ function computeBesparing(bouwjaar: number | null, score: number): number {
   return Math.round(base * (score / 65))
 }
 
-// Split hoofdtekst into two sections for the 2-column layout
 function splitContent(tekst: string | null): { analyse: string[]; netwerk: string[] } {
   if (!tekst) return { analyse: [], netwerk: [] }
   const paras = tekst.split('\n\n').filter(Boolean)
   const mid = Math.ceil(paras.length / 2)
   return { analyse: paras.slice(0, mid), netwerk: paras.slice(mid) }
 }
+
+// ── Palette & shared styles ───────────────────────────────────────────────────
+
+const G     = '#00aa65'
+const AMBER = '#f59e0b'
+const N1    = '#020617'
+const N2    = '#0f172a'
+
+const amberBtnCls = [
+  'bg-amber-500 text-slate-950 font-bold rounded-full',
+  'transition-all duration-300',
+  'shadow-[0_0_25px_rgba(245,158,11,0.4)]',
+  'hover:opacity-90 active:scale-105',
+].join(' ')
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
@@ -107,33 +121,28 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
   const { analyse, netwerk } = splitContent(page.hoofdtekst)
 
   const netConfig = {
-    ROOD:   { label: 'Vol stroomnet', dot: '#ef4444', cls: 'bg-red-950/50 border-red-700 text-red-400' },
+    ROOD:   { label: 'Vol stroomnet',  dot: '#ef4444', cls: 'bg-red-950/50 border-red-700 text-red-400' },
     ORANJE: { label: 'Druk stroomnet', dot: '#f59e0b', cls: 'bg-amber-950/50 border-amber-700 text-amber-400' },
     GROEN:  { label: 'Vrij stroomnet', dot: '#10b981', cls: 'bg-emerald-950/50 border-emerald-700 text-emerald-400' },
   }
   const net = page.netcongestieStatus ? netConfig[page.netcongestieStatus as keyof typeof netConfig] : null
 
-  const N1 = '#020617'
-  const N2 = '#0f172a'
-  const AMBER = '#f59e0b'
-  const amberBtn = 'inline-flex items-center gap-2 font-bold px-8 py-4 rounded-full transition-all duration-200 bg-amber-500 text-slate-950 shadow-[0_0_30px_rgba(245,158,11,0.45)] hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]'
-
   return (
     <div className="min-h-screen pb-24 sm:pb-0" style={{ background: N1 }}>
       {page.jsonLd && Object.keys(page.jsonLd).length > 0 && <LocalSchema jsonLd={page.jsonLd} />}
 
-      {/* ── Nav ───────────────────────────────────────────────────── */}
+      {/* ── Nav ─────────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 bg-white border-b border-slate-100">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <a href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: '#00aa65' }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: G }}>
               <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
                 <path d="M9 2L15.5 6V13L9 17L2.5 13V6L9 2Z" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="1.3" strokeLinejoin="round" />
                 <path d="M9 6.5L12 8.5V12L9 14L6 12V8.5L9 6.5Z" fill="white" />
               </svg>
             </div>
             <span className="font-bold text-[#0e352e] tracking-tight text-lg" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
-              SaldeerScan<span style={{ color: '#00aa65' }}>.nl</span>
+              SaldeerScan<span style={{ color: G }}>.nl</span>
             </span>
           </a>
           <div className="flex items-center gap-3">
@@ -141,274 +150,342 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
               {wijkDisplay}, {stadDisplay}
             </span>
             <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
-              className="text-sm font-bold px-5 py-2.5 rounded-full bg-amber-500 text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.35)] hover:brightness-110 transition-all">
+              className={`text-sm px-5 py-2.5 ${amberBtnCls}`}>
               Gratis analyseren
             </a>
           </div>
         </div>
       </nav>
 
-      {/* ── Breadcrumb ────────────────────────────────────────────── */}
-      <div className="max-w-4xl mx-auto px-6 pt-5">
-        <p className="text-xs font-mono text-white/30">
-          <a href="/" className="hover:text-white/60 transition-colors">Home</a>
-          {' · '}
-          <a href={`/${provincie}`} className="hover:text-white/60 transition-colors">{toDisplay(provincie)}</a>
-          {' · '}
-          <a href={`/${provincie}/${stad}`} className="hover:text-white/60 transition-colors">{stadDisplay}</a>
-          {' · '}
-          <span className="text-white/50">{wijkDisplay}</span>
-        </p>
-      </div>
-
-      {/* ── Hero ──────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden px-6 pt-10 pb-10" style={{ background: N1 }}>
-        {/* Grid overlay */}
+      {/* ── Hero ────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ background: N1 }}>
+        {/* SVG grid — vervaagt naar beneden */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true"
+          style={{ opacity: 0.03, maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)' }}>
+          <defs>
+            <pattern id="wijk-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M 48 0 L 0 0 0 48" fill="none" stroke="rgb(100,116,139)" strokeOpacity="0.3" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#wijk-grid)" />
+        </svg>
+        {/* Zachte radiale gloed */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-          maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+          backgroundImage: `radial-gradient(ellipse 70% 50% at 50% -5%, rgba(0,170,101,0.14) 0%, transparent 70%)`,
         }} />
-        {/* Amber glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 rounded-full blur-3xl pointer-events-none"
-          style={{ background: 'rgba(245,158,11,0.07)' }} />
 
-        <div className="relative max-w-4xl mx-auto text-center">
-          <p className="text-[10px] font-mono uppercase tracking-widest mb-4" style={{ color: AMBER }}>
-            // NEIGHBORHOOD INTELLIGENCE DASHBOARD
+        <div className="relative max-w-4xl mx-auto px-6 py-20 sm:py-28 text-center">
+          {/* Breadcrumb */}
+          <p className="text-xs text-white/30 mb-6">
+            <a href="/" className="hover:text-white/60 transition-colors">Home</a>
+            {' · '}
+            <a href={`/${provincie}`} className="hover:text-white/60 transition-colors">{toDisplay(provincie)}</a>
+            {' · '}
+            <a href={`/${provincie}/${stad}`} className="hover:text-white/60 transition-colors">{stadDisplay}</a>
+            {' · '}
+            <span className="text-white/50">{wijkDisplay}</span>
           </p>
 
-          <h1 className="font-black text-white mb-2 leading-none"
-            style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', letterSpacing: '-0.03em' }}>
+          {/* Green badge — zelfde patroon als homepage */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-8"
+            style={{ background: G, color: 'white', fontFamily: 'var(--font-heading)' }}>
+            <span className="w-1.5 h-1.5 bg-white rounded-full opacity-80" />
+            {stadDisplay} · Gratis wijkanalyse 2027
+          </div>
+
+          <h1 className="font-extrabold text-white mb-4"
+            style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', letterSpacing: '-0.03em', lineHeight: 1.05 }}>
             {wijkDisplay}
           </h1>
-          <p className="text-lg font-mono" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            {stadDisplay} · {page.aantalWoningen ? `${page.aantalWoningen} woningen` : provincie}
+          <p className="text-lg text-white/65 mb-4">
+            {page.aantalWoningen ? `${page.aantalWoningen.toLocaleString('nl')} woningen` : stadDisplay} · {toDisplay(provincie)}
           </p>
 
-          {ranking && (
-            <div className="inline-flex items-center gap-2 mt-3 mb-8 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-950/30">
-              <span className="text-amber-400 text-sm">🏆</span>
-              <span className="text-xs font-mono font-bold text-amber-400">{ranking.label} in {stadDisplay}</span>
+          {ranking ? (
+            <div className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full text-xs font-semibold"
+              style={{ background: 'rgba(245,158,11,0.15)', color: AMBER, border: '1px solid rgba(245,158,11,0.3)', fontFamily: 'var(--font-heading)' }}>
+              <span>🏆</span>
+              {ranking.label} in {stadDisplay}
             </div>
+          ) : (
+            <div className="mb-8" />
           )}
-          {!ranking && <div className="mb-8" />}
 
-          {/* ── Data Ribbon ─────────────────────────────────────── */}
+          {/* Data Ribbon */}
           <div className="grid grid-cols-3 gap-3 max-w-2xl mx-auto mb-10">
-            {/* Grid Status */}
-            <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-center">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-white/30 mb-2">Grid Status</p>
+            <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-center">
+              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: G, fontFamily: 'var(--font-heading)' }}>Grid Status</p>
               {net ? (
                 <>
                   <div className="flex items-center justify-center gap-1.5 mb-1">
                     <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: net.dot }} />
-                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full border ${net.cls}`}>
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${net.cls}`} style={{ fontFamily: 'var(--font-heading)' }}>
                       {page.netcongestieStatus}
                     </span>
                   </div>
-                  <p className="text-[10px] font-mono text-white/30">{net.label}</p>
+                  <p className="text-xs text-white/40">{net.label}</p>
                 </>
               ) : (
-                <span className="text-xs font-mono text-white/20">—</span>
+                <span className="text-sm text-white/20">—</span>
               )}
             </div>
 
-            {/* Build Year */}
-            <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-center">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-white/30 mb-2">Gem. Bouwjaar</p>
-              <p className="text-2xl font-mono font-black" style={{ color: AMBER }}>
+            <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-center">
+              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: G, fontFamily: 'var(--font-heading)' }}>Gem. Bouwjaar</p>
+              <p className="text-2xl font-extrabold" style={{ fontFamily: 'var(--font-heading)', color: AMBER, letterSpacing: '-0.02em' }}>
                 {page.gemBouwjaar ?? '—'}
               </p>
-              <p className="text-[10px] font-mono text-white/30 mt-1">[BAG_2026]</p>
+              <p className="text-xs text-white/30 mt-1">BAG 2026</p>
             </div>
 
-            {/* Energy Score */}
-            <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-center">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-white/30 mb-2">Energy Score</p>
-              <p className="text-2xl font-mono font-black" style={{ color: scoreColor }}>
-                {score}<span className="text-sm text-white/30">/100</span>
+            <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-center">
+              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: G, fontFamily: 'var(--font-heading)' }}>Energy Score</p>
+              <p className="text-2xl font-extrabold" style={{ fontFamily: 'var(--font-heading)', color: scoreColor, letterSpacing: '-0.02em' }}>
+                {score}<span className="text-sm font-normal text-white/30">/100</span>
               </p>
-              <p className="text-[10px] font-mono mt-1" style={{ color: scoreColor }}>{scorelabel}</p>
+              <p className="text-xs mt-1" style={{ color: scoreColor }}>{scorelabel}</p>
             </div>
           </div>
 
           <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
-            className={`text-base ${amberBtn}`}
+            className={`inline-flex items-center gap-2 text-base ${amberBtnCls}`}
             style={{ fontFamily: 'var(--font-heading)' }}>
             Start mijn gratis Saldeercheck
             <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </a>
+
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/45 mt-6">
+            {['BAG officiële data', 'AVG-compliant', 'Volledig gratis'].map((t) => (
+              <span key={t} className="flex items-center gap-1.5">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke={G} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── Urgentie Chart ────────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 py-10">
-        <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+      {/* ── Urgentie Chart ──────────────────────────────────────── */}
+      <section className="py-20 px-6" style={{ background: N2 }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: G, fontFamily: 'var(--font-heading)' }}>
+              2027 Urgentie
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+              Besparing per jaar<br />in {wijkDisplay}
+            </h2>
+          </div>
+
+          <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: G, fontFamily: 'var(--font-heading)' }}>Salderingsafbouw</p>
+                <h3 className="text-lg font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+                  Wat kost wachten u in {wijkDisplay}?
+                </h3>
+              </div>
+              <div className="bg-red-950/50 border border-red-700/60 rounded-xl px-4 py-3 shrink-0 text-right">
+                <p className="text-xs font-semibold uppercase tracking-widest text-red-400/70 mb-0.5" style={{ fontFamily: 'var(--font-heading)' }}>Verlies vanaf 2027</p>
+                <p className="text-xl font-extrabold text-red-400" style={{ fontFamily: 'var(--font-heading)' }}>
+                  −€{verlies}<span className="text-xs font-normal text-red-400/60">/jaar</span>
+                </p>
+              </div>
+            </div>
+
+            <WijkSaldeerChart besparing={besparing} wijk={wijkDisplay} />
+
+            <div className="mt-4 flex items-start gap-2 bg-amber-950/30 border border-amber-700/40 rounded-xl px-4 py-3">
+              <span className="text-amber-400 text-sm mt-0.5 shrink-0">⚡</span>
+              <p className="text-sm text-amber-300/80 leading-relaxed">
+                <span className="font-bold text-amber-400">Shock 2027:</span>{' '}
+                Verlies door saldering in {wijkDisplay}: <span className="font-bold text-amber-400">€{verlies} per jaar</span> vanaf 1 januari 2027 voor woningen zonder batterijopslag.
+              </p>
+            </div>
+
+            <div className="mt-8">
+              <CountdownTimer />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 2-koloms content ────────────────────────────────────── */}
+      <section className="py-20 px-6" style={{ background: N1 }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: G, fontFamily: 'var(--font-heading)' }}>
+              Wijkanalyse
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+              Energieprofiel {wijkDisplay}
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Links: analyse tekst (2/3 breed) */}
+            <div className="lg:col-span-2 space-y-6">
+              {analyse.length > 0 && (
+                <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-7 transition-all hover:border-white/20">
+                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: G, fontFamily: 'var(--font-heading)' }}>
+                    Bouwtechnische analyse
+                  </p>
+                  <h3 className="font-extrabold text-lg mb-5 text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.01em' }}>
+                    Woningkenmerken &amp; zonnepotentieel
+                  </h3>
+                  <div className="space-y-4">
+                    {analyse.map((para, i) => (
+                      <p key={i} className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>{renderBold(para)}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {netwerk.length > 0 && (
+                <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-7 transition-all hover:border-white/20">
+                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: G, fontFamily: 'var(--font-heading)' }}>
+                    Netwerkbeperkingen
+                  </p>
+                  <h3 className="font-extrabold text-lg mb-5 text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.01em' }}>
+                    Netcapaciteit &amp; batterijopties
+                  </h3>
+                  <div className="space-y-4">
+                    {netwerk.map((para, i) => (
+                      <p key={i} className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>{renderBold(para)}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Rechts: Quick Facts */}
             <div>
-              <p className="text-[9px] font-mono uppercase tracking-widest text-white/30 mb-1">2027 Urgentie — Salderingsafbouw</p>
-              <h2 className="text-lg font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
-                Besparing per jaar in {wijkDisplay}
+              <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-5 sticky top-20">
+                <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: G, fontFamily: 'var(--font-heading)' }}>
+                  Quick Facts — {wijkDisplay}
+                </p>
+
+                <div className="space-y-3">
+                  {[
+                    { label: 'Gem. bouwjaar', value: page.gemBouwjaar ? `${page.gemBouwjaar}` : '—', sub: 'BAG registratie' },
+                    { label: 'Energy Score', value: `${score}/100`, sub: scorelabel },
+                    { label: 'Est. besparing', value: `€${besparing}/jr`, sub: 'zonder batterij, 2024' },
+                    { label: 'Verlies 2027', value: `−€${verlies}/jr`, sub: 'bij 0% saldering', danger: true },
+                    { label: 'Netcongestie', value: page.netcongestieStatus ?? '—', sub: net?.label ?? '' },
+                    ...(page.aantalWoningen ? [{ label: 'Woningen', value: `${page.aantalWoningen.toLocaleString('nl')}`, sub: 'in dit postcodegebied' }] : []),
+                    ...(ranking ? [{ label: 'Wijk Ranking', value: ranking.top ? '🏆 Top 10%' : '⭐ Top 25%', sub: 'rendement in ' + stadDisplay }] : []),
+                  ].map(({ label, value, sub, danger }) => (
+                    <div key={label} className="flex items-start justify-between gap-2 pb-3 border-b border-white/5 last:border-0 last:pb-0">
+                      <div>
+                        <p className="text-xs font-semibold text-white/50">{label}</p>
+                        <p className="text-xs text-white/25">{sub}</p>
+                      </div>
+                      <span className={`text-sm font-extrabold shrink-0 ${danger ? 'text-red-400' : 'text-amber-400'}`}
+                        style={{ fontFamily: 'var(--font-heading)' }}>
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
+                  className={`mt-5 w-full flex items-center justify-center gap-2 text-sm py-3 ${amberBtnCls}`}
+                  style={{ fontFamily: 'var(--font-heading)' }}>
+                  Mijn adres scannen →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ─────────────────────────────────────────────────── */}
+      {page.faqItems.length > 0 && (
+        <section className="py-20 px-6" style={{ background: N2 }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-14">
+              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: G, fontFamily: 'var(--font-heading)' }}>
+                Veelgestelde vragen
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+                Alles over zonnepanelen<br />in {wijkDisplay}
               </h2>
             </div>
-            <div className="bg-red-950/50 border border-red-700/60 rounded-xl px-4 py-3 shrink-0 text-right">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-red-400/70 mb-0.5">Verlies vanaf 2027</p>
-              <p className="text-xl font-mono font-black text-red-400">−€{verlies}<span className="text-xs font-normal text-red-400/60">/jaar</span></p>
+            <div className="space-y-3">
+              {page.faqItems.map((faq, i) => (
+                <div key={i} className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 transition-all hover:border-white/20">
+                  <h3 className="font-bold text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>{faq.vraag}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{faq.antwoord}</p>
+                </div>
+              ))}
             </div>
-          </div>
-
-          <WijkSaldeerChart besparing={besparing} wijk={wijkDisplay} />
-
-          <div className="mt-4 flex items-start gap-2 bg-amber-950/30 border border-amber-700/40 rounded-xl px-4 py-3">
-            <span className="text-amber-400 text-sm mt-0.5 shrink-0">⚡</span>
-            <p className="text-xs font-mono text-amber-300/80 leading-relaxed">
-              <span className="font-bold text-amber-400">Shock Label:</span>{' '}
-              Verlies door saldering in {wijkDisplay}: <span className="font-bold text-amber-400">€{verlies} per jaar</span> vanaf 1 januari 2027 voor woningen zonder batterijopslag.
-            </p>
-          </div>
-
-          <div className="mt-8">
-            <CountdownTimer />
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2-koloms content ──────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 py-4">
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Links: analyse tekst (2/3 breed) */}
-          <div className="lg:col-span-2 space-y-6">
-            {analyse.length > 0 && (
-              <div className="bg-slate-900/40 border border-white/10 rounded-2xl p-6 sm:p-7">
-                <div className="flex items-center gap-2 mb-5">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-amber-500/70">[ANALYSE]</span>
-                  <h2 className="text-base font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
-                    Bouwtechnische Analyse
-                  </h2>
-                </div>
-                <div className="space-y-4">
-                  {analyse.map((para, i) => (
-                    <p key={i} className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>{renderBold(para)}</p>
-                  ))}
-                </div>
-                <p className="text-[9px] font-mono mt-5" style={{ color: 'rgba(255,255,255,0.15)' }}>
-                  [DATA_SOURCE: BAG_2026 · NETBEHEER_NL · ISDE_2026]
-                </p>
-              </div>
-            )}
-
-            {netwerk.length > 0 && (
-              <div className="bg-slate-900/40 border border-white/10 rounded-2xl p-6 sm:p-7">
-                <div className="flex items-center gap-2 mb-5">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-amber-500/70">[NETWERK]</span>
-                  <h2 className="text-base font-extrabold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
-                    Netwerkbeperkingen & Oplossingen
-                  </h2>
-                </div>
-                <div className="space-y-4">
-                  {netwerk.map((para, i) => (
-                    <p key={i} className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>{renderBold(para)}</p>
-                  ))}
-                </div>
-                <p className="text-[9px] font-mono mt-5" style={{ color: 'rgba(255,255,255,0.15)' }}>
-                  [DATA_SOURCE: NETBEHEER_NL_CONGESTIEKAART_2026]
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Rechts: Quick Facts */}
-          <div className="space-y-4">
-            <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-5 sticky top-20">
-              <p className="text-[9px] font-mono uppercase tracking-widest text-white/30 mb-4">Quick Facts — {wijkDisplay}</p>
-
-              <div className="space-y-3">
-                {[
-                  { label: 'Gem. bouwjaar', value: page.gemBouwjaar ? `${page.gemBouwjaar}` : '—', sub: 'BAG registratie' },
-                  { label: 'Energy Score', value: `${score}/100`, sub: scorelabel },
-                  { label: 'Est. besparing', value: `€${besparing}/jr`, sub: 'zonder batterij, 2024' },
-                  { label: 'Verlies 2027', value: `−€${verlies}/jr`, sub: 'bij 0% saldering', danger: true },
-                  { label: 'Netcongestie', value: page.netcongestieStatus ?? '—', sub: net?.label ?? '' },
-                  ...(page.aantalWoningen ? [{ label: 'Woningen', value: `${page.aantalWoningen.toLocaleString('nl')}`, sub: 'in dit postcodegebied' }] : []),
-                  ...(ranking ? [{ label: 'Wijk Ranking', value: ranking.top ? '🏆 Top 10%' : '⭐ Top 25%', sub: 'rendement in ' + stadDisplay }] : []),
-                ].map(({ label, value, sub, danger }) => (
-                  <div key={label} className="flex items-start justify-between gap-2 pb-3 border-b border-white/5 last:border-0 last:pb-0">
-                    <div>
-                      <p className="text-[10px] font-mono text-white/35">{label}</p>
-                      <p className="text-[9px] font-mono text-white/20">{sub}</p>
-                    </div>
-                    <span className={`text-sm font-mono font-bold shrink-0 ${danger ? 'text-red-400' : 'text-amber-400'}`}>
-                      {value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
-                className="mt-5 w-full flex items-center justify-center gap-2 text-sm font-bold py-3 rounded-full bg-amber-500 text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:brightness-110 transition-all">
-                Mijn adres scannen →
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ───────────────────────────────────────────────────── */}
-      {page.faqItems.length > 0 && (
-        <section className="max-w-4xl mx-auto px-6 py-10">
-          <p className="text-[9px] font-mono uppercase tracking-widest text-white/30 mb-2">[FAQ]</p>
-          <h2 className="text-xl font-extrabold text-white mb-6" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
-            Veelgestelde vragen
-          </h2>
-          <div className="space-y-3">
-            {page.faqItems.map((faq, i) => (
-              <div key={i} className="bg-slate-900/40 border border-white/10 rounded-2xl p-5 sm:p-6">
-                <h3 className="font-bold text-white mb-2 text-sm" style={{ fontFamily: 'var(--font-heading)' }}>{faq.vraag}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{faq.antwoord}</p>
-              </div>
-            ))}
           </div>
         </section>
       )}
 
-      {/* ── Bottom CTA ────────────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 py-6 pb-16">
-        <div className="text-center bg-slate-900/60 border border-white/10 rounded-2xl p-10"
-          style={{ boxShadow: '0 0 60px rgba(245,158,11,0.05)' }}>
-          <p className="text-[9px] font-mono uppercase tracking-widest mb-4" style={{ color: AMBER }}>[CONVERSIE]</p>
-          <h2 className="text-2xl font-extrabold text-white mb-3" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
-            Uw persoonlijk investeringsrapport
+      {/* ── Bottom CTA ──────────────────────────────────────────── */}
+      <section className="py-20 px-6" style={{ background: N1 }}>
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-white" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+            Bereken wat {wijkDisplay}<br />
+            <span style={{ color: AMBER }}>u kunt besparen</span>
           </h2>
-          <p className="mb-6 text-sm max-w-md mx-auto" style={{ color: 'rgba(255,255,255,0.45)' }}>
-            Gratis AI-scan voor uw specifieke woning in {wijkDisplay}. BAG-data, ROI-berekening en ISDE subsidie check in 3 minuten.
+          <p className="mb-6 text-base leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Voer uw adres in voor een analyse op maat — BAG-data, ROI-berekening en ISDE subsidie check in 3 minuten.
           </p>
-          <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
-            className={`text-base ${amberBtn}`} style={{ fontFamily: 'var(--font-heading)' }}>
-            Start gratis Saldeercheck
-            <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </a>
-          <p className="mt-4 text-[10px] font-mono" style={{ color: 'rgba(255,255,255,0.2)' }}>
-            ✓ Geen account · ✓ AVG-compliant · ✓ [DATA_SOURCE: BAG_2026]
-          </p>
+          <AddressAutocomplete
+            extraParams={{ wijk, stad }}
+            placeholder={`Uw adres in ${wijkDisplay}, bijv. Hoofdstraat 1`}
+          />
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-5 text-sm" style={{ color: 'rgba(255,255,255,0.25)' }}>
+            <span>✓ BAG-data</span>
+            <span>✓ AVG-compliant</span>
+            <span>✓ Geen account nodig</span>
+          </div>
         </div>
       </section>
 
-      {/* ── Footer ────────────────────────────────────────────────── */}
-      <footer className="border-t px-6 py-8 text-center" style={{ borderColor: 'rgba(255,255,255,0.06)', background: N1 }}>
-        <p className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.2)' }}>© 2026 SaldeerScan.nl</p>
+      {/* ── Footer ──────────────────────────────────────────────── */}
+      <footer className="py-12 px-6" style={{ background: N1, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-10">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: G }}>
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                    <path d="M9 2L15.5 6V13L9 17L2.5 13V6L9 2Z" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="1.3" strokeLinejoin="round" />
+                    <path d="M9 6.5L12 8.5V12L9 14L6 12V8.5L9 6.5Z" fill="white" />
+                  </svg>
+                </div>
+                <span className="font-bold text-white text-base" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+                  SaldeerScan.nl
+                </span>
+              </div>
+              <p className="text-sm max-w-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Gratis energieanalyse voor Nederlandse woningeigenaren.
+              </p>
+            </div>
+            <a href="/check" className={`text-sm px-6 py-3 ${amberBtnCls}`}>
+              Gratis analyseren
+            </a>
+          </div>
+          <div className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+            <div className="flex gap-6 text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <a href="/privacy" className="hover:text-white/50 transition-colors">Privacyverklaring</a>
+              <a href="/check" className="hover:text-white/50 transition-colors">Analyseer uw woning</a>
+            </div>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.15)' }}>© 2026 SaldeerScan.nl</p>
+          </div>
+        </div>
       </footer>
 
-      {/* ── Sticky Mobile CTA ─────────────────────────────────────── */}
+      {/* ── Sticky Mobile CTA ───────────────────────────────────── */}
       <div className="fixed bottom-0 left-0 right-0 sm:hidden z-50 px-4 pb-4 pt-3"
         style={{ background: 'linear-gradient(to top, rgba(2,6,23,0.98) 60%, transparent)' }}>
         <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
-          className="flex items-center justify-center gap-2 w-full py-4 rounded-full text-base font-bold bg-amber-500 text-slate-950 shadow-[0_0_30px_rgba(245,158,11,0.5)] active:scale-[0.98] transition-all"
+          className={`flex items-center justify-center gap-2 w-full py-4 text-base ${amberBtnCls}`}
           style={{ fontFamily: 'var(--font-heading)' }}>
           Start gratis Saldeercheck
           <svg width="18" height="18" viewBox="0 0 16 16" fill="none">

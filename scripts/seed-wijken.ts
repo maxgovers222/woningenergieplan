@@ -1415,16 +1415,17 @@ const WIJKEN_BASE: WijkEntry[] = [
 // Batch 3 apart gedeclareerd om TypeScript union-type complexiteit te voorkomen
 const WIJKEN_BATCH3: WijkEntry[] = [
   // ── Uitbreiding batch 3 — CBS 2023 naar 2000 wijken ──────────────────
-  { wijk: "Bergen op Zoom-Oude stad e.o.", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ORANJE", aantalWoningen: 5752 },
-  { wijk: "Halsteren", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ORANJE", aantalWoningen: 5240 },
-  { wijk: "Bergen op Zoom-Noord", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ORANJE", aantalWoningen: 4439 },
-  { wijk: "Bergen op Zoom-West", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1982, netcongestie: "ORANJE", aantalWoningen: 4225 },
+  { wijk: "Bergen op Zoom-Oude stad e.o.", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ROOD", aantalWoningen: 5752 },
+  { wijk: "Halsteren", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ROOD", aantalWoningen: 5240 },
+  { wijk: "Bergen op Zoom-Noord", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ROOD", aantalWoningen: 4439 },
+  { wijk: "Bergen op Zoom-West", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1982, netcongestie: "ROOD", aantalWoningen: 4225 },
   { wijk: "Tholen", stad: "Tholen", provincie: "zeeland", bouwjaar: 1982, netcongestie: "GROEN", aantalWoningen: 3505 },
   { wijk: "Sint-Annaland", stad: "Tholen", provincie: "zeeland", bouwjaar: 1972, netcongestie: "GROEN", aantalWoningen: 1623 },
   { wijk: "Sint-Maartensdijk", stad: "Tholen", provincie: "zeeland", bouwjaar: 1972, netcongestie: "GROEN", aantalWoningen: 1447 },
   { wijk: "Sint Philipsland", stad: "Tholen", provincie: "zeeland", bouwjaar: 1972, netcongestie: "GROEN", aantalWoningen: 1140 },
   { wijk: "Oud-Vossemeer", stad: "Tholen", provincie: "zeeland", bouwjaar: 1972, netcongestie: "GROEN", aantalWoningen: 1138 },
-  { wijk: "Lepelstraat", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ORANJE", aantalWoningen: 813 },
+  { wijk: "Rode Schouw", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1985, netcongestie: "ROOD", aantalWoningen: 2100 },
+  { wijk: "Lepelstraat", stad: "Bergen op Zoom", provincie: "noord-brabant", bouwjaar: 1972, netcongestie: "ROOD", aantalWoningen: 813 },
   { wijk: "Scherpenisse", stad: "Tholen", provincie: "zeeland", bouwjaar: 1972, netcongestie: "GROEN", aantalWoningen: 779 },
   { wijk: "Poortvliet", stad: "Tholen", provincie: "zeeland", bouwjaar: 1972, netcongestie: "GROEN", aantalWoningen: 741 },
   { wijk: "Stavenisse", stad: "Tholen", provincie: "zeeland", bouwjaar: 1972, netcongestie: "GROEN", aantalWoningen: 710 },
@@ -2468,6 +2469,12 @@ async function run() {
 
   for (let i = 0; i < subset.length; i++) {
     const entry = subset[i]
+    const wijkSlug = toSlug(entry.wijk)
+    if (/\d/.test(wijkSlug)) {
+      console.warn(`[skip] wijk slug bevat cijfer — lijkt straat: ${wijkSlug}`)
+      stats.skip++
+      continue
+    }
     const nr    = `[${String(i + 1).padStart(3, '0')}/${subset.length}]`
     process.stdout.write(`${nr} ${entry.wijk}, ${entry.stad} ... `)
 

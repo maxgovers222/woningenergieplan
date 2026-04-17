@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { CountdownTimer } from '@/components/CountdownTimer'
+import { AddressAutocomplete } from '@/components/AddressAutocomplete'
 
 /* ─── Palette tokens ──────────────────────────────── */
 const G     = '#00aa65'   // brand green (accenten, logo)
@@ -50,15 +49,6 @@ function NavBar() {
 
 /* ─── Hero ────────────────────────────────────────── */
 function HeroSection() {
-  const router = useRouter()
-  const [adres, setAdres] = useState('')
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (adres.trim().length < 5) return
-    router.push(`/check?adres=${encodeURIComponent(adres.trim())}`)
-  }
-
   return (
     <section className="relative overflow-hidden" style={{ background: N1 }}>
       {/* SVG grid — alleen hero, vervaagt naar beneden */}
@@ -94,23 +84,7 @@ function HeroSection() {
           met BAG-data, AI-analyse en een persoonlijk energieplan.
         </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-8">
-          <input
-            type="text"
-            value={adres}
-            onChange={(e) => setAdres(e.target.value)}
-            placeholder="Uw adres, bijv. Keizersgracht 1, Amsterdam"
-            className="flex-1 rounded-full px-6 py-4 text-slate-800 placeholder:text-slate-400 text-sm focus:outline-none shadow-xl"
-            style={{ background: 'rgba(255,255,255,0.95)' }}
-            autoComplete="street-address"
-          />
-          <button
-            type="submit"
-            disabled={adres.trim().length < 5}
-            className={`py-4 px-7 text-sm whitespace-nowrap ${amberBtnCls}`}>
-            Start gratis analyse
-          </button>
-        </form>
+        <AddressAutocomplete />
 
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/45 mb-12">
           {['BAG officiële data', 'AVG-compliant', 'Volledig gratis'].map((t) => (
@@ -130,14 +104,12 @@ function HeroSection() {
 /* ─── Urgentie 2027 strip ─────────────────────────── */
 function UrgentieStrip() {
   return (
-    <div className="border-y border-amber-200 py-4 px-6" style={{ background: '#fffbeb' }}>
+    <div className="border-y border-red-700/60 py-3 px-6" style={{ background: 'rgba(69,10,10,0.85)' }}>
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-sm text-center">
-        <span className="font-bold text-amber-800" style={{ fontFamily: 'var(--font-heading)' }}>
-          Saldering 2026: 28% &rarr; 2027: 0%
-        </span>
-        <span className="hidden sm:inline text-amber-400">·</span>
-        <span className="text-amber-700">Elke maand wachten kost u teruglevering die u nooit meer vergoed krijgt.</span>
-        <a href="/check" className="sm:ml-2 font-semibold underline text-amber-800 hover:text-amber-600 whitespace-nowrap">
+        <span className="text-red-300 font-mono text-xs font-bold tracking-widest uppercase shrink-0">⚠ Deadline 1 jan 2027</span>
+        <span className="hidden sm:inline text-red-700">·</span>
+        <span className="text-red-200/80 text-xs">Saldering: <strong className="text-red-200">28% (2026) → 0% (2027)</strong> — Elke maand wachten kost u saldeervoordeel dat u nooit meer terugkrijgt.</span>
+        <a href="/check" className="sm:ml-2 text-xs font-bold text-amber-400 hover:text-amber-300 underline whitespace-nowrap transition-colors">
           Bereken uw verlies →
         </a>
       </div>
@@ -248,7 +220,7 @@ function UspSection() {
     {
       icon: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>,
       titel: 'Gecertificeerde installateurs',
-      tekst: 'Alleen keurmerk-geverifieerde installateurs. Offerte binnen 24 uur, altijd vrijblijvend.',
+      tekst: 'Alleen keurmerk-geverifieerde installateurs. Vrijblijvende offerte, altijd gecertificeerd.',
     },
   ]
 

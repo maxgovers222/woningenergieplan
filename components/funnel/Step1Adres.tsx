@@ -29,18 +29,29 @@ function HealthScoreGauge({ score, label }: { score: number; label: string }) {
 
 function NetcongentieBadge({ status, netbeheerder }: { status: 'ROOD' | 'ORANJE' | 'GROEN'; netbeheerder: string }) {
   const config = {
-    ROOD: { label: 'Vol stroomnet — batterij prioriteit', textClass: 'text-red-400', bgClass: 'bg-red-950/50 border-red-700', dotClass: 'bg-red-500' },
-    ORANJE: { label: 'Druk stroomnet', textClass: 'text-amber-400', bgClass: 'bg-amber-950/50 border-amber-700', dotClass: 'bg-amber-500' },
-    GROEN: { label: 'Vrij stroomnet', textClass: 'text-emerald-400', bgClass: 'bg-emerald-950/50 border-emerald-700', dotClass: 'bg-emerald-500' },
+    ROOD: {
+      label: `Net vol (${netbeheerder || 'netbeheerder'}): teruglevering beperkt`,
+      subtext: 'Zonne-energie die u teruglevert wordt niet volledig vergoed. Een thuisbatterij is hier extra waardevol.',
+      textClass: 'text-red-400', bgClass: 'bg-red-950/50 border-red-700', dotClass: 'bg-red-500',
+    },
+    ORANJE: {
+      label: `Druk stroomnet (${netbeheerder || 'netbeheerder'}): piekproductie soms beperkt`,
+      subtext: null,
+      textClass: 'text-amber-400', bgClass: 'bg-amber-950/50 border-amber-700', dotClass: 'bg-amber-500',
+    },
+    GROEN: {
+      label: `Vrij stroomnet (${netbeheerder || 'netbeheerder'}): teruglevering onbeperkt`,
+      subtext: null,
+      textClass: 'text-emerald-400', bgClass: 'bg-emerald-950/50 border-emerald-700', dotClass: 'bg-emerald-500',
+    },
   }
   const c = config[status]
   return (
-    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${c.bgClass}`}>
-      <span className={`w-2 h-2 rounded-full ${c.dotClass} shrink-0`} />
+    <div className={`flex items-start gap-2 px-3 py-2 rounded-lg border ${c.bgClass}`}>
+      <span className={`w-2 h-2 rounded-full ${c.dotClass} shrink-0 mt-1`} />
       <div>
-        <span className={`text-xs font-mono font-semibold ${c.textClass}`}>{status}</span>
-        <span className="text-xs text-white/40 ml-1.5">{c.label}</span>
-        {netbeheerder && <div className="text-xs text-white/30 font-mono">{netbeheerder}</div>}
+        <div className={`text-xs font-mono font-semibold ${c.textClass}`}>{c.label}</div>
+        {c.subtext && <div className="text-xs text-white/45 font-mono mt-0.5 leading-relaxed">{c.subtext}</div>}
       </div>
     </div>
   )

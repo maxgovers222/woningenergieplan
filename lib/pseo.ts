@@ -130,7 +130,8 @@ export async function getWijkenByStad(provincie: string, stad: string) {
     .not('wijk', 'is', null)
     .eq('status', 'published')
     .order('aantal_woningen', { ascending: false, nullsFirst: false })
-  return (data ?? []) as {
+  const WIJK_SLUG_REGEX = /^[a-z][a-z-]*[a-z]$/
+  return (data ?? []).filter(row => row.wijk && WIJK_SLUG_REGEX.test(row.wijk)) as {
     wijk: string
     gem_bouwjaar: number | null
     gem_health_score: number | null

@@ -3,12 +3,12 @@ import { berekenROI, ROIInput } from '@/lib/roi'
 import { berekenHealthScore } from '@/lib/health-score'
 
 export async function POST(request: Request) {
-  const limitResult = applyRateLimit(request)
+  const limitResult = applyRateLimit(request, 120, 3_600_000)
   if (limitResult.response) return limitResult.response
 
   const body = await request.json()
   const { oppervlakte, bouwjaar, dakOppervlakte, huidigVerbruikKwh, budgetEur,
-          energielabel, netcongestieStatus } = body
+          energielabel, netcongestieStatus, aantalPanelenOverride } = body
 
   if (!oppervlakte || !bouwjaar || !dakOppervlakte) {
     return Response.json({ error: 'oppervlakte, bouwjaar en dakOppervlakte zijn verplicht' }, { status: 400 })
@@ -23,7 +23,10 @@ export async function POST(request: Request) {
     return Response.json({ error: 'DakOppervlakte moet tussen 0 en 5000 m² liggen' }, { status: 400 })
   }
 
-  const roiInput: ROIInput = { oppervlakte, bouwjaar, dakOppervlakte, huidigVerbruikKwh, budgetEur }
+  const roiInput: ROIInput = {
+    oppervlakte, bouwjaar, dakOppervlakte, huidigVerbruikKwh, budgetEur,
+    aantalPanelenOverride: aantalPanelenOverride ? Number(aantalPanelenOverride) : undefined,
+  }
   const roi = berekenROI(roiInput)
   const health = berekenHealthScore({ bouwjaar, energielabel, dakOppervlakte, netcongestieStatus })
 

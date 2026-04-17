@@ -1,5 +1,19 @@
 @AGENTS.md
 
+## Werkwijze voor Claude Code
+
+Gebruik altijd de relevante superpowers skills vóór elke taak:
+- **Nieuwe feature of creatief werk** → `superpowers:brainstorming` eerst
+- **Bug of onverwacht gedrag** → `superpowers:systematic-debugging`
+- **Implementatieplan uitvoeren** → `superpowers:executing-plans`
+- **Meerdere onafhankelijke taken** → `superpowers:dispatching-parallel-agents`
+- **Werk afronden / branch mergen** → `superpowers:finishing-a-development-branch`
+- **Code review ontvangen** → `superpowers:receiving-code-review`
+- **Code review aanvragen** → `superpowers:requesting-code-review`
+- **Werk valideren voor afronden** → `superpowers:verification-before-completion`
+
+Bij twijfel: gebruik de skill. Niet gebruiken is nooit de veilige keuze.
+
 # Saldeerscan.nl — pSEO Lead Fabriek
 
 Next.js 16 / React 19 platform voor de Nederlandse energiemarkt. Genereert 10.000+ statische pagina's (pSEO op straat- én wijk-niveau) die converteren via een 6-staps funnel naar 'Technisch Dossiers' voor B2B partners (installateurs). Kernurgentie: einde salderen per 1 januari 2027.
@@ -221,6 +235,15 @@ npm run seed:netcongestie # Seed netcongestie_cache tabel
 npm run seed:pseo         # Seed eerste batch pSEO adrespagina's
 npm run seed:wijken       # 2000-wijk seed via Gemini (gebruik --batch=0,50 per run)
 npx playwright test       # E2E tests draaien (dev server moet actief zijn)
+```
+
+## Handmatige DB-fixes (eenmalig uitvoeren in Supabase SQL editor)
+
+```sql
+-- Fix Issue 6: Bergen op Zoom wijken op ROOD zetten (postcode 4600-4799 = ROOD per CONGESTION_SEED)
+UPDATE pseo_pages
+SET netcongestie_status = 'ROOD'
+WHERE stad = 'bergen-op-zoom' AND provincie = 'noord-brabant';
 ```
 
 ## Verificatie checklist

@@ -77,7 +77,13 @@ export async function POST(request: Request) {
     .single()
 
   if (error || !lead) {
-    console.error('[api/leads] insert error:', error?.message)
+    console.error('[api/leads] insert error:', error?.message, 'code:', error?.code)
+    if (error?.code === '23505') {
+      return Response.json(
+        { error: 'U heeft al een rapport aangevraagd met dit e-mailadres. Controleer uw inbox (ook de spammap).' },
+        { status: 409 }
+      )
+    }
     return Response.json({ error: 'Lead kon niet worden opgeslagen' }, { status: 500 })
   }
 
@@ -92,7 +98,7 @@ export async function POST(request: Request) {
     const besparing = (body.roiResult as { scenarioNu?: { besparingJaarEur?: number } } | null)?.scenarioNu?.besparingJaarEur ?? null
 
     resend.emails.send({
-      from: 'SaldeerScan.nl <noreply@saldeerscan.nl>',
+      from: process.env.RESEND_FROM_EMAIL ?? 'SaldeerScan.nl <noreply@saldeerscan.nl>',
       to: String(email),
       subject: `Uw gratis PDF-rapport is klaar — SaldeerScan.nl`,
       html: `
@@ -137,6 +143,10 @@ export async function POST(request: Request) {
   </div>
 </body>
 </html>`,
+    }).then(result => {
+      if ('error' in result && result.error) {
+        console.error('[api/leads] email error:', result.error)
+      }
     }).catch(err => console.error('[api/leads] email error:', err))
   }
 

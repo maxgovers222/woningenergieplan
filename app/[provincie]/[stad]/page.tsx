@@ -42,6 +42,13 @@ const N2 = '#0f172a'
 const AMBER = '#f59e0b'
 const G = '#00aa65'
 
+const amberBtnCls = [
+  'bg-amber-500 text-slate-950 font-bold rounded-full',
+  'transition-all duration-300',
+  'shadow-[0_0_25px_rgba(245,158,11,0.4)]',
+  'hover:opacity-90 active:scale-105',
+].join(' ')
+
 export default async function StadPage({ params }: { params: Promise<Params> }) {
   const { provincie, stad } = await params
   const wijken = await getWijkenByStad(provincie, stad)
@@ -260,9 +267,37 @@ export default async function StadPage({ params }: { params: Promise<Params> }) 
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t px-6 py-6 text-center" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-        <p className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.2)' }}>© 2026 SaldeerScan.nl · {stadDisplay} · {provDisplay}</p>
+      <footer className="py-12 px-6" style={{ background: N1, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-10">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: G }}>
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                    <path d="M9 2L15.5 6V13L9 17L2.5 13V6L9 2Z" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="1.3" strokeLinejoin="round" />
+                    <path d="M9 6.5L12 8.5V12L9 14L6 12V8.5L9 6.5Z" fill="white" />
+                  </svg>
+                </div>
+                <span className="font-bold text-white text-base" style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.02em' }}>
+                  SaldeerScan.nl
+                </span>
+              </div>
+              <p className="text-sm max-w-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Gratis energieanalyse voor Nederlandse woningeigenaren.
+              </p>
+            </div>
+            <a href="/check" className={`text-sm px-6 py-3 ${amberBtnCls}`}>
+              Gratis analyseren
+            </a>
+          </div>
+          <div className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+            <div className="flex gap-6 text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <a href="/privacy" className="hover:text-white/50 transition-colors">Privacyverklaring</a>
+              <a href="/check" className="hover:text-white/50 transition-colors">Analyseer uw woning</a>
+            </div>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.15)' }}>© 2026 SaldeerScan.nl</p>
+          </div>
+        </div>
       </footer>
     </div>
   )

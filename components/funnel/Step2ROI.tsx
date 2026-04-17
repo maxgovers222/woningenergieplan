@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, type Dispatch } from 'react'
 import type { FunnelState, FunnelAction, ROIResult } from './types'
 import { Shock2027Banner } from './Shock2027Banner'
 import { StepHeader } from './StepHeader'
+import { schatVerbruik } from '@/lib/roi'
 
 interface Step2ROIProps {
   state: FunnelState
@@ -85,10 +86,19 @@ function SliderInput({ label, value, onChange, min, max, step, unit, note }: {
 
 export function Step2ROI({ state, dispatch }: Step2ROIProps) {
   const dakMax = Math.max(100, state.bagData?.dakOppervlakte ?? 100)
-  const [verbruik, setVerbruik] = useState<number>(state.roiResult?.geschatVerbruikKwh ?? 3500)
+
+  const geschatVerbruik = state.bagData
+    ? schatVerbruik(state.bagData.oppervlakte, state.bagData.bouwjaar)
+    : 3500
+  const verbruikMax = Math.max(25000, (state.bagData?.oppervlakte ?? 0) * 40)
+
+  const [verbruik, setVerbruik] = useState<number>(state.roiResult?.geschatVerbruikKwh ?? geschatVerbruik)
   const [dakOpp, setDakOpp] = useState<number>(Math.min(state.bagData?.dakOppervlakte ?? 35, dakMax))
+  const panelenMax = Math.max(40, Math.floor((dakMax * 0.70) / 4))
+  const [panelen, setPanelen] = useState<number>(state.roiResult?.aantalPanelen ?? Math.floor((dakMax * 0.55) / 4) || 10)
   const [localRoi, setLocalRoi] = useState<ROIResult | null>(state.roiResult ?? null)
   const [loading, setLoading] = useState(false)
+  const [roiError, setRoiError] = useState<string | null>(null)
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hasLoadedOnce = useRef(false)
 
@@ -99,22 +109,34 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
     hasLoadedOnce.current = true
     debounceTimer.current = setTimeout(async () => {
       setLoading(true)
+      setRoiError(null)
       try {
         const res = await fetch('/api/roi', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ oppervlakte: state.bagData!.oppervlakte, bouwjaar: state.bagData!.bouwjaar, dakOppervlakte: dakOpp, huidigVerbruikKwh: verbruik, netcongestieStatus: state.netcongestie?.status }),
+          body: JSON.stringify({
+            oppervlakte: state.bagData!.oppervlakte,
+            bouwjaar: state.bagData!.bouwjaar,
+            dakOppervlakte: dakOpp,
+            huidigVerbruikKwh: verbruik,
+            aantalPanelenOverride: panelen,
+            netcongestieStatus: state.netcongestie?.status,
+          }),
         })
         if (res.ok) {
           const data = await res.json()
           setLocalRoi(data.roi)
           dispatch({ type: 'SET_ROI', roiResult: data.roi })
           if (data.health) dispatch({ type: 'SET_HEALTH_SCORE', healthScore: data.health })
+        } else {
+          setRoiError('Herberekening mislukt. Probeer opnieuw.')
         }
-      } catch { /* silent */ } finally { setLoading(false) }
+      } catch {
+        setRoiError('Herberekening mislukt. Controleer uw verbinding.')
+      } finally { setLoading(false) }
     }, delay)
     return () => { if (debounceTimer.current) clearTimeout(debounceTimer.current) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [verbruik, dakOpp])
+  }, [verbruik, dakOpp, panelen])
 
   const roi = localRoi
 
@@ -124,11 +146,20 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
 
       <div className="bg-slate-900/40 border border-white/10 rounded-xl p-4 space-y-5">
         <div className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Parameters</div>
-        <SliderInput label="Huidig verbruik" value={verbruik} onChange={setVerbruik} min={1000} max={8000} step={100} unit="kWh/jaar"
+        <SliderInput label="Huidig verbruik" value={verbruik} onChange={setVerbruik} min={1000} max={verbruikMax} step={100} unit="kWh/jaar"
           note={state.bagData?.oppervlakte ? `Geschat o.b.v. ${state.bagData.oppervlakte}m²` : undefined} />
         <SliderInput label="Dakoppervlak" value={dakOpp} onChange={setDakOpp} min={10} max={dakMax} step={1} unit="m²"
           note={state.bagData?.dakOppervlakte ? `BAG: ${state.bagData.dakOppervlakte}m²` : undefined} />
+        <SliderInput label="Zonnepanelen" value={panelen} onChange={setPanelen} min={1} max={panelenMax} step={1} unit="stuks"
+          note="Pas aan als u al weet hoeveel panelen u wilt" />
       </div>
+
+      {roiError && (
+        <div className="flex items-start gap-2 bg-red-950/40 border border-red-700 rounded-lg px-3 py-2">
+          <span className="text-red-400 text-xs mt-0.5">!</span>
+          <p className="text-red-400 text-xs font-mono">{roiError}</p>
+        </div>
+      )}
 
       {loading && (
         <div className="flex items-center gap-2 text-xs font-mono text-amber-400">

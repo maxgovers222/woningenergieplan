@@ -12,7 +12,7 @@ const LEVERINGSTARIEF = 0.40   // €/kWh inkoop
 const TERUGLEVERTARIEF = 0.09  // €/kWh uitkoop (marktprijs)
 const KWH_PER_PANEEL = 350     // kWh/jaar per 400Wp paneel NL gemiddeld
 const M2_PER_PANEEL = 4        // m² dakoppervlak per paneel (incl. tussenruimte)
-const DAK_BENUTTING = 0.70     // 70% van dakoppervlak bruikbaar
+const DAK_BENUTTING = 0.55     // 55% van dakoppervlak bruikbaar (realistisch: niet alle vlakken zijn zuidgericht)
 
 export interface ROIInput {
   oppervlakte: number          // Woonoppervlak m²
@@ -20,6 +20,7 @@ export interface ROIInput {
   dakOppervlakte: number       // Geschat dakoppervlak m²
   huidigVerbruikKwh?: number   // Optioneel: overschrijft schatting
   budgetEur?: number           // Optioneel: max investering
+  aantalPanelenOverride?: number // Optioneel: gebruiker overschrijft paneel berekening
 }
 
 export interface ShockEffect2027 {
@@ -80,7 +81,8 @@ export function schatVerbruik(oppervlakte: number, bouwjaar: number): number {
 export function berekenROI(input: ROIInput): ROIResult {
   const verbruikKwh = input.huidigVerbruikKwh ?? schatVerbruik(input.oppervlakte, input.bouwjaar)
 
-  const aantalPanelen = Math.floor((input.dakOppervlakte * DAK_BENUTTING) / M2_PER_PANEEL)
+  const aantalPanelen = input.aantalPanelenOverride
+    ?? Math.floor((input.dakOppervlakte * DAK_BENUTTING) / M2_PER_PANEEL)
   const productieKwh = aantalPanelen * KWH_PER_PANEEL
   const saldering2026 = SALDERING_SCHEMA[2026]
 
