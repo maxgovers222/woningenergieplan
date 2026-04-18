@@ -71,7 +71,7 @@ components/
     PhotoUpload.tsx                 # Dropzone + vision API
     FunnelProgress.tsx
     AnalysisLoading.tsx             # Labor illusion loader met roterende berichten (BAG / netcapaciteit / ROI)
-    StepHeader.tsx                  # Gedeelde stap-header component
+    StepHeader.tsx                  # Gedeelde stap-header component — clean design: geen grid/glow, stap-label 'Stap X — Naam' in DM Sans
     PDFDownloadButton.tsx           # @react-pdf/renderer v4, dynamic import (ssr:false), window.print() fallback
     types.ts                        # Gedeelde funnel types (incl. wijk + stad in FunnelState)
   pseo/
@@ -178,10 +178,12 @@ wijk-pSEO CTA linkt naar `/check?wijk=[wijk]&stad=[stad]` om de URL handshake te
 `scripts/seed-wijken.ts` — géén template fallback, altijd Gemini. Haalt CBS PDOK WFS data op voor echte `aantalWoningen`. Gemini prompt: 800w hyperlocale content + 5 FAQs. JSON-LD @graph: WebPage + FAQPage. Flags: `--skip-existing`, `--batch=START,END`, `--dry-run`.
 
 ### Email bevestiging
-`app/api/leads/route.ts` — na succesvolle lead opslag stuurt Resend een bevestigingsmail (fire-and-forget, fouten worden gelogd maar niet gethrowt).
+`app/api/leads/route.ts` — na succesvolle lead opslag stuurt Resend een bevestigingsmail. Email call is **geawait** (niet fire-and-forget) zodat de Promise niet wegvalt in serverless. FROM-adres: `RESEND_FROM_EMAIL` env var of fallback `onboarding@resend.dev` (Resend test domein). Vervang fallback door `noreply@saldeerscan.nl` zodra domein geverifieerd is in Resend dashboard.
 
 ### Interne linking structuur
 Breadcrumbs: Home → Provincie → Stad → Wijk op alle pSEO pagina's. Provincie pagina's linken naar alle steden. Stad pagina's linken naar alle wijken. Wijk CTAs linken naar `/check?wijk=...&stad=...`. Sitemap bevat alle drie niveaus. Wijkpagina's bevatten ook een "Andere wijken in {stad}" sectie (max 6 links, via `getWijkenByStad()`) voor extra interne linking.
+
+BreadcrumbList JSON-LD aanwezig op provincie (Home→Provincie), stad (Home→Provincie→Stad) en wijk pagina's (Home→Provincie→Stad→Wijk). Canonical URLs zijn absoluut (`https://saldeerscan.nl/...`) op alle pSEO routes. Organization JSON-LD schema staat in root layout. `app/robots.ts` genereert `/robots.txt` via Next.js MetadataRoute.
 
 ## Design systeem
 
