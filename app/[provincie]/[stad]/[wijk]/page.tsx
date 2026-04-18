@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const description = page?.metaDescription ?? `Gratis 2027 saldeercheck voor woningen in ${wijk}, ${stad}. AI-scan, ROI en investeringsrapport.`
   return {
     title, description,
-    alternates: { canonical: `/${provincie}/${stad}/${wijk}` },
-    openGraph: { title, description, type: 'website' },
+    alternates: { canonical: `https://saldeerscan.nl/${provincie}/${stad}/${wijk}` },
+    openGraph: { title, description, type: 'website', locale: 'nl_NL', url: `https://saldeerscan.nl/${provincie}/${stad}/${wijk}` },
   }
 }
 

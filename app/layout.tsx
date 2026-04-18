@@ -31,6 +31,18 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'SaldeerScan.nl',
+  url: 'https://saldeerscan.nl',
+  logo: 'https://saldeerscan.nl/logo.png',
+  description: 'Gratis AI-scan voor de 2027 salderingsafschaffing — ROI berekening en investeringsrapport voor Nederlandse woningeigenaren.',
+  areaServed: 'NL',
+  serviceType: 'Energie-advies',
+  contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', availableLanguage: 'Dutch' },
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +53,12 @@ export default function RootLayout({
       lang="nl"
       className={`${jakarta.variable} ${dmSans.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

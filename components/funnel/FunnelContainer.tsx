@@ -145,7 +145,7 @@ export function FunnelContainer({ initialAdres = '', initialWijk = '', initialSt
         </div>
       )}
       <FunnelProgress currentStep={state.step} />
-      <div className="bg-slate-900/70 backdrop-blur-xl border border-white/10 shadow-[0_0_60px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.07)] rounded-3xl overflow-hidden">
+      <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl overflow-hidden">
         {state.step === 1 && <Step1Adres state={state} dispatch={dispatch} />}
         {state.step === 2 && <Step2ROI state={state} dispatch={dispatch} />}
         {state.step === 3 && <Step3Meterkast state={state} dispatch={dispatch} />}

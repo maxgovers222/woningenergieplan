@@ -43,8 +43,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return {
     title,
     description,
-    alternates: { canonical: `/${provincie}` },
-    openGraph: { title, description, type: 'website' },
+    alternates: { canonical: `https://saldeerscan.nl/${provincie}` },
+    openGraph: { title, description, type: 'website', locale: 'nl_NL', url: `https://saldeerscan.nl/${provincie}` },
   }
 }
 
@@ -87,12 +87,19 @@ export default async function ProvincePage({ params }: { params: Promise<Params>
     })),
   }
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://saldeerscan.nl' },
+      { '@type': 'ListItem', position: 2, name: provLabel, item: `https://saldeerscan.nl/${provincie}` },
+    ],
+  }
+
   return (
     <div className="min-h-screen pb-20" style={{ background: N1 }}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* Nav */}
       <nav className="sticky top-0 z-50 bg-white border-b border-slate-100">

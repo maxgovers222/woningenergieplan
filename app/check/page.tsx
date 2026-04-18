@@ -20,7 +20,7 @@ function Header() {
             SaldeerScan<span style={{ color: '#00aa65' }}>.nl</span>
           </span>
         </a>
-        <span className="text-xs font-mono text-white/50">Gratis 2027 saldeercheck</span>
+        <span className="text-xs text-white/50" style={{ fontFamily: 'var(--font-sans)' }}>Gratis 2027 saldeercheck</span>
       </div>
     </nav>
   )

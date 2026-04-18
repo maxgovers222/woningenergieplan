@@ -47,8 +47,8 @@ export function FunnelProgress({ currentStep }: FunnelProgressProps) {
                   </svg>
                 ) : <span>{num}</span>}
               </div>
-              <span className="text-[10px] font-mono hidden sm:block transition-colors duration-300"
-                style={{ color: isActive ? AMBER : isCompleted ? AMBER : 'rgba(255,255,255,0.25)', fontWeight: isActive ? 600 : 400 }}>
+              <span className="text-[10px] hidden sm:block transition-colors duration-300"
+                style={{ fontFamily: 'var(--font-sans)', color: isActive ? AMBER : isCompleted ? AMBER : 'rgba(255,255,255,0.25)', fontWeight: isActive ? 600 : 400 }}>
                 {label}
               </span>
             </div>
@@ -57,7 +57,7 @@ export function FunnelProgress({ currentStep }: FunnelProgressProps) {
       </div>
 
       <div className="mt-2 text-center sm:hidden">
-        <span className="text-xs font-mono" style={{ color: AMBER }}>
+        <span className="text-xs" style={{ color: AMBER, fontFamily: 'var(--font-sans)' }}>
           Stap {currentStep}/6 — {STEPS[currentStep - 1].label}
         </span>
       </div>

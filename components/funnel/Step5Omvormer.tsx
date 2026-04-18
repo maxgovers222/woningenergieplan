@@ -10,7 +10,7 @@ interface Step5OmvormerProps {
   dispatch: Dispatch<FunnelAction>
 }
 
-const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_35px_rgba(245,158,11,0.5)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
+const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
 
 function OmvormerResultaat({ analyse }: { analyse: OmvormerAnalyse }) {
   return (
@@ -73,12 +73,12 @@ export function Step5Omvormer({ state, dispatch }: Step5OmvormerProps) {
 
   return (
     <div className="p-6 space-y-6">
-      <StepHeader stap="// STAP 05 — OMVORMER SCAN" title="Omvormer compatibiliteit" subtitle="AI-identificatie van merk, model en hybride geschiktheid" />
+      <StepHeader stap="Stap 5 — Omvormer scan" title="Omvormer compatibiliteit" subtitle="AI-identificatie van merk, model en hybride geschiktheid" />
 
       {!analyse && (
         <div className="bg-amber-950/30 border border-amber-500/30 rounded-lg px-4 py-3 flex items-start gap-2.5">
           <span className="text-amber-400 text-base shrink-0 mt-0.5">💡</span>
-          <div className="text-xs font-mono text-amber-300 leading-relaxed">
+          <div className="text-xs text-amber-300 leading-relaxed" style={{ fontFamily: 'var(--font-sans)' }}>
             <span className="font-bold">Tip:</span> Foto van het label of display op de omvormer. Merk en model moeten leesbaar zijn — gebruik indien nodig de zaklamp van uw telefoon.
           </div>
         </div>
@@ -96,7 +96,7 @@ export function Step5Omvormer({ state, dispatch }: Step5OmvormerProps) {
           <OmvormerResultaat analyse={analyse} />
           <button
             onClick={() => dispatch({ type: 'SET_OMVORMER', omvormerAnalyse: null })}
-            className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 font-mono text-xs py-2 px-4 rounded-lg transition-colors"
+            className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 text-xs py-2 px-4 rounded-lg transition-colors"
           >
             Andere foto uploaden
           </button>
@@ -104,18 +104,18 @@ export function Step5Omvormer({ state, dispatch }: Step5OmvormerProps) {
       )}
 
       {!analyse && (
-        <div className="text-xs font-mono text-white/30 text-center">
+        <div className="text-xs text-white/30 text-center" style={{ fontFamily: 'var(--font-sans)' }}>
           Nog geen zonnepanelen? U kunt deze stap overslaan.
         </div>
       )}
 
       <div className="flex gap-3">
         <button onClick={() => dispatch({ type: 'SET_STEP', step: 4 })}
-          className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 font-mono text-sm py-3 px-4 rounded-full transition-colors">
+          className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 text-sm py-3 px-4 rounded-full transition-colors">
           ← Terug
         </button>
         <button onClick={() => dispatch({ type: 'SET_STEP', step: 6 })}
-          className={`flex-[2] font-mono text-sm py-3 px-6 ${amberBtnCls}`}>
+          className={`flex-[2] text-sm py-3 px-6 ${amberBtnCls}`}>
           {analyse ? 'Aanvraag versturen →' : 'Overslaan →'}
         </button>
       </div>

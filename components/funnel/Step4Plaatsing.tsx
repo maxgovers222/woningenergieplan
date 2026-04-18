@@ -10,7 +10,7 @@ interface Step4PlaatsingProps {
   dispatch: Dispatch<FunnelAction>
 }
 
-const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_35px_rgba(245,158,11,0.5)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
+const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
 
 function PlaatsingResultaat({ analyse }: { analyse: PlaatsingsAnalyse }) {
   const scoreColor = analyse.geschiktheidScore >= 8 ? 'text-emerald-400' : analyse.geschiktheidScore >= 5 ? 'text-amber-400' : 'text-red-400'
@@ -63,12 +63,12 @@ export function Step4Plaatsing({ state, dispatch }: Step4PlaatsingProps) {
   const analyse = state.plaatsingsAnalyse
   return (
     <div className="p-6 space-y-6">
-      <StepHeader stap="// STAP 04 — PLAATSINGSLOCATIE" title="Locatie beoordeling" subtitle="NEN 2078:2023 brandveiligheidscheck voor batterijplaatsing" />
+      <StepHeader stap="Stap 4 — Plaatsingslocatie" title="Locatie beoordeling" subtitle="NEN 2078:2023 brandveiligheidscheck voor batterijplaatsing" />
       <div className="bg-slate-900/40 border border-white/10 rounded-xl p-3">
-        <div className="text-[10px] font-mono text-white/40 uppercase tracking-widest mb-1.5">NEN 2078:2023 vereisten</div>
+        <div className="text-xs font-semibold text-white/50 mb-1.5">NEN 2078:2023 vereisten</div>
         <ul className="space-y-1">
           {['Min. 50 cm afstand tot brandbare materialen', 'Adequate ventilatie aanwezig', 'Geen waterleiding of gas in nabijheid', 'Stabiele temperatuur (geen directe zon)'].map((req, i) => (
-            <li key={i} className="text-xs font-mono text-white/40 flex items-center gap-1.5">
+            <li key={i} className="text-xs text-white/40 flex items-center gap-1.5" style={{ fontFamily: 'var(--font-sans)' }}>
               <span className="text-white/10">○</span> {req}
             </li>
           ))}
@@ -77,7 +77,7 @@ export function Step4Plaatsing({ state, dispatch }: Step4PlaatsingProps) {
       {!analyse && (
         <div className="bg-amber-950/30 border border-amber-500/30 rounded-lg px-4 py-3 flex items-start gap-2.5">
           <span className="text-amber-400 text-base shrink-0 mt-0.5">💡</span>
-          <div className="text-xs font-mono text-amber-300 leading-relaxed">
+          <div className="text-xs text-amber-300 leading-relaxed" style={{ fontFamily: 'var(--font-sans)' }}>
             <span className="font-bold">Tip:</span> Maak een overzichtsfoto van de ruimte (garage, bijkeuken). Zorg dat ventilatie en nabijgelegen leidingen zichtbaar zijn.
           </div>
         </div>
@@ -89,16 +89,16 @@ export function Step4Plaatsing({ state, dispatch }: Step4PlaatsingProps) {
         <div className="space-y-3">
           <PlaatsingResultaat analyse={analyse} />
           <button onClick={() => dispatch({ type: 'SET_PLAATSING', plaatsingsAnalyse: null })}
-            className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 font-mono text-xs py-2 px-4 rounded-lg transition-colors">
+            className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 text-xs py-2 px-4 rounded-lg transition-colors">
             Andere foto uploaden
           </button>
         </div>
       )}
       <div className="flex gap-3">
         <button onClick={() => dispatch({ type: 'SET_STEP', step: 3 })}
-          className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 font-mono text-sm py-3 px-4 rounded-full transition-colors">← Terug</button>
+          className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 text-sm py-3 px-4 rounded-full transition-colors">← Terug</button>
         <button onClick={() => dispatch({ type: 'SET_STEP', step: 5 })}
-          className={`flex-[2] font-mono text-sm py-3 px-6 ${amberBtnCls}`}>
+          className={`flex-[2] text-sm py-3 px-6 ${amberBtnCls}`}>
           {analyse ? 'Omvormer scannen →' : 'Overslaan →'}
         </button>
       </div>

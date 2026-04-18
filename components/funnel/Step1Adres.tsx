@@ -10,7 +10,7 @@ interface Step1AdresProps {
   dispatch: Dispatch<FunnelAction>
 }
 
-const amberBtnCls = 'bg-[#f59e0b] text-slate-950 font-bold rounded-full transition-all duration-200 shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:brightness-110 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100 disabled:brightness-100'
+const amberBtnCls = 'bg-[#f59e0b] text-slate-950 font-bold rounded-full transition-all duration-200 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
 
 function HealthScoreGauge({ score, label }: { score: number; label: string }) {
   const colorClass =
@@ -250,7 +250,7 @@ export function Step1Adres({ state, dispatch }: Step1AdresProps) {
 
   return (
     <div className="p-7 space-y-6">
-      <StepHeader stap="// STAP 01 — ADRESVERIFICATIE" title="Voer uw adres in" subtitle="Selecteer uw adres voor een nauwkeurige BAG-analyse" />
+      <StepHeader stap="Stap 1 — Adresverificatie" title="Voer uw adres in" subtitle="Selecteer uw adres voor een nauwkeurige BAG-analyse" />
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <AddressAutocomplete

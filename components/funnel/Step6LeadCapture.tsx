@@ -42,7 +42,7 @@ interface LeadFormData {
   gdprConsent: boolean
 }
 
-const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_35px_rgba(245,158,11,0.5)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
+const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
 
 function IsdeSummaryCard({ bedragEur, apparaatType, vermogenKwp }: { bedragEur: number; apparaatType: string; vermogenKwp: number }) {
   if (bedragEur <= 0) return null
@@ -152,7 +152,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
 
   return (
     <div className="p-6 space-y-6">
-      <StepHeader stap="// STAP 06 — RAPPORT" title="Ontvang uw gratis PDF-rapport" subtitle="Vul uw gegevens in — wij sturen het rapport direct naar uw e-mail" />
+      <StepHeader stap="Stap 6 — Uw rapport" title="Ontvang uw gratis PDF-rapport" subtitle="Vul uw gegevens in — wij sturen het rapport direct naar uw e-mail" />
 
       {isde && <IsdeSummaryCard {...isde} />}
 
@@ -291,7 +291,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
       </form>
 
       <button onClick={() => dispatch({ type: 'SET_STEP', step: 5 })} disabled={loading}
-        className="w-full bg-white/5 hover:bg-white/10 border border-white/10 disabled:opacity-30 text-white/50 font-mono text-sm py-2.5 px-4 rounded-full transition-colors">
+        className="w-full bg-white/5 hover:bg-white/10 border border-white/10 disabled:opacity-30 text-white/50 text-sm py-2.5 px-4 rounded-full transition-colors">
         ← Terug
       </button>
     </div>

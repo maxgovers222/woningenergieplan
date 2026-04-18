@@ -11,7 +11,7 @@ interface Step2ROIProps {
   dispatch: Dispatch<FunnelAction>
 }
 
-const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_35px_rgba(245,158,11,0.5)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
+const amberBtnCls = 'bg-amber-500 text-slate-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:opacity-90 active:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100'
 
 const PANEEL_TYPES = [
   { label: 'Standaard (330 kWh/jaar)', kwhPerPaneel: 330 },
@@ -154,7 +154,7 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
 
   return (
     <div className="p-6 space-y-6">
-      <StepHeader stap="// STAP 02 — ROI BEREKENING" title="Uw besparingsanalyse" subtitle="Pas de sliders aan voor een persoonlijke berekening" />
+      <StepHeader stap="Stap 2 — ROI berekening" title="Uw besparingsanalyse" subtitle="Pas de sliders aan voor een persoonlijke berekening" />
 
       <div className="bg-slate-900/40 border border-white/10 rounded-xl p-4 space-y-5">
         <div className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Parameters</div>
@@ -251,9 +251,9 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
 
       <div className="flex gap-3">
         <button onClick={() => dispatch({ type: 'SET_STEP', step: 1 })}
-          className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 font-mono text-sm py-3 px-4 rounded-full transition-colors">← Terug</button>
+          className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 text-sm py-3 px-4 rounded-full transition-colors">← Terug</button>
         <button onClick={() => dispatch({ type: 'SET_STEP', step: 3 })} disabled={!roi || panelen === 0}
-          className={`flex-[2] font-mono text-sm py-3 px-6 ${amberBtnCls}`}>
+          className={`flex-[2] text-sm py-3 px-6 ${amberBtnCls}`}>
           Meterkast scannen →
         </button>
       </div>
