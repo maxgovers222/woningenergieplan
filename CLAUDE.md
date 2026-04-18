@@ -132,7 +132,7 @@ De B2B webhook dispatcher in `lib/webhooks.ts` controleert altijd `gdpr_consent 
 `lib/roi.ts` heeft een `SALDERING_SCHEMA` map (2025: 64%, 2026: 28%, 2027: 0%). Het `shockEffect2027` object drijft urgentie in `Shock2027Banner.tsx` én op pSEO-pagina's.
 
 ### Rate limiting
-`lib/rate-limit.ts` — in-memory sliding window, 5 req/IP/uur, **namespace per route** (key = `${pathname}:${ip}`). Voorkomt dat BAG + ROI + netcongestie calls dezelfde teller delen. Voor productie vervangen door Upstash Redis.
+`lib/rate-limit.ts` — in-memory sliding window, 5 req/IP/uur, **namespace per route** (key = `${pathname}:${ip}`). Voorkomt dat BAG + ROI + netcongestie calls dezelfde teller delen. `pruneExpiredEntries()` verwijdert verlopen entries als de Map > 1000 entries bereikt. Voor productie vervangen door Upstash Redis.
 
 ### URL pre-fill handshake
 `app/check/page.tsx` leest `useSearchParams()` (wrapped in `Suspense`):
@@ -142,12 +142,12 @@ De B2B webhook dispatcher in `lib/webhooks.ts` controleert altijd `gdpr_consent 
 wijk-pSEO CTA linkt naar `/check?wijk=[wijk]&stad=[stad]` om de URL handshake te activeren.
 
 ### Funnel localStorage persistentie
-`FunnelContainer` slaat volledige `FunnelState` op in `localStorage` (key: `funnel_state`). Bij herladen verschijnt een "Doorgaan waar je was?" banner.
+`FunnelContainer` slaat volledige `FunnelState` op in `localStorage` (key: `funnel_state`). Bij herladen verschijnt een "Doorgaan waar je was?" banner — ook als URL-params aanwezig zijn (initialAdres/Wijk/Stad). Opslaan is gedebounced met 500ms om I/O te beperken.
 
 ### pSEO routes — drie niveaus
-- **Provincie-niveau**: `app/[provincie]/page.tsx` — ISR 30d, steden overzicht, JSON-LD AdministrativeArea
-- **Stad-niveau**: `app/[provincie]/[stad]/page.tsx` — ISR 30d, wijken overzicht, urgentie strip, JSON-LD City
-- **Wijk-niveau**: `app/[provincie]/[stad]/[wijk]/page.tsx` — ISR 30d, `generateStaticParams()` via `getTopWijken(500)`, AI-content via `generateWijkContent()`, breadcrumb, ranking badge, CountdownTimer
+- **Provincie-niveau**: `app/[provincie]/page.tsx` — ISR 7d, steden overzicht, JSON-LD AdministrativeArea
+- **Stad-niveau**: `app/[provincie]/[stad]/page.tsx` — ISR 7d, wijken overzicht, urgentie strip, JSON-LD City
+- **Wijk-niveau**: `app/[provincie]/[stad]/[wijk]/page.tsx` — ISR 7d, `generateStaticParams()` via `getTopWijken(500)`, AI-content via `generateWijkContent()`, breadcrumb, ranking badge, CountdownTimer, BreadcrumbList JSON-LD, gerelateerde wijken sectie onderaan
 - **Straat-niveau**: `app/[provincie]/[stad]/[wijk]/[straat]/page.tsx` — ISR 30d, `generateStaticParams()` pre-bouwt top-500 straten op `aantal_woningen`
 
 ### Wijk ranking badge
@@ -181,7 +181,7 @@ wijk-pSEO CTA linkt naar `/check?wijk=[wijk]&stad=[stad]` om de URL handshake te
 `app/api/leads/route.ts` — na succesvolle lead opslag stuurt Resend een bevestigingsmail (fire-and-forget, fouten worden gelogd maar niet gethrowt).
 
 ### Interne linking structuur
-Breadcrumbs: Home → Provincie → Stad → Wijk op alle pSEO pagina's. Provincie pagina's linken naar alle steden. Stad pagina's linken naar alle wijken. Wijk CTAs linken naar `/check?wijk=...&stad=...`. Sitemap bevat alle drie niveaus.
+Breadcrumbs: Home → Provincie → Stad → Wijk op alle pSEO pagina's. Provincie pagina's linken naar alle steden. Stad pagina's linken naar alle wijken. Wijk CTAs linken naar `/check?wijk=...&stad=...`. Sitemap bevat alle drie niveaus. Wijkpagina's bevatten ook een "Andere wijken in {stad}" sectie (max 6 links, via `getWijkenByStad()`) voor extra interne linking.
 
 ## Design systeem
 
