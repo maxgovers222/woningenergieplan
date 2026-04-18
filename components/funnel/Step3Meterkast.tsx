@@ -64,7 +64,10 @@ export function Step3Meterkast({ state, dispatch }: Step3MeterkastProps) {
       <StepHeader stap="Stap 3 — Meterkast scan" title="Meterkast analyse" subtitle="AI-scan bepaalt geschiktheid voor zonnepanelen & batterij" />
       {!analyse && (
         <div className="bg-amber-950/30 border border-amber-500/30 rounded-lg px-4 py-3 flex items-start gap-2.5">
-          <span className="text-amber-400 text-base shrink-0 mt-0.5">💡</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-amber-400 shrink-0 mt-0.5">
+            <circle cx="8" cy="6" r="3.5" stroke="currentColor" strokeWidth="1.3"/>
+            <path d="M6.5 11h3M7 12.5h2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+          </svg>
           <div className="text-xs text-amber-300 leading-relaxed" style={{ fontFamily: 'var(--font-sans)' }}>
             <span className="font-bold">Tip:</span> Open de kast volledig, sta ~1 meter ervoor en zorg voor verlichting. Alle groepen moeten zichtbaar zijn.
           </div>
@@ -72,7 +75,7 @@ export function Step3Meterkast({ state, dispatch }: Step3MeterkastProps) {
       )}
       {!analyse ? (
         <PhotoUpload visionType="meterkast" onAnalysed={(r) => dispatch({ type: 'SET_METERKAST', meterkastAnalyse: r as MeterkastAnalyse })}
-          title="Foto van uw meterkast" description="Maak een foto van uw open meterkast, inclusief alle groepen zichtbaar" icon="⚡" />
+          title="Foto van uw meterkast" description="Maak een foto van uw open meterkast, inclusief alle groepen zichtbaar" />
       ) : (
         <div className="space-y-3">
           <MeterkastResultaat analyse={analyse} />

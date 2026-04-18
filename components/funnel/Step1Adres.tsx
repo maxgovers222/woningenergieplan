@@ -159,7 +159,10 @@ function AddressAutocomplete({ value, onChange, onSelect, isSelected, disabled }
             <button key={s.id} type="button"
               onMouseDown={(e) => { e.preventDefault(); handleSelect(s) }}
               className="w-full text-left px-4 py-2.5 text-sm font-mono text-white/70 hover:bg-amber-500/10 hover:text-amber-300 transition-colors border-b border-white/5 last:border-0">
-              <span className="text-amber-500/60 mr-2 text-xs">📍</span>{s.label}
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-amber-500/60 mr-2 shrink-0 inline-block">
+                <path d="M8 1.5a4.5 4.5 0 014.5 4.5C12.5 10 8 14.5 8 14.5S3.5 10 3.5 6A4.5 4.5 0 018 1.5z" stroke="currentColor" strokeWidth="1.3"/>
+                <circle cx="8" cy="6" r="1.5" fill="currentColor"/>
+              </svg>{s.label}
             </button>
           ))}
         </div>

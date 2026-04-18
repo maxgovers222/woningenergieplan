@@ -219,7 +219,7 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
           {ranking ? (
             <div className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full text-xs font-semibold"
               style={{ background: 'rgba(245,158,11,0.15)', color: AMBER, border: '1px solid rgba(245,158,11,0.3)', fontFamily: 'var(--font-heading)' }}>
-              <span>🏆</span>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.5l1.6 3.9 4.4.4-3.2 3 .9 4.3L8 10.8l-3.7 2.3.9-4.3L2 5.8l4.4-.4z"/></svg>
               {ranking.label} in {stadDisplay}
             </div>
           ) : (
@@ -313,7 +313,9 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
             <WijkSaldeerChart besparing={besparing} wijk={wijkDisplay} />
 
             <div className="mt-4 flex items-start gap-2 bg-amber-950/30 border border-amber-700/40 rounded-xl px-4 py-3">
-              <span className="text-amber-400 text-sm mt-0.5 shrink-0">⚡</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="text-amber-400 shrink-0 mt-0.5">
+                <path d="M9 1.5L4 9h5L6 14.5l7-8.5H8z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+              </svg>
               <p className="text-sm text-amber-300/80 leading-relaxed">
                 <span className="font-bold text-amber-400">Shock 2027:</span>{' '}
                 Verlies door saldering in {wijkDisplay}: <span className="font-bold text-amber-400">€{verlies} per jaar</span> vanaf 1 januari 2027 voor woningen zonder batterijopslag.
@@ -390,7 +392,7 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
                     { label: 'Verlies 2027', value: `−€${verlies}/jr`, sub: 'bij 0% saldering', danger: true },
                     { label: 'Netcongestie', value: page.netcongestieStatus ?? '—', sub: net?.label ?? '' },
                     ...(page.aantalWoningen ? [{ label: 'Woningen', value: `${page.aantalWoningen.toLocaleString('nl')}`, sub: 'in dit postcodegebied' }] : []),
-                    ...(ranking ? [{ label: 'Wijk Ranking', value: ranking.top ? '🏆 Top 10%' : '⭐ Top 25%', sub: 'rendement in ' + stadDisplay }] : []),
+                    ...(ranking ? [{ label: 'Wijk Ranking', value: ranking.top ? 'Top 10%' : 'Top 25%', sub: 'rendement in ' + stadDisplay }] : []),
                   ].map(({ label, value, sub, danger }) => (
                     <div key={label} className="flex items-start justify-between gap-2 pb-3 border-b border-white/5 last:border-0 last:pb-0">
                       <div>

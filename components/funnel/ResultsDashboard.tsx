@@ -66,10 +66,18 @@ function ShockChart({ besparing }: { besparing: number }) {
 function ROITijdlijn({ terugverdien, besparing }: { terugverdien: number; besparing: number }) {
   const startYear = 2025
   const milestones = [
-    { jaar: startYear,               label: 'Installatie',        kleur: '#f59e0b', icon: '⚡' },
-    { jaar: startYear + Math.round(terugverdien / 2), label: 'Halverwege',  kleur: '#f97316', icon: '📈' },
-    { jaar: startYear + Math.round(terugverdien),     label: 'Terugverdiend', kleur: '#10b981', icon: '✓' },
-    { jaar: startYear + 15,          label: '15 jaar winst',      kleur: '#10b981', icon: '🏆' },
+    { jaar: startYear, label: 'Installatie', kleur: '#f59e0b', icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9 1.5L4 9h5L6 14.5l7-8.5H8z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/></svg>
+    )},
+    { jaar: startYear + Math.round(terugverdien / 2), label: 'Halverwege', kleur: '#f97316', icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1.5 11l4-4 3 3 5.5-6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/><path d="M10.5 4h4v4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    )},
+    { jaar: startYear + Math.round(terugverdien), label: 'Terugverdiend', kleur: '#10b981', icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8l3.5 3.5 7.5-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    )},
+    { jaar: startYear + 15, label: '15 jaar winst', kleur: '#10b981', icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.5l1.6 3.9 4.4.4-3.2 3 .9 4.3L8 10.8l-3.7 2.3.9-4.3L2 5.8l4.4-.4z"/></svg>
+    )},
   ]
 
   return (

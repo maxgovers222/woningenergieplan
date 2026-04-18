@@ -172,7 +172,13 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
 
       {/* Floating report preview card */}
       <div className="bg-slate-900/40 border border-white/10 rounded-2xl p-5">
-        <div className="text-[10px] font-mono text-amber-400 uppercase tracking-widest mb-3">📄 Dit staat in uw PDF-rapport</div>
+        <div className="flex items-center gap-1.5 text-[10px] font-mono text-amber-400 uppercase tracking-widest mb-3">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="3" y="1" width="10" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.3"/>
+            <path d="M5.5 5h5M5.5 7.5h5M5.5 10h3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+          </svg>
+          Dit staat in uw PDF-rapport
+        </div>
         <div className="space-y-1.5 mb-3">
           {[
             { label: 'ROI-berekening', value: state.roiResult ? `€${state.roiResult.scenarioNu.besparingJaarEur.toLocaleString('nl-NL')}/jaar` : '—', done: !!state.roiResult },
@@ -282,7 +288,18 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
           className={`w-full font-mono text-sm py-3.5 px-6 flex items-center justify-center gap-2 ${amberBtnCls}`}>
           {loading ? (
             <><div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />Indienen...</>
-          ) : '📄 Stuur mij het gratis PDF-rapport →'}
+          ) : (
+            <>
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <rect x="3" y="1" width="10" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.3"/>
+                <path d="M5.5 5h5M5.5 7.5h5M5.5 10h3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+              </svg>
+              Stuur mij het gratis PDF-rapport
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </>
+          )}
         </button>
 
         <p className="text-[10px] font-mono text-white/30 text-center">

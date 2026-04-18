@@ -11,7 +11,6 @@ interface PhotoUploadProps {
   onAnalysed: (result: VisionResult) => void
   title: string
   description: string
-  icon: string
 }
 
 function ScanAnimation({ imageUrl }: { imageUrl: string }) {
@@ -37,7 +36,7 @@ function ScanAnimation({ imageUrl }: { imageUrl: string }) {
   )
 }
 
-export function PhotoUpload({ visionType, onAnalysed, title, description, icon }: PhotoUploadProps) {
+export function PhotoUpload({ visionType, onAnalysed, title, description }: PhotoUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -104,21 +103,19 @@ export function PhotoUpload({ visionType, onAnalysed, title, description, icon }
             isDragOver ? 'border-amber-500 bg-amber-500/10 scale-[1.01]' : 'border-white/15 hover:border-amber-500/50 bg-white/5 hover:bg-amber-500/5',
           ].join(' ')}
         >
-          <div className="text-4xl select-none">{icon}</div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-white/30">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
           <div className="text-center">
-            <p className="font-mono font-semibold text-white/80 text-sm">{title}</p>
-            <p className="text-xs text-white/40 mt-1">{description}</p>
+            <p className="font-semibold text-white/80 text-sm" style={{ fontFamily: 'var(--font-sans)' }}>{title}</p>
+            <p className="text-xs text-white/40 mt-1" style={{ fontFamily: 'var(--font-sans)' }}>{description}</p>
           </div>
           <div className="flex items-center gap-2 mt-1">
             <div className="h-px w-12 bg-white/10" />
-            <span className="text-[10px] font-mono text-white/30 uppercase">sleep of klik</span>
+            <span className="text-[10px] text-white/30" style={{ fontFamily: 'var(--font-sans)' }}>Sleep of klik</span>
             <div className="h-px w-12 bg-white/10" />
           </div>
-          <div className="text-[10px] font-mono text-amber-600/70 uppercase tracking-widest">JPEG · PNG · WebP — max 10 MB</div>
-          <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-amber-400/40 rounded-tl" />
-          <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-amber-400/40 rounded-tr" />
-          <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-amber-400/40 rounded-bl" />
-          <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-amber-400/40 rounded-br" />
+          <div className="text-[10px] text-amber-600/70" style={{ fontFamily: 'var(--font-sans)' }}>JPEG · PNG · WebP — max 10 MB</div>
         </div>
 
         <input ref={fileInputRef} type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) processFile(f); e.target.value = '' }} className="hidden" />
