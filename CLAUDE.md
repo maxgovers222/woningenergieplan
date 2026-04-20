@@ -43,7 +43,9 @@ app/
   layout.tsx                        # Fonts: Bricolage Grotesque (headings) + DM Sans (body)
   globals.css                       # Tailwind v4 + design tokens + .glass-card-navy + @media print
   sitemap.ts                        # Gesplitste sitemaps per provincie (+ provincie/stad URLs)
-  privacy/page.tsx                  # Privacyverklaring (lege placeholder)
+  privacy/page.tsx                  # AVG-compliant privacyverklaring (9 secties, volledig ingevuld)
+  icon.tsx                          # Dynamische favicon 32x32 (edge runtime, navy cirkel + amber hexagon)
+  apple-icon.tsx                    # Apple touch icon 180x180 (zelfde stijl)
   check/page.tsx                    # 6-staps Super Funnel (Suspense + useSearchParams voor ?adres=, ?wijk=, ?stad= prefill)
   [provincie]/page.tsx              # Provincie overzichtspagina met steden (ISR 30d)
   [provincie]/[stad]/page.tsx       # Stad overzichtspagina met wijken + urgentie strip (ISR 30d)
@@ -66,9 +68,9 @@ components/
     FunnelContainer.tsx             # useReducer state machine (6 stappen), accepteert initialAdres/initialWijk/initialStad props + localStorage persistentie
     Step1Adres.tsx                  # Auto-zoekt bij mount als initialAdres aanwezig; AnalysisLoading tijdens fetch
     Step2ROI.tsx … Step6LeadCapture.tsx
-    ResultsDashboard.tsx            # Volledig resultaten dashboard na lead submit: ShockChart + ROITijdlijn + GevalideerdStempel + ExpertSectie + PDF/print
-    Shock2027Banner.tsx             # 2027 saldering urgentie component
-    PhotoUpload.tsx                 # Dropzone + vision API
+    ResultsDashboard.tsx            # Volledig resultaten dashboard na lead submit: ShockChart + ROITijdlijn + GevalideerdStempel + PDF/print (geen nep-expert sectie)
+    Shock2027Banner.tsx             # 2027 saldering urgentie — amber design (bg-amber-950/20 border-amber-500/25), geen rode kleuren
+    PhotoUpload.tsx                 # Dropzone + vision API (geen icon prop, vaste SVG upload icon)
     FunnelProgress.tsx
     AnalysisLoading.tsx             # Labor illusion loader met roterende berichten (BAG / netcapaciteit / ROI)
     StepHeader.tsx                  # Gedeelde stap-header component — clean design: geen grid/glow, stap-label 'Stap X — Naam' in DM Sans
@@ -178,7 +180,15 @@ wijk-pSEO CTA linkt naar `/check?wijk=[wijk]&stad=[stad]` om de URL handshake te
 `scripts/seed-wijken.ts` — géén template fallback, altijd Gemini. Haalt CBS PDOK WFS data op voor echte `aantalWoningen`. Gemini prompt: 800w hyperlocale content + 5 FAQs. JSON-LD @graph: WebPage + FAQPage. Flags: `--skip-existing`, `--batch=START,END`, `--dry-run`.
 
 ### Email bevestiging
-`app/api/leads/route.ts` — na succesvolle lead opslag stuurt Resend een bevestigingsmail. Email call is **geawait** (niet fire-and-forget) zodat de Promise niet wegvalt in serverless. FROM-adres: `RESEND_FROM_EMAIL` env var of fallback `onboarding@resend.dev` (Resend test domein). Vervang fallback door `noreply@saldeerscan.nl` zodra domein geverifieerd is in Resend dashboard.
+`app/api/leads/route.ts` — na succesvolle lead opslag stuurt Resend een bevestigingsmail. Email call is **geawait** (niet fire-and-forget) zodat de Promise niet wegvalt in serverless. FROM-adres: `RESEND_FROM_EMAIL` env var — **geen fallback meer**. Stel in Vercel in als `SaldeerScan <noreply@saldeerscan.nl>` (display name zonder punt vermijdt RFC 5322 422-errors). Email template: donker amber urgency bar (`#1c1208` + `#fbbf24`), geen download knop, dynamisch copyright jaar.
+
+### Lead validatie (Step 6)
+`components/funnel/Step6LeadCapture.tsx` — strikte validatie vóór submit:
+- **Naam**: minimaal 2 woorden vereist (voor- + achternaam)
+- **Email**: trim + lowercase normalisatie, regex min TLD-lengte 2
+- **Telefoon**: landselector (NL +31 / BE +32 / DE +49 / LU +352) + regex per land. Opgeslagen in internationaal formaat (`+31612345678`). Live groen vinkje toont genormaliseerd nummer zodra het valide is.
+- `normalizePhone(raw, code)` strip leading zero + prepend country code
+- `validatePhone(raw, code)` regex per land via `COUNTRIES` array
 
 ### Interne linking structuur
 Breadcrumbs: Home → Provincie → Stad → Wijk op alle pSEO pagina's. Provincie pagina's linken naar alle steden. Stad pagina's linken naar alle wijken. Wijk CTAs linken naar `/check?wijk=...&stad=...`. Sitemap bevat alle drie niveaus. Wijkpagina's bevatten ook een "Andere wijken in {stad}" sectie (max 6 links, via `getWijkenByStad()`) voor extra interne linking.
@@ -201,7 +211,9 @@ Homepage en pSEO pagina's: dark navy achtergrond. Funnel cards (`/check`): wit/l
 | `amberBtnCls` pattern | `shadow-[0_0_35px_rgba(245,158,11,0.5)]` (sterkere glow variant in funnel) |
 | Disabled button | `disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none` |
 | Stats / highlight cijfers | `#f59e0b` (amber-500) |
-| Status ROOD | `bg-red-50 border-red-200 text-red-600` (licht) / `bg-red-950/50 border-red-700 text-red-400` (donker) |
+| Urgentie strips (homepage, stad) | `background: rgba(28,18,8,0.95)` + `border-amber-500/20` + tekst `text-amber-300/80` — **geen rood** |
+| Urgentie cards (Shock2027Banner, PDF) | `bg-amber-950/20 border-amber-500/25` — negatieve getallen mogen `text-red-400` blijven (semantisch) |
+| Status ROOD | `bg-red-50 border-red-200 text-red-600` (licht) / `bg-red-950/50 border-red-700 text-red-400` (donker) — **alleen voor netcongestie ROOD status** |
 | Status ORANJE | `bg-amber-50 border-amber-200 text-amber-600` (licht) / `bg-amber-950/50 border-amber-700 text-amber-400` (donker) |
 | Status GROEN | `bg-emerald-50 border-emerald-200 text-emerald-600` (licht) / `bg-emerald-950/50 border-emerald-700 text-emerald-400` (donker) |
 | SVG grid (hero only) | opacity 0.03, fade via `maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)'` |
@@ -210,8 +222,10 @@ Homepage en pSEO pagina's: dark navy achtergrond. Funnel cards (`/check`): wit/l
 
 Fonts (via `app/layout.tsx`, Next.js Google Fonts):
 - **Bricolage Grotesque** — koppen (H1-H6), `var(--font-heading)`
-- **DM Sans** — body tekst, `var(--font-sans)`
-- **ui-monospace** — code/data labels, `font-mono`
+- **DM Sans** — body tekst, labels, form fields, `var(--font-sans)` — **gebruik dit als default, niet font-mono**
+- **ui-monospace** — uitsluitend voor numerieke data/scores/bedragen, `font-mono`
+
+**Emoji-vrij**: geen emoji's in de UI. Gebruik altijd inline SVG iconen.
 
 ## Environment variables
 
@@ -256,7 +270,10 @@ WHERE stad = 'bergen-op-zoom' AND provincie = 'noord-brabant';
 - Homepage adres invoeren → redirect naar `/check?adres=...` → auto-zoek triggered
 - Homepage countdown timer telt af (niet `--`)
 - `/check?wijk=IJburg&stad=Amsterdam` → Step 1 AnalysisLoading toont "Netcapaciteit IJburg verifiëren..."
+- Step 6: naam vereist 2 woorden, telefoonnummer toont live groen preview na validatie
 - Step 6 submit → SuccessState toont ResultsDashboard met ShockChart + ROITijdlijn
+- Favicon zichtbaar in browsertabblad (niet Vercel logo)
+- Homepage urgentie strip is amber (niet rood)
 - pSEO straat-route laadt met JSON-LD in `<head>`
 - pSEO wijk-route (`/utrecht/utrecht/leidsche-rijn`) laadt na seed, breadcrumb aanwezig
 - Provincie pagina (`/noord-holland`) → grid van alle steden
