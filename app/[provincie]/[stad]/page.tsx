@@ -181,10 +181,10 @@ export default async function StadPage({ params }: { params: Promise<Params> }) 
       </section>
 
       {/* Urgentie strip */}
-      <div className="bg-red-950/40 border-y border-red-700/40 px-6 py-3">
+      <div className="border-y border-amber-500/20 px-6 py-3" style={{ background: 'rgba(28,18,8,0.95)' }}>
         <div className="max-w-5xl mx-auto text-center">
-          <p className="text-xs font-mono text-red-300">
-            ⚠ Per 1 januari 2027 stopt de salderingsregeling — woningbezitters in {stadDisplay} verliezen gemiddeld €{avgScore > 60 ? '650' : '450'}–€{avgScore > 60 ? '950' : '700'} per jaar aan saldeervoordeel
+          <p className="text-xs font-sans text-amber-300/80">
+            Deadline 1 januari 2027 — woningbezitters in {stadDisplay} verliezen gemiddeld €{avgScore > 60 ? '650' : '450'}–€{avgScore > 60 ? '950' : '700'} per jaar aan saldeervoordeel
           </p>
         </div>
       </div>

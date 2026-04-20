@@ -104,11 +104,11 @@ function HeroSection() {
 /* ─── Urgentie 2027 strip ─────────────────────────── */
 function UrgentieStrip() {
   return (
-    <div className="border-y border-red-700/60 py-3 px-6" style={{ background: 'rgba(69,10,10,0.85)' }}>
+    <div className="border-y border-amber-500/20 py-3 px-6" style={{ background: 'rgba(28,18,8,0.95)' }}>
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-sm text-center">
-        <span className="text-red-300 font-mono text-xs font-bold tracking-widest uppercase shrink-0">⚠ Deadline 1 jan 2027</span>
-        <span className="hidden sm:inline text-red-700">·</span>
-        <span className="text-red-200/80 text-xs">Saldering: <strong className="text-red-200">28% (2026) → 0% (2027)</strong> — Elke maand wachten kost u saldeervoordeel dat u nooit meer terugkrijgt.</span>
+        <span className="text-amber-400 font-sans text-xs font-bold tracking-widest uppercase shrink-0">Deadline 1 jan 2027</span>
+        <span className="hidden sm:inline text-amber-500/30">·</span>
+        <span className="text-amber-200/60 text-xs">Saldering: <strong className="text-amber-200/80">28% (2026) → 0% (2027)</strong> — Elke maand wachten kost u saldeervoordeel dat u nooit meer terugkrijgt.</span>
         <a href="/check" className="sm:ml-2 text-xs font-bold text-amber-400 hover:text-amber-300 underline whitespace-nowrap transition-colors">
           Bereken uw verlies →
         </a>
