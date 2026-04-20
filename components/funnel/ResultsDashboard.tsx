@@ -64,7 +64,7 @@ function ShockChart({ besparing }: { besparing: number }) {
 
 // ── ROI Tijdlijn ──────────────────────────────────────────────────────────────
 function ROITijdlijn({ terugverdien, besparing }: { terugverdien: number; besparing: number }) {
-  const startYear = 2025
+  const startYear = new Date().getFullYear()
   const milestones = [
     { jaar: startYear, label: 'Installatie', kleur: '#f59e0b', icon: (
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9 1.5L4 9h5L6 14.5l7-8.5H8z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/></svg>
@@ -125,28 +125,12 @@ function GevalideerdStempel() {
 function ExpertSectie({ regio }: { regio: string }) {
   return (
     <div className="bg-slate-900/40 border border-amber-500/20 rounded-2xl p-5 print-break-avoid">
-      <p className="text-[9px] font-mono uppercase tracking-widest text-amber-400/70 mb-3">[LOKALE EXPERT]</p>
-      <div className="flex items-center gap-4 mb-4">
-        {/* Avatar placeholder */}
-        <div className="w-14 h-14 rounded-full bg-slate-800 border-2 border-amber-500/30 flex items-center justify-center shrink-0">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" fill="rgba(245,158,11,0.4)"/>
-          </svg>
-        </div>
-        <div>
-          <p className="font-bold text-white text-sm" style={{ fontFamily: 'var(--font-heading)' }}>
-            Uw lokale expert in {regio}
-          </p>
-          <p className="text-xs font-mono text-white/40">Gecertificeerd energie-adviseur · SaldeerScan netwerk</p>
-          <div className="flex items-center gap-1 mt-1">
-            {[1,2,3,4,5].map(i => <span key={i} className="text-amber-400 text-xs">★</span>)}
-            <span className="text-[10px] font-mono text-white/30 ml-1">4.9/5 · 127 klanten</span>
-          </div>
-        </div>
-      </div>
-      <p className="text-xs font-mono text-white/50 mb-4 leading-relaxed">
-        Uw dossier is doorgezet naar een gecertificeerde installateur in {regio}.
-        Hij bekijkt uw scan, berekent de exacte configuratie en neemt <strong className="text-white/70">zo spoedig mogelijk</strong> contact op.
+      <p className="text-xs font-semibold text-amber-400 mb-3" style={{ fontFamily: 'var(--font-heading)' }}>Volgende stap</p>
+      <p className="font-bold text-white text-sm mb-1" style={{ fontFamily: 'var(--font-heading)' }}>
+        Een energieadviseur neemt contact op
+      </p>
+      <p className="text-xs text-white/50 mb-4 leading-relaxed" style={{ fontFamily: 'var(--font-sans)' }}>
+        Uw dossier wordt bekeken door een energieadviseur in {regio}. Hij berekent de exacte configuratie en neemt <strong className="text-white/70">zo spoedig mogelijk</strong> contact op.
       </p>
       <a
         href="/check"
