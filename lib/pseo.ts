@@ -118,6 +118,7 @@ export async function getPseoPagesByProvincie(provincie: string) {
     .select('slug, generated_at')
     .eq('provincie', provincie)
     .eq('status', 'published')
+    .is('straat', null)
   return data ?? []
 }
 

@@ -1,7 +1,9 @@
 'use client'
 
 import { useReducer, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import type { FunnelState, FunnelAction, HealthScoreResult, ROIResult, MeterkastAnalyse, PlaatsingsAnalyse, OmvormerAnalyse } from './types'
+import { trackEvent } from '@/lib/analytics'
 
 const STORAGE_KEY = 'wep_funnel_state'
 
@@ -45,6 +47,7 @@ function funnelReducer(state: FunnelState, action: FunnelAction): FunnelState {
     case 'SET_ADRES': return { ...state, adres: action.adres }
     case 'SET_LOADING': return { ...state, loading: action.loading }
     case 'SET_ERROR': return { ...state, error: action.error }
+    case 'SET_UTM_PARAMS': return { ...state, utmParams: action.utmParams }
     default: return state
   }
 }
@@ -65,6 +68,7 @@ function makeInitialState(initialAdres = '', initialWijk = '', initialStad = '')
     leadId: null,
     loading: false,
     error: null,
+    utmParams: null,
   }
 }
 
@@ -80,6 +84,31 @@ export function FunnelContainer({ initialAdres = '', initialWijk = '', initialSt
   const [state, dispatch] = useReducer(funnelReducer, makeInitialState(initialAdres, initialWijk, initialStad))
   const [savedState, setSavedState] = useState<FunnelState | null>(null)
   const [resumeBannerDismissed, setResumeBannerDismissed] = useState(false)
+  const searchParams = useSearchParams()
+
+  function trackingDispatch(action: FunnelAction) {
+    // Only track forward navigation — backward steps are not completions
+    if (action.type === 'SET_STEP' && action.step > state.step) {
+      trackEvent('funnel_step_complete', { step: state.step, next_step: action.step })
+    }
+    dispatch(action)
+  }
+
+  // Capture UTM params at mount — eenmalig. landingPage zonder UTM query zodat grouping in GA4 klopt.
+  useEffect(() => {
+    const source = searchParams.get('utm_source')
+    const medium = searchParams.get('utm_medium')
+    const campaign = searchParams.get('utm_campaign')
+    const landingPage = typeof window !== 'undefined'
+      ? window.location.origin + window.location.pathname
+      : null
+
+    if (source || medium || campaign) {
+      dispatch({ type: 'SET_UTM_PARAMS', utmParams: { source, medium, campaign, landingPage } })
+    }
+  // searchParams is stable per Next.js App Router — intentioneel lege deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Load saved state on mount (client only) — always, even with URL params
   useEffect(() => {
@@ -93,6 +122,11 @@ export function FunnelContainer({ initialAdres = '', initialWijk = '', initialSt
     const t = setTimeout(() => saveState(state), 500)
     return () => clearTimeout(t)
   }, [state])
+
+  // Track lead submission
+  useEffect(() => {
+    if (state.leadId) trackEvent('lead_submitted', { lead_id: state.leadId })
+  }, [state.leadId])
 
   function resumeSavedState() {
     if (!savedState) return
@@ -146,12 +180,12 @@ export function FunnelContainer({ initialAdres = '', initialWijk = '', initialSt
       )}
       <FunnelProgress currentStep={state.step} />
       <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] rounded-2xl overflow-hidden">
-        {state.step === 1 && <Step1Adres state={state} dispatch={dispatch} />}
-        {state.step === 2 && <Step2ROI state={state} dispatch={dispatch} />}
-        {state.step === 3 && <Step3Meterkast state={state} dispatch={dispatch} />}
-        {state.step === 4 && <Step4Plaatsing state={state} dispatch={dispatch} />}
-        {state.step === 5 && <Step5Omvormer state={state} dispatch={dispatch} />}
-        {state.step === 6 && <Step6LeadCapture state={state} dispatch={dispatch} />}
+        {state.step === 1 && <Step1Adres state={state} dispatch={trackingDispatch} />}
+        {state.step === 2 && <Step2ROI state={state} dispatch={trackingDispatch} />}
+        {state.step === 3 && <Step3Meterkast state={state} dispatch={trackingDispatch} />}
+        {state.step === 4 && <Step4Plaatsing state={state} dispatch={trackingDispatch} />}
+        {state.step === 5 && <Step5Omvormer state={state} dispatch={trackingDispatch} />}
+        {state.step === 6 && <Step6LeadCapture state={state} dispatch={trackingDispatch} />}
       </div>
     </div>
   )

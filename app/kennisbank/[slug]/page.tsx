@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { getKennisbankArticle, getAllKennisbankSlugs, getAllPublishedKennisbank } from '@/lib/kennisbank'
 import { LocalSchema } from '@/components/pseo/LocalSchema'
 import { NavDark, FooterDark } from '@/components/NavDark'
+import { RelatedWijken } from '@/components/pseo/RelatedWijken'
 
 export const revalidate = 2592000
 
@@ -158,6 +159,9 @@ export default async function KennisbankArtikel({ params }: { params: Promise<Pa
                 </div>
               </section>
             )}
+
+            {/* Wijk interne linking */}
+            <RelatedWijken limit={4} />
           </article>
 
           {/* Sidebar */}

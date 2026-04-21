@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@/components/Analytics";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-heading",
@@ -59,7 +60,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Analytics />
+        {children}
+      </body>
     </html>
   );
 }

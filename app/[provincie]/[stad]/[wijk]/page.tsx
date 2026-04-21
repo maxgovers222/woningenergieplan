@@ -6,6 +6,7 @@ import { LocalSchema } from '@/components/pseo/LocalSchema'
 import { WijkSaldeerChart } from '@/components/pseo/WijkSaldeerChart'
 import { CountdownTimer } from '@/components/CountdownTimer'
 import { AddressAutocomplete } from '@/components/AddressAutocomplete'
+import { WijkCtaButton } from '@/components/pseo/WijkCtaButton'
 
 const getCachedWijkPage = cache(getWijkPage)
 
@@ -164,10 +165,9 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
             <span className="hidden sm:block text-sm text-slate-500 font-medium">
               {wijkDisplay}, {stadDisplay}
             </span>
-            <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
-              className={`text-sm px-5 py-2.5 ${amberBtnCls}`}>
+            <WijkCtaButton wijk={wijk} stad={stad} className={`text-sm px-5 py-2.5 ${amberBtnCls}`}>
               Gratis analyseren
-            </a>
+            </WijkCtaButton>
           </div>
         </div>
       </nav>
@@ -262,14 +262,14 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
             </div>
           </div>
 
-          <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
+          <WijkCtaButton wijk={wijk} stad={stad}
             className={`inline-flex items-center gap-2 text-base ${amberBtnCls}`}
             style={{ fontFamily: 'var(--font-heading)' }}>
             Gratis mijn woning analyseren
             <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </a>
+          </WijkCtaButton>
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/45 mt-6">
             {['BAG officiële data', 'AVG-compliant', 'Volledig gratis'].map((t) => (
@@ -407,11 +407,11 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
                   ))}
                 </div>
 
-                <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
+                <WijkCtaButton wijk={wijk} stad={stad}
                   className={`mt-5 w-full flex items-center justify-center gap-2 text-sm py-3 ${amberBtnCls}`}
                   style={{ fontFamily: 'var(--font-heading)' }}>
                   Mijn adres scannen →
-                </a>
+                </WijkCtaButton>
               </div>
             </div>
           </div>
@@ -565,14 +565,14 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
       {/* ── Sticky Mobile CTA ───────────────────────────────────── */}
       <div className="fixed bottom-0 left-0 right-0 sm:hidden z-50 px-4 pb-4 pt-3"
         style={{ background: 'linear-gradient(to top, rgba(2,6,23,0.98) 60%, transparent)' }}>
-        <a href={`/check?wijk=${encodeURIComponent(wijk)}&stad=${encodeURIComponent(stad)}`}
+        <WijkCtaButton wijk={wijk} stad={stad}
           className={`flex items-center justify-center gap-2 w-full py-4 text-base ${amberBtnCls}`}
           style={{ fontFamily: 'var(--font-heading)' }}>
           Start gratis Saldeercheck
           <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-        </a>
+        </WijkCtaButton>
       </div>
     </div>
   )

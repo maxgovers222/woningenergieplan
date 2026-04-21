@@ -153,6 +153,10 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
           roiResult: state.roiResult, meterkastAnalyse: state.meterkastAnalyse,
           plaatsingsAnalyse: state.plaatsingsAnalyse, omvormerAnalyse: state.omvormerAnalyse,
           isdeSchatting: state.roiResult?.isdeSchatting, gdprConsent: form.gdprConsent,
+          utmSource: state.utmParams?.source,
+          utmMedium: state.utmParams?.medium,
+          utmCampaign: state.utmParams?.campaign,
+          landingPage: state.utmParams?.landingPage,
         }),
       })
       if (!res.ok) {
