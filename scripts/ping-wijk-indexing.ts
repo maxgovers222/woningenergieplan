@@ -170,7 +170,7 @@ async function main(): Promise<void> {
     const url = `${BASE_URL}${slug}`
 
     if (dryRun) {
-      console.log(`[DRY-RUN] ${url}`)
+      console.log(`[DRY-RUN] ✓ gepinged: ${url}`)
       successCount++
       continue
     }
