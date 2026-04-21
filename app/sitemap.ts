@@ -17,13 +17,12 @@ export async function generateSitemaps() {
   ]
 }
 
-export default async function sitemap({ id }: { id: string | Promise<string> }): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
   // id = provincie slug (e.g. 'noord-holland') — matches DB storage format
-  const resolvedId = await Promise.resolve(id)
   const now = new Date()
 
   // Kennisbank sitemap
-  if (resolvedId === 'kennisbank') {
+  if (id === 'kennisbank') {
     try {
       const articles = await getAllPublishedKennisbank()
       return [
@@ -39,7 +38,7 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
   }
 
   // Nieuws sitemap
-  if (resolvedId === 'nieuws') {
+  if (id === 'nieuws') {
     try {
       const articles = await getAllPublishedNieuws()
       return [
@@ -55,22 +54,23 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
   }
 
   // Provincie sitemaps
-  let pages: Awaited<ReturnType<typeof getPseoPagesByProvincie>> = []
-  try {
-    pages = await getPseoPagesByProvincie(resolvedId)
-  } catch {
-    return []
-  }
-
-  // Provincie-overzichtspagina
+  // Provincie-overzichtspagina — altijd aanwezig als fallback
   const provincieUrl = [{
-    url: `https://saldeerscan.nl/${resolvedId}`,
+    url: `https://saldeerscan.nl/${id}`,
     lastModified: now,
     changeFrequency: 'monthly' as const,
     priority: 0.9,
   }]
 
-  // Stad-overzichtspagina's (unieke stads uit de wijk-slugs)
+  let pages: Awaited<ReturnType<typeof getPseoPagesByProvincie>> = []
+  try {
+    pages = await getPseoPagesByProvincie(id)
+  } catch {
+    // Als de DB-query faalt, return minimaal de provincie-overzichtspagina
+    return provincieUrl
+  }
+
+  // Stad-overzichtspagina's (unieke steden uit de wijk-slugs)
   const stadSlugs = new Set(
     pages
       .map(p => p.slug.split('/').slice(0, 3).join('/'))
