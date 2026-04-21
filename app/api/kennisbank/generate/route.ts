@@ -1,4 +1,5 @@
 import { generateKennisbankContent } from '@/lib/gemini'
+import { notifyGoogleIndexing } from '@/lib/google-indexing'
 import { buildArticleSchema } from '@/lib/json-ld'
 import { getAllKennisbankSlugs, upsertKennisbankArticle } from '@/lib/kennisbank'
 
@@ -39,6 +40,8 @@ export async function POST(request: Request) {
     relatedSlugs: content.relatedSlugs ?? [],
     status: 'published',
   })
+
+  await notifyGoogleIndexing(`https://saldeerscan.nl/kennisbank/${slug}`).catch(() => {})
 
   return Response.json({ ok: true, slug })
 }

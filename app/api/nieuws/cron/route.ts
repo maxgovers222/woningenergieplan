@@ -1,4 +1,5 @@
 import { generateNieuwsContent } from '@/lib/gemini'
+import { notifyGoogleIndexing } from '@/lib/google-indexing'
 import { buildArticleSchema } from '@/lib/json-ld'
 import { getRecentNieuwsTitles, upsertNieuwsArticle } from '@/lib/nieuws'
 
@@ -78,6 +79,8 @@ export async function GET(request: Request) {
     status: 'published',
     publishedAt: now,
   })
+
+  await notifyGoogleIndexing(`https://saldeerscan.nl/nieuws/${baseSlug}`).catch(() => {})
 
   return Response.json({ ok: true, slug: baseSlug })
 }
