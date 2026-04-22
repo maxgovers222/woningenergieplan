@@ -98,7 +98,7 @@ function SuccessState({ state }: { state: FunnelState }) {
       {/* Bevestiging header */}
       <div className="text-center pb-2">
         <div className="w-14 h-14 bg-emerald-950/30 border border-emerald-500/40 rounded-full flex items-center justify-center mx-auto mb-3">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
             <path d="M6 16l6 6L26 8" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
@@ -417,7 +417,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
                 form.gdprConsent ? 'bg-amber-500 border-amber-500' : errors.gdprConsent ? 'bg-transparent border-red-400' : 'bg-transparent border-white/20 group-hover:border-amber-500',
               ].join(' ')}>
                 {form.gdprConsent && (
-                  <svg className="w-full h-full text-slate-950" viewBox="0 0 16 16" fill="none">
+                  <svg className="w-full h-full text-slate-950" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8l3 3 7-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}
