@@ -122,6 +122,17 @@ export async function getPseoPagesByProvincie(provincie: string) {
   return data ?? []
 }
 
+export async function getStratenByProvincie(provincie: string) {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('slug, generated_at')
+    .eq('provincie', provincie)
+    .eq('status', 'published')
+    .not('straat', 'is', null)
+    .order('aantal_woningen', { ascending: false, nullsFirst: false })
+  return data ?? []
+}
+
 export async function getWijkenByStad(provincie: string, stad: string) {
   const { data } = await supabaseAdmin
     .from('pseo_pages')
