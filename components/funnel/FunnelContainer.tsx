@@ -123,6 +123,20 @@ export function FunnelContainer({ initialAdres = '', initialWijk = '', initialSt
     return () => clearTimeout(t)
   }, [state])
 
+  // Track funnel abandonment on page unload (only if no lead submitted yet)
+  useEffect(() => {
+    const handleUnload = () => {
+      if (!state.leadId) {
+        trackEvent('funnel_abandoned', {
+          step: state.step,
+          max_step_reached: state.step,
+        })
+      }
+    }
+    window.addEventListener('beforeunload', handleUnload)
+    return () => window.removeEventListener('beforeunload', handleUnload)
+  }, [state.step, state.leadId])
+
   // Track lead submission
   useEffect(() => {
     if (state.leadId) trackEvent('lead_submitted', { lead_id: state.leadId })
