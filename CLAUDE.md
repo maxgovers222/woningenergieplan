@@ -113,10 +113,10 @@ supabase/migrations/
 
 ## Database tabellen
 
-- **leads** — volledig verrijkt lead record; GDPR-constraint blokkeert B2B export zonder consent
-- **pseo_pages** — gegenereerde pagina's (slug, SEO content, JSON-LD, stats); kolom `status` (draft/published)
-- **netcongestie_cache** — postcode-prefix → ROOD/ORANJE/GROEN (TTL 24h)
-- **b2b_partners** — webhook URL, HMAC key hash, lead filter (min score, provincie, etc.)
+- **leads** — volledig verrijkt lead record; GDPR-constraint blokkeert B2B export zonder consent. Kwalificatievelden: `is_eigenaar` (BOOLEAN), `heeft_panelen` (BOOLEAN), `wijk` (TEXT). RLS ingeschakeld — alleen service_role heeft toegang.
+- **pseo_pages** — gegenereerde pagina's (slug, SEO content, JSON-LD, stats); kolom `status` (draft/published). RLS ingeschakeld.
+- **netcongestie_cache** — postcode-prefix → ROOD/ORANJE/GROEN (TTL 24h). RLS ingeschakeld.
+- **b2b_partners** — webhook URL, HMAC key hash, lead filter (min score, provincie, etc.). RLS ingeschakeld.
 
 ## Kritieke architectuurbeslissingen
 
@@ -189,6 +189,18 @@ wijk-pSEO CTA linkt naar `/check?wijk=[wijk]&stad=[stad]` om de URL handshake te
 - **Telefoon**: landselector (NL +31 / BE +32 / DE +49 / LU +352) + regex per land. Opgeslagen in internationaal formaat (`+31612345678`). Live groen vinkje toont genormaliseerd nummer zodra het valide is.
 - `normalizePhone(raw, code)` strip leading zero + prepend country code
 - `validatePhone(raw, code)` regex per land via `COUNTRIES` array
+
+### Lead kwalificatievragen (Step 6)
+Twee toggle-vragen vóór het formulier die commerciële segmentatie mogelijk maken voor B2B inkopers:
+- **Eigenaar/huurder** → `is_eigenaar BOOLEAN` — filtert onkwalificeerbare huurders eruit
+- **Heeft al panelen** → `heeft_panelen BOOLEAN` — bepaalt product (installatie vs. batterij/upgrade)
+Beide zijn optioneel (null = niet ingevuld). Vragen zijn pill-buttons, niet verplicht voor submit.
+
+### Lead datakwaliteit
+- `stad` gebruikt `state.stad` (pSEO pre-fill) als primaire bron, valt terug op `extractStad(adres)` — split op komma's zodat "Den Haag" intact blijft
+- `provincie` valt terug op `bagData.postcode.substring(0,4)` als netcongestie ontbreekt
+- `huisnummer` wordt expliciet gestuurd vanuit `bagData.huisnummer`
+- `wijk` wordt opgeslagen als de gebruiker via een pSEO wijk-pagina binnenkomt
 
 ### Interne linking structuur
 Breadcrumbs: Home → Provincie → Stad → Wijk op alle pSEO pagina's. Provincie pagina's linken naar alle steden. Stad pagina's linken naar alle wijken. Wijk CTAs linken naar `/check?wijk=...&stad=...`. Sitemap bevat alle drie niveaus. Wijkpagina's bevatten ook een "Andere wijken in {stad}" sectie (max 6 links, via `getWijkenByStad()`) voor extra interne linking.
@@ -280,6 +292,8 @@ UPDATE pseo_pages
 SET netcongestie_status = 'ROOD'
 WHERE stad = 'bergen-op-zoom' AND provincie = 'noord-brabant';
 ```
+
+Migraties uitgevoerd t/m `20260422000003_rls.sql`. Alle tabellen hebben RLS ingeschakeld (apr 2026).
 
 ## Verificatie checklist
 
