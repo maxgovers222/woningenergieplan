@@ -219,6 +219,23 @@ export default async function KennisbankArtikel({ params }: { params: Promise<Pa
               </svg>
               Alle kennisbank artikelen
             </Link>
+
+            {/* CTA naar funnel */}
+            <div className="mt-6 p-4 rounded-xl border border-amber-500/20 bg-amber-950/10">
+              <p className="text-xs text-amber-300/70 uppercase tracking-wider mb-2">Gratis berekenen</p>
+              <p className="text-sm text-slate-300 mb-3">
+                Bekijk hoeveel uw woning bespaart vóór 2027.
+              </p>
+              <Link
+                href="/check"
+                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-sm transition-colors"
+              >
+                Bekijk uw woning
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Link>
+            </div>
           </aside>
         </div>
       </div>

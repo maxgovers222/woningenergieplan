@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { getPseoPagesByProvincie } from '@/lib/pseo'
+import { getPseoPagesByProvincie, getStratenByProvincie } from '@/lib/pseo'
 import { getAllPublishedKennisbank } from '@/lib/kennisbank'
 import { getAllPublishedNieuws } from '@/lib/nieuws'
 
@@ -69,8 +69,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }]
 
   let pages: Awaited<ReturnType<typeof getPseoPagesByProvincie>> = []
+  let straten: Awaited<ReturnType<typeof getStratenByProvincie>> = []
   try {
-    pages = await getPseoPagesByProvincie(id)
+    ;[pages, straten] = await Promise.all([
+      getPseoPagesByProvincie(id),
+      getStratenByProvincie(id),
+    ])
   } catch {
     // Als de DB-query faalt, return minimaal de provincie-overzichtspagina
     return provincieUrl
@@ -97,5 +101,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     priority: 0.8,
   }))
 
-  return [...provincieUrl, ...stadUrls, ...wijkUrls]
+  // Straat-pagina's
+  const straatUrls = straten.map(p => ({
+    url: `https://saldeerscan.nl${p.slug}`,
+    lastModified: p.generated_at ? new Date(p.generated_at) : now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  return [...provincieUrl, ...stadUrls, ...wijkUrls, ...straatUrls]
 }

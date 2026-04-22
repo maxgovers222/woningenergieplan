@@ -122,6 +122,17 @@ export async function getPseoPagesByProvincie(provincie: string) {
   return data ?? []
 }
 
+export async function getStratenByProvincie(provincie: string) {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('slug, generated_at')
+    .eq('provincie', provincie)
+    .eq('status', 'published')
+    .not('straat', 'is', null)
+    .order('aantal_woningen', { ascending: false, nullsFirst: false })
+  return data ?? []
+}
+
 export async function getWijkenByStad(provincie: string, stad: string) {
   const { data } = await supabaseAdmin
     .from('pseo_pages')
@@ -161,6 +172,48 @@ export async function getStaddenByProvincie(provincie: string) {
   return Array.from(map.entries())
     .map(([stad, totalWoningen]) => ({ stad, totalWoningen }))
     .sort((a, b) => b.totalWoningen - a.totalWoningen)
+}
+
+// Haalt andere straten op in dezelfde wijk (voor interne linking)
+export async function getStratenByWijk(
+  provincie: string,
+  stad: string,
+  wijk: string,
+  excludeStraat: string,
+  limit = 6
+): Promise<Array<{ straat: string; provincie: string; stad: string; wijk: string }>> {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('straat, provincie, stad, wijk')
+    .eq('provincie', provincie)
+    .eq('stad', stad)
+    .eq('wijk', wijk)
+    .neq('straat', excludeStraat)
+    .not('straat', 'is', null)
+    .eq('status', 'published')
+    .order('aantal_woningen', { ascending: false })
+    .limit(limit)
+  return (data ?? []).filter(r => r.straat !== null) as Array<{ straat: string; provincie: string; stad: string; wijk: string }>
+}
+
+// Haalt top straten op voor een wijk (voor interne linking op wijkpagina)
+export async function getTopStratenByWijk(
+  provincie: string,
+  stad: string,
+  wijk: string,
+  limit = 8
+): Promise<Array<{ straat: string; provincie: string; stad: string; wijk: string }>> {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('straat, provincie, stad, wijk')
+    .eq('provincie', provincie)
+    .eq('stad', stad)
+    .eq('wijk', wijk)
+    .not('straat', 'is', null)
+    .eq('status', 'published')
+    .order('aantal_woningen', { ascending: false })
+    .limit(limit)
+  return (data ?? []).filter((r): r is { straat: string; provincie: string; stad: string; wijk: string } => r.straat !== null)
 }
 
 export async function getTopStadden(limit = 100) {

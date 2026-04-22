@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import type { MeterkastAnalyse, PlaatsingsAnalyse, OmvormerAnalyse } from './types'
+import { trackEvent } from '@/lib/analytics'
 
 type VisionType = 'meterkast' | 'plaatsingslocatie' | 'omvormer'
 type VisionResult = MeterkastAnalyse | PlaatsingsAnalyse | OmvormerAnalyse
@@ -70,6 +71,7 @@ export function PhotoUpload({ visionType, onAnalysed, title, description }: Phot
           throw new Error(errData.error ?? 'Vision analyse mislukt')
         }
         const data = await res.json() as { analyse: VisionResult }
+        trackEvent('photo_uploaded', { type: visionType })
         onAnalysed(data.analyse)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Onbekende fout bij analyse')

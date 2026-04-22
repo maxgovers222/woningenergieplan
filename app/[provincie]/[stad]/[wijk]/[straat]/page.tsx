@@ -1,7 +1,7 @@
 import { cache } from 'react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getPseoPage, getTopPseoPages } from '@/lib/pseo'
+import { getPseoPage, getTopPseoPages, getStratenByWijk } from '@/lib/pseo'
 import { LocalSchema } from '@/components/pseo/LocalSchema'
 
 // Deduplicate Supabase fetches: generateMetadata + page component share one request
@@ -49,6 +49,11 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       siteName: 'SaldeerScan.nl',
       locale: 'nl_NL',
       type: 'website',
+      images: [{
+        url: `https://saldeerscan.nl/api/og?titel=${encodeURIComponent(page.titel ?? `Energiebesparing ${p.straat}`)}&score=${page.gemHealthScore ?? ''}&status=${page.netcongestieStatus ?? ''}&type=straat`,
+        width: 1200,
+        height: 630,
+      }],
     },
   }
 }
@@ -57,6 +62,8 @@ export default async function PseoStreetPage({ params }: { params: Promise<Param
   const p = await params
   const page = await getCachedPseoPage(p)
   if (!page) notFound()
+
+  const andereStraten = await getStratenByWijk(p.provincie, p.stad, p.wijk, p.straat, 6)
 
   const healthLabel = page.gemHealthScore
     ? page.gemHealthScore >= 75 ? 'Uitstekend'
@@ -97,6 +104,19 @@ export default async function PseoStreetPage({ params }: { params: Promise<Param
 
       {/* Hero */}
       <section className="px-4 py-16 max-w-4xl mx-auto">
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-2 text-xs text-slate-500 mb-6 flex-wrap">
+          <a href="/" className="hover:text-amber-400 transition-colors">Home</a>
+          <span>/</span>
+          <a href={`/${p.provincie}`} className="hover:text-amber-400 transition-colors capitalize">{p.provincie.replace(/-/g, ' ')}</a>
+          <span>/</span>
+          <a href={`/${p.provincie}/${p.stad}`} className="hover:text-amber-400 transition-colors capitalize">{p.stad.replace(/-/g, ' ')}</a>
+          <span>/</span>
+          <a href={`/${p.provincie}/${p.stad}/${p.wijk}`} className="hover:text-amber-400 transition-colors capitalize">{p.wijk.replace(/-/g, ' ')}</a>
+          <span>/</span>
+          <span className="text-slate-400 capitalize">{p.straat.replace(/-/g, ' ')}</span>
+        </nav>
+
         <div className="flex flex-wrap gap-3 mb-6">
           {page.netcongestieStatus && netBadge[page.netcongestieStatus as keyof typeof netBadge] && (
             <span className={`text-xs font-mono px-3 py-1 rounded-full ${netBadge[page.netcongestieStatus as keyof typeof netBadge].color}`}>
@@ -111,6 +131,11 @@ export default async function PseoStreetPage({ params }: { params: Promise<Param
           {healthLabel && (
             <span className="text-xs font-mono px-3 py-1 rounded-full text-amber-400 bg-amber-900/30">
               Score: {healthLabel}
+            </span>
+          )}
+          {page.aantalWoningen && (
+            <span className="text-xs font-mono px-3 py-1 rounded-full text-slate-400 bg-slate-800">
+              {page.aantalWoningen} woningen
             </span>
           )}
         </div>
@@ -154,6 +179,41 @@ export default async function PseoStreetPage({ params }: { params: Promise<Param
                 <p className="text-slate-400 text-sm leading-relaxed">{faq.antwoord}</p>
               </div>
             ))}
+          </div>
+        </section>
+      )}
+      {/* Andere straten in wijk */}
+      {andereStraten.length > 0 && (
+        <section className="px-4 pb-16 max-w-4xl mx-auto">
+          <div className="border-t border-slate-800 pt-10">
+            <p className="text-slate-500 text-xs uppercase tracking-wider mb-4">
+              Andere straten in {p.wijk.replace(/-/g, ' ')}
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {andereStraten.map((s) => (
+                <a
+                  key={s.straat}
+                  href={`/${s.provincie}/${s.stad}/${s.wijk}/${s.straat}`}
+                  className="bg-slate-900/40 border border-white/10 hover:border-white/20 rounded-xl p-4 transition-all hover:bg-slate-900/60 group"
+                >
+                  <p className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors capitalize" style={{ fontFamily: 'var(--font-heading)' }}>
+                    {s.straat.replace(/-/g, ' ')}
+                  </p>
+                  <p className="text-xs font-mono mt-1 text-slate-500">
+                    {s.wijk.replace(/-/g, ' ')}
+                  </p>
+                </a>
+              ))}
+            </div>
+            <a
+              href={`/${p.provincie}/${p.stad}/${p.wijk}`}
+              className="inline-flex items-center gap-2 mt-4 text-sm text-slate-400 hover:text-amber-300 transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Bekijk alle straten in {p.wijk.replace(/-/g, ' ')}
+            </a>
           </div>
         </section>
       )}

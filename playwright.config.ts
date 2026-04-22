@@ -15,6 +15,10 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['iPhone 13'] },
+    },
   ],
   // Do not start dev server automatically — run `npm run dev` first
   webServer: {
