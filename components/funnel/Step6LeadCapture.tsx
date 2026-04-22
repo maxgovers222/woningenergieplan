@@ -8,7 +8,8 @@ import { ResultsDashboard } from './ResultsDashboard'
 
 function extractStad(adres?: string): string {
   if (!adres) return 'Nederland'
-  const parts = adres.split(/[,\s]+/)
+  // Split on commas only — preserves multi-word cities like "Den Haag", "'s-Hertogenbosch"
+  const parts = adres.split(',').map(s => s.trim()).filter(Boolean)
   return parts[parts.length - 1] || 'Nederland'
 }
 
@@ -147,8 +148,13 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
         body: JSON.stringify({
           naam: form.naam.trim(), email: form.email.trim().toLowerCase(), telefoon: normalizePhone(form.telefoon, form.countryCode),
           adres: state.adres, postcode: state.bagData?.postcode,
-          stad: state.bagData ? extractStad(state.adres) : null,
-          provincie: state.netcongestie?.postcodePrefix ? extractProvincie(state.netcongestie.postcodePrefix) : null,
+          huisnummer: state.bagData?.huisnummer ? String(state.bagData.huisnummer) : null,
+          stad: state.stad || (state.bagData ? extractStad(state.adres) : null),
+          provincie: state.netcongestie?.postcodePrefix
+            ? extractProvincie(state.netcongestie.postcodePrefix)
+            : state.bagData?.postcode
+              ? extractProvincie(state.bagData.postcode.substring(0, 4))
+              : null,
           lat: state.bagData?.lat, lon: state.bagData?.lon, bagData: state.bagData,
           healthScore: state.healthScore?.score, netcongestieStatus: state.netcongestie?.status,
           roiResult: state.roiResult, meterkastAnalyse: state.meterkastAnalyse,

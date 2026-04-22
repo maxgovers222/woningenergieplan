@@ -198,6 +198,7 @@ export function Step1Adres({ state, dispatch }: Step1AdresProps) {
       dispatch({ type: 'SET_BAG_DATA', bagData: {
         bouwjaar: bagData.bouwjaar, oppervlakte: bagData.oppervlakte,
         woningtype: bagData.woningtype, postcode: bagData.postcode,
+        huisnummer: bagData.huisnummer ?? null,
         dakOppervlakte: bagData.dakOppervlakte, lat: bagData.lat, lon: bagData.lon,
       }})
 

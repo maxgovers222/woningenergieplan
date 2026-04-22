@@ -83,6 +83,7 @@ export interface FunnelState {
     oppervlakte: number | null
     woningtype: string | null
     postcode: string | null
+    huisnummer: number | null
     dakOppervlakte: number | null
     lat: number
     lon: number
