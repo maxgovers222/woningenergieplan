@@ -6,12 +6,13 @@ import { PDFDownloadButton } from './PDFDownloadButton'
 
 function ReferralButtons({ stad }: { stad?: string }) {
   const [copied, setCopied] = useState(false)
-  const url = `https://saldeerscan.nl/check?ref=buur&utm_source=referral&utm_medium=whatsapp`
+  const waUrl = `https://saldeerscan.nl/check?ref=buur&utm_source=referral&utm_medium=whatsapp`
+  const copyUrl = `https://saldeerscan.nl/check?ref=buur&utm_source=referral&utm_medium=copy`
   const stadLabel = stad ? stad.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Nederland'
-  const waText = encodeURIComponent(`Ik heb net mijn huis laten scannen voor de 2027 salderingswijziging via SaldeerScan.nl. Jij loopt hetzelfde risico in ${stadLabel}! Doe hier de gratis check: ${url}`)
+  const waText = encodeURIComponent(`Ik heb net mijn huis laten scannen voor de 2027 salderingswijziging via SaldeerScan.nl. Jij loopt hetzelfde risico in ${stadLabel}! Doe hier de gratis check: ${waUrl}`)
 
   function handleCopy() {
-    navigator.clipboard.writeText(url).then(() => {
+    navigator.clipboard.writeText(copyUrl).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }).catch(() => {})
@@ -287,9 +288,9 @@ export function ResultsDashboard({ state }: { state: FunnelState }) {
         <p className="text-xs font-semibold text-amber-400 mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Wat gebeurt er nu?</p>
         <div className="space-y-4">
           {[
-            { dot: 'amber', label: 'Uw dossier verstuurd naar max 3 installateurs', timing: 'nu' },
-            { dot: 'amber', label: 'Gecertificeerde adviseur belt u op uw telefoonnummer', timing: 'binnen 24 uur' },
-            { dot: 'green', label: 'Gratis locatiecheck en definitief advies', timing: 'binnen 1 week' },
+            { dot: 'amber', label: 'Uw aanvraag is geregistreerd', timing: 'nu' },
+            { dot: 'amber', label: 'Een adviseur neemt zo spoedig mogelijk contact met u op', timing: '' },
+            { dot: 'green', label: 'Vrijblijvende offerte op maat', timing: '' },
           ].map(({ dot, label, timing }, i) => (
             <div key={i} className="flex items-start gap-3">
               <div className={`mt-1 w-2 h-2 rounded-full shrink-0 animate-pulse ${dot === 'amber' ? 'bg-amber-400' : 'bg-emerald-400'}`} />
@@ -301,7 +302,7 @@ export function ResultsDashboard({ state }: { state: FunnelState }) {
           ))}
         </div>
         <p className="text-[10px] font-mono text-white/20 mt-4">
-          Niet gebeld na 24 uur? Mail ons: info@saldeerscan.nl
+          Nog geen contact ontvangen? Mail ons: info@saldeerscan.nl
         </p>
       </div>
 
@@ -315,17 +316,19 @@ export function ResultsDashboard({ state }: { state: FunnelState }) {
       </div>
 
       {/* Download */}
-      <div className="space-y-3 no-print">
-        <PDFDownloadButton state={state} />
+      <div className="flex flex-col sm:flex-row gap-3 no-print">
+        <div className="flex-1">
+          <PDFDownloadButton state={state} />
+        </div>
         <button
           onClick={() => window.print()}
-          className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-full font-semibold text-sm border border-white/10 bg-white/5 text-white/50 hover:bg-white/8 hover:text-white/70 transition-all"
+          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-full text-sm border border-white/10 bg-white/5 text-white/40 hover:bg-white/8 hover:text-white/60 transition-all"
           style={{ fontFamily: 'var(--font-sans)' }}
         >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Afdrukken / opslaan als PDF
+          Afdrukken
         </button>
       </div>
 

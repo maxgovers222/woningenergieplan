@@ -186,20 +186,6 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
 
       {isde && <IsdeSummaryCard {...isde} />}
 
-      {/* PDF delivery promise */}
-      <div className="flex items-center gap-3 bg-emerald-950/30 border border-emerald-600/30 rounded-xl px-4 py-3">
-        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M14 2v6h6M9 13h6M9 17h4" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-        <div>
-          <p className="text-sm font-bold text-emerald-400">U ontvangt gratis een PDF-rapport</p>
-          <p className="text-xs font-mono text-white/40 mt-0.5">Direct naar uw e-mail · Geen verplichtingen</p>
-        </div>
-      </div>
-
       {/* Floating report preview card */}
       <div className="bg-slate-900/40 border border-white/10 rounded-2xl p-5">
         <div className="flex items-center gap-1.5 text-[10px] font-mono text-amber-400 uppercase tracking-widest mb-3">
@@ -267,8 +253,8 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
               <circle cx="15" cy="7" r="3" stroke="#f59e0b" strokeWidth="1.5"/>
               <path d="M3 19c0-3.314 2.686-6 6-6h6c3.314 0 6 2.686 6 6" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
-            <span className="text-[11px] font-bold text-amber-400">Max 3 installateurs</span>
-            <span className="text-[9px] font-mono text-white/35 uppercase tracking-wide">ontvangen uw aanvraag</span>
+            <span className="text-[11px] font-bold text-amber-400">Lokale installateurs</span>
+            <span className="text-[9px] font-mono text-white/35 uppercase tracking-wide">in uw regio</span>
           </div>
           {/* Binnen 24 uur */}
           <div className="flex flex-col items-center text-center gap-1 py-2">
@@ -276,8 +262,8 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
               <circle cx="12" cy="12" r="9" stroke="#f59e0b" strokeWidth="1.5"/>
               <path d="M12 7v5l3 3" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span className="text-[11px] font-bold text-white/80">Binnen 24 uur</span>
-            <span className="text-[9px] font-mono text-white/35 uppercase tracking-wide">belt een adviseur</span>
+            <span className="text-[11px] font-bold text-white/80">Vrijblijvend</span>
+            <span className="text-[9px] font-mono text-white/35 uppercase tracking-wide">geen verplichtingen</span>
           </div>
         </div>
       </div>
@@ -297,8 +283,8 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
         {watGebeurtOpen && (
           <div className="bg-slate-950/40 border border-white/8 rounded-xl p-4 mt-2 space-y-3">
             {[
-              'Uw dossier gaat naar maximaal 3 gecertificeerde installateurs in uw regio',
-              'Een adviseur belt u binnen 24 uur (ma–vr, 08:00–18:00)',
+              'Uw aanvraag wordt doorgestuurd naar gecertificeerde installateurs in uw regio',
+              'Een adviseur neemt zo spoedig mogelijk contact met u op',
               'U ontvangt een vrijblijvende offerte op maat — geen verplichtingen',
             ].map((tekst, i) => (
               <div key={i} className="flex gap-3">
@@ -415,7 +401,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
         </button>
 
         <p className="text-[10px] font-mono text-center flex items-center justify-center gap-2 flex-wrap">
-          <span className="text-amber-400/60 font-bold">Max 3 installateurs ontvangen uw dossier</span>
+          <span className="text-amber-400/60 font-bold">Vrijblijvend advies</span>
           <span className="text-white/20">·</span>
           <span className="text-white/30">Geen verplichtingen</span>
           <span className="text-white/20">·</span>

@@ -259,6 +259,15 @@ npx tsx scripts/ping-wijk-indexing.ts --batch=START,END  # Google Indexing API, 
 - `info@saldeerscan.nl` — algemeen contact (footer, JSON-LD), forward via ImprovMX → Gmail
 - `privacy@saldeerscan.nl` — AVG-verzoeken (privacyverklaring), forward via ImprovMX → Gmail
 
+## TODO na hoofdinkoper
+
+Zodra er een overeenkomst is met een hoofdinkoper, moeten de volgende vage placeholders worden aangescherpt met concrete claims:
+
+- `components/funnel/Step6LeadCapture.tsx` — TrustBar kolom 2 ("Lokale installateurs") en kolom 3 ("Vrijblijvend") → vervangen door echte SLA-tekst
+- `components/funnel/Step6LeadCapture.tsx` — Collapsible stap 2 ("zo spoedig mogelijk") → vervangen door concrete termijn
+- `components/funnel/ResultsDashboard.tsx` — Tijdlijn stap 2 ("zo spoedig mogelijk") en stap 3 ("zo spoedig mogelijk") → concrete termijn
+- `app/api/leads/route.ts` — Email intro + "Wat nu?" stap 1 ("zo spoedig mogelijk") → concrete termijn
+
 ## Google Indexing API voortgang
 
 Limiet 200 URLs/dag. Voortgang (apr 2026): batch 0–400 gedaan → volgende: `--batch=400,600`
