@@ -1,6 +1,6 @@
 'use client'
 
-import { useReducer, useEffect, useState } from 'react'
+import { useReducer, useEffect, useState, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import type { FunnelState, FunnelAction, HealthScoreResult, ROIResult, MeterkastAnalyse, PlaatsingsAnalyse, OmvormerAnalyse } from './types'
 import { trackEvent } from '@/lib/analytics'
@@ -127,6 +127,15 @@ export function FunnelContainer({ initialAdres = '', initialWijk = '', initialSt
   useEffect(() => {
     if (state.leadId) trackEvent('lead_submitted', { lead_id: state.leadId })
   }, [state.leadId])
+
+  // Scroll to top on forward navigation only
+  const prevStepRef = useRef(state.step)
+  useEffect(() => {
+    if (state.step > prevStepRef.current && typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    prevStepRef.current = state.step
+  }, [state.step])
 
   function resumeSavedState() {
     if (!savedState) return
