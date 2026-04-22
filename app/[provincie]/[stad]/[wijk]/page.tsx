@@ -457,9 +457,18 @@ export default async function WijkPage({ params }: { params: Promise<Params> }) 
             placeholder={`Uw adres in ${wijkDisplay}, bijv. Hoofdstraat 1`}
           />
           <div className="mt-2 flex flex-wrap items-center justify-center gap-5 text-sm" style={{ color: 'rgba(255,255,255,0.25)' }}>
-            <span>✓ BAG-data</span>
-            <span>✓ AVG-compliant</span>
-            <span>✓ Geen account nodig</span>
+            <span className="flex items-center gap-1.5">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              BAG-data
+            </span>
+            <span className="flex items-center gap-1.5">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              AVG-compliant
+            </span>
+            <span className="flex items-center gap-1.5">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Geen account nodig
+            </span>
           </div>
         </div>
       </section>
