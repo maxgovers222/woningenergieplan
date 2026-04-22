@@ -128,6 +128,11 @@ export function FunnelContainer({ initialAdres = '', initialWijk = '', initialSt
     if (state.leadId) trackEvent('lead_submitted', { lead_id: state.leadId })
   }, [state.leadId])
 
+  // Scroll to top on forward step navigation
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [state.step])
+
   function resumeSavedState() {
     if (!savedState) return
     if (savedState.wijk || savedState.stad) {
