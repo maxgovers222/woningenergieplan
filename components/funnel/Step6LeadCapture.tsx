@@ -51,6 +51,8 @@ interface LeadFormData {
   telefoon: string
   countryCode: CountryCode
   gdprConsent: boolean
+  isEigenaar: boolean | null
+  heeftPanelen: boolean | null
 }
 
 function normalizePhone(raw: string, code: CountryCode): string {
@@ -113,7 +115,7 @@ function SuccessState({ state }: { state: FunnelState }) {
 const inputBase = 'w-full bg-slate-900/60 border rounded-lg px-4 py-3 text-white placeholder:text-white/30 font-sans text-sm transition-colors focus:outline-none amber-glow'
 
 export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
-  const [form, setForm] = useState<LeadFormData>({ naam: '', email: '', telefoon: '', countryCode: '+31', gdprConsent: false })
+  const [form, setForm] = useState<LeadFormData>({ naam: '', email: '', telefoon: '', countryCode: '+31', gdprConsent: false, isEigenaar: null, heeftPanelen: null })
   const [errors, setErrors] = useState<Partial<Record<keyof LeadFormData | 'submit', string>>>({})
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -161,6 +163,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
           roiResult: state.roiResult, meterkastAnalyse: state.meterkastAnalyse,
           plaatsingsAnalyse: state.plaatsingsAnalyse, omvormerAnalyse: state.omvormerAnalyse,
           isdeSchatting: state.roiResult?.isdeSchatting, gdprConsent: form.gdprConsent,
+          isEigenaar: form.isEigenaar, heeftPanelen: form.heeftPanelen,
           utmSource: state.utmParams?.source,
           utmMedium: state.utmParams?.medium,
           utmCampaign: state.utmParams?.campaign,
@@ -271,6 +274,51 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
             </svg>
             <span className="text-[11px] font-bold text-white/80">Vrijblijvend</span>
             <span className="text-[9px] font-mono text-white/35 uppercase tracking-wide">geen verplichtingen</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Kwalificatievragen */}
+      <div className="space-y-3">
+        <div className="bg-slate-900/40 border border-white/8 rounded-xl p-4 space-y-3">
+          <p className="text-xs font-sans text-white/50 uppercase tracking-widest">Bent u eigenaar van de woning?</p>
+          <div className="grid grid-cols-2 gap-2">
+            {([true, false] as const).map((val) => (
+              <button
+                key={String(val)}
+                type="button"
+                onClick={() => setForm(f => ({ ...f, isEigenaar: val }))}
+                className={[
+                  'py-2.5 rounded-lg text-sm font-sans border transition-all',
+                  form.isEigenaar === val
+                    ? 'bg-amber-500/15 border-amber-500/60 text-amber-400 font-semibold'
+                    : 'bg-slate-800/40 border-white/8 text-white/40 hover:border-white/20 hover:text-white/60',
+                ].join(' ')}
+              >
+                {val ? 'Ja, eigenaar' : 'Nee, huurder'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-slate-900/40 border border-white/8 rounded-xl p-4 space-y-3">
+          <p className="text-xs font-sans text-white/50 uppercase tracking-widest">Heeft u al zonnepanelen?</p>
+          <div className="grid grid-cols-2 gap-2">
+            {([false, true] as const).map((val) => (
+              <button
+                key={String(val)}
+                type="button"
+                onClick={() => setForm(f => ({ ...f, heeftPanelen: val }))}
+                className={[
+                  'py-2.5 rounded-lg text-sm font-sans border transition-all',
+                  form.heeftPanelen === val
+                    ? 'bg-amber-500/15 border-amber-500/60 text-amber-400 font-semibold'
+                    : 'bg-slate-800/40 border-white/8 text-white/40 hover:border-white/20 hover:text-white/60',
+                ].join(' ')}
+              >
+                {val ? 'Ja, ik heb panelen' : 'Nee, nog geen panelen'}
+              </button>
+            ))}
           </div>
         </div>
       </div>

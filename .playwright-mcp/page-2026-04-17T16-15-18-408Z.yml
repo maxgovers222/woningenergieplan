@@ -1,0 +1,255 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "SaldeerScan.nl" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img [ref=e7]
+          - generic [ref=e10]: SaldeerScan.nl
+        - generic [ref=e11]:
+          - generic [ref=e12]: Leidsche Rijn, Utrecht
+          - link "Gratis analyseren" [ref=e13] [cursor=pointer]:
+            - /url: /check?wijk=leidsche-rijn&stad=utrecht
+    - generic [ref=e14]:
+      - img
+      - generic [ref=e15]:
+        - paragraph [ref=e16]:
+          - link "Home" [ref=e17] [cursor=pointer]:
+            - /url: /
+          - text: ·
+          - link "Utrecht" [ref=e18] [cursor=pointer]:
+            - /url: /utrecht
+          - text: ·
+          - link "Utrecht" [ref=e19] [cursor=pointer]:
+            - /url: /utrecht/utrecht
+          - text: · Leidsche Rijn
+        - generic [ref=e20]: Utrecht · Gratis wijkanalyse 2027
+        - heading "Leidsche Rijn" [level=1] [ref=e22]
+        - paragraph [ref=e23]: Utrecht · Utrecht
+        - generic [ref=e24]:
+          - generic [ref=e25]: 🏆
+          - text: Top 10% meest rendabele wijken in Utrecht
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - paragraph [ref=e28]: Grid Status
+            - generic [ref=e31]: ORANJE
+            - paragraph [ref=e32]: Druk stroomnet
+          - generic [ref=e33]:
+            - paragraph [ref=e34]: Gem. Bouwjaar
+            - paragraph [ref=e35]: "2001"
+            - paragraph [ref=e36]: BAG 2026
+          - generic [ref=e37]:
+            - paragraph [ref=e38]: Energy Score
+            - paragraph [ref=e39]: 78/100
+            - paragraph [ref=e40]: Uitstekend
+        - link "Start mijn gratis Saldeercheck" [ref=e41] [cursor=pointer]:
+          - /url: /check?wijk=leidsche-rijn&stad=utrecht
+          - text: Start mijn gratis Saldeercheck
+          - img [ref=e42]
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - img [ref=e46]
+            - text: BAG officiële data
+          - generic [ref=e48]:
+            - img [ref=e49]
+            - text: AVG-compliant
+          - generic [ref=e51]:
+            - img [ref=e52]
+            - text: Volledig gratis
+    - generic [ref=e55]:
+      - generic [ref=e56]:
+        - paragraph [ref=e57]: 2027 Urgentie
+        - heading "Besparing per jaar in Leidsche Rijn" [level=2] [ref=e58]:
+          - text: Besparing per jaar
+          - text: in Leidsche Rijn
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - paragraph [ref=e62]: Salderingsafbouw
+            - heading "Wat kost wachten u in Leidsche Rijn?" [level=3] [ref=e63]
+          - generic [ref=e64]:
+            - paragraph [ref=e65]: Verlies vanaf 2027
+            - paragraph [ref=e66]: −€1008/jaar
+        - generic [ref=e68]:
+          - list [ref=e70]:
+            - listitem [ref=e71]:
+              - img "Met batterij legend icon" [ref=e72]
+              - text: Met batterij
+            - listitem [ref=e74]:
+              - img "Zonder batterij (Leidsche Rijn) legend icon" [ref=e75]
+              - text: Zonder batterij (Leidsche Rijn)
+          - application [ref=e77]:
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - generic [ref=e98]: "2024"
+                - generic [ref=e100]: "2025"
+                - generic [ref=e102]: "2026"
+                - generic [ref=e104]: "2027"
+                - generic [ref=e106]: "2028"
+              - generic [ref=e107]:
+                - generic [ref=e109]: €0
+                - generic [ref=e111]: €300
+                - generic [ref=e113]: €600
+                - generic [ref=e115]: €900
+                - generic [ref=e117]: €1200
+              - generic [ref=e118]: 2027 →
+        - generic [ref=e119]:
+          - generic [ref=e120]: ⚡
+          - paragraph [ref=e121]:
+            - text: "Shock 2027: Verlies door saldering in Leidsche Rijn:"
+            - generic [ref=e122]: €1008 per jaar
+            - text: vanaf 1 januari 2027 voor woningen zonder batterijopslag.
+        - generic [ref=e124]:
+          - paragraph [ref=e125]: Salderingsregeling eindigt over
+          - generic [ref=e126]:
+            - generic [ref=e127]:
+              - generic [ref=e128]: "258"
+              - generic [ref=e129]: Dagen
+            - generic [ref=e130]:
+              - generic [ref=e131]: "06"
+              - generic [ref=e132]: Uren
+            - generic [ref=e133]:
+              - generic [ref=e134]: "44"
+              - generic [ref=e135]: Min
+            - generic [ref=e136]:
+              - generic [ref=e137]: "41"
+              - generic [ref=e138]: Sec
+          - paragraph [ref=e139]: Per 1 januari 2027 daalt uw opbrengst van 28% naar 0%
+    - generic [ref=e141]:
+      - generic [ref=e142]:
+        - paragraph [ref=e143]: Wijkanalyse
+        - heading "Energieprofiel Leidsche Rijn" [level=2] [ref=e144]
+      - generic [ref=e145]:
+        - generic [ref=e146]:
+          - generic [ref=e147]:
+            - paragraph [ref=e148]: Bouwtechnische analyse
+            - heading "Woningkenmerken & zonnepotentieel" [level=3] [ref=e149]
+            - generic [ref=e150]:
+              - paragraph [ref=e151]: De energietransitie versnelt, en voor u als woningeigenaar in Leidsche Rijn, Utrecht, is het cruciaal om nu actie te ondernemen, vooral met het oog op 2027.
+              - paragraph [ref=e152]:
+                - strong [ref=e153]: "Uw woning in Leidsche Rijn: klaar voor de toekomst?"
+                - text: Met een gemiddeld bouwjaar van 2001, bezit u een woning die doorgaans uitstekend geschikt is voor zonnepanelen. De daken in Leidsche Rijn zijn vaak in goede conditie, wat de installatie vereenvoudigt. Bovendien is de groepenkast in veel woningen uit 2001 al geschikt voor een omvormer, al kan een kleine upgrade wenselijk zijn om optimale prestaties te garanderen. Dit betekent dat de drempel voor u om te investeren in duurzame energie lager is dan u wellicht denkt. De geschatte jaarlijkse besparing voor woningen in Leidsche Rijn ligt tussen de
+                - strong [ref=e154]: €700 en €1.100
+                - text: ", met een terugverdientijd van 7 tot 10 jaar, zelfs met de naderende wijzigingen in de salderingsregeling."
+              - paragraph [ref=e155]:
+                - strong [ref=e156]: "Netcongestie in Leidsche Rijn: een urgente realiteit."
+                - text: Het stroomnet in Leidsche Rijn is niet langer een onuitputtelijke bron. Netbeheer Nederland heeft de status voor netcongestie hier op
+                - strong [ref=e157]: ORANJE
+                - text: gezet. Dit betekent dat het netwerk van Liander/Enexis toenemend vol raakt en er in de komende jaren beperkingen op teruglevering te verwachten zijn. Voor u als woningeigenaar in Leidsche Rijn heeft dit directe gevolgen voor de financiële opbrengst van uw zonnepanelen. Waar u voorheen onbeperkt stroom kon terugleveren en dit volledig kon salderen, wordt de capaciteit nu een kritische factor. De afbouw van de salderingsregeling, die definitief stopt op
+                - strong [ref=e158]: 1 januari 2027
+                - text: ", maakt deze situatie nog urgenter. Een thuisbatterij wordt hierdoor steeds relevanter en transformeert van een luxe naar een noodzakelijke investering om uw zelfverbruik te maximaliseren en onafhankelijk te blijven van het overvolle net."
+          - generic [ref=e159]:
+            - paragraph [ref=e160]: Netwerkbeperkingen
+            - heading "Netcapaciteit & batterijopties" [level=3] [ref=e161]
+            - generic [ref=e162]:
+              - paragraph [ref=e163]:
+                - strong [ref=e164]: De salderingsregeling en uw portemonnee na 2027.
+                - text: De
+                - strong [ref=e165]: salderingsregeling
+                - text: heeft jarenlang een belangrijke stimulans geboden voor de aanschaf van zonnepanelen. Echter, de regeling wordt stapsgewijs afgebouwd en stopt per
+                - strong [ref=e166]: 1 januari 2027
+                - text: . Voor woningen in Leidsche Rijn, die een significante woningpopulatie vertegenwoordigen, betekent dit dat de financiële calculatie verandert. Zonder volledige saldering wordt het essentieel om zoveel mogelijk van uw zelf opgewekte stroom direct te verbruiken. Uw woning heeft een Energie-rendementsscore van 78/100, wat al een goede basis is, maar met zonnepanelen en een thuisbatterij kunt u deze score significant verbeteren en uw afhankelijkheid van het net en de fluctuerende energieprijzen minimaliseren. De jaarlijkse besparing van
+                - strong [ref=e167]: €700–€1.100
+                - text: blijft haalbaar, mits u slim investeert in opslag.
+              - paragraph [ref=e168]:
+                - strong [ref=e169]: "Thuisbatterijen: de buffer voor uw energieonafhankelijkheid."
+                - text: Met de netcongestie status
+                - strong [ref=e170]: ORANJE
+                - text: in Leidsche Rijn en de afbouw van de
+                - strong [ref=e171]: salderingsregeling
+                - text: is de thuisbatterij geen optie meer, maar een strategische zet. Een thuisbatterij stelt u in staat om overdag opgewekte zonne-energie op te slaan en te gebruiken wanneer de zon niet schijnt, bijvoorbeeld 's avonds of in de wintermaanden. Dit maximaliseert uw zelfverbruik en vermindert de noodzaak om stroom terug te leveren aan een overvol net. Voor woningen uit 2001 in Leidsche Rijn, waar de dakconditie doorgaans goed is, is de installatie van een thuisbatterij een logische volgende stap na zonnepanelen. Het is een investering die de terugverdientijd van 7-10 jaar voor uw zonnepanelen helpt behouden en u beschermt tegen toekomstige onzekerheden op de energiemarkt.
+              - paragraph [ref=e172]:
+                - strong [ref=e173]: Waarom nu actie ondernemen in Leidsche Rijn?
+                - text: De tijd om te profiteren van de huidige voordelen en u voor te bereiden op de toekomst is nu. Met de netcongestie en de naderende afbouw van de salderingsregeling per 1 januari 2027, is uitstel geen optie. Uw woning in Leidsche Rijn, met het gemiddelde bouwjaar 2001, biedt een uitstekende basis voor een energiezuinige toekomst. De potentiële besparing van
+                - strong [ref=e174]: €700–€1.100
+                - text: per jaar ligt binnen handbereik. Wees proactief en zorg ervoor dat uw woning klaar is voor de energie-uitdagingen van morgen. Vraag vandaag nog uw gratis SaldeerScan aan en ontdek de concrete mogelijkheden voor uw specifieke situatie in Leidsche Rijn, Utrecht. Het is tijd om de controle over uw energierekening terug te nemen.
+        - generic [ref=e176]:
+          - paragraph [ref=e177]: Quick Facts — Leidsche Rijn
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - generic [ref=e180]:
+                - paragraph [ref=e181]: Gem. bouwjaar
+                - paragraph [ref=e182]: BAG registratie
+              - generic [ref=e183]: "2001"
+            - generic [ref=e184]:
+              - generic [ref=e185]:
+                - paragraph [ref=e186]: Energy Score
+                - paragraph [ref=e187]: Uitstekend
+              - generic [ref=e188]: 78/100
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - paragraph [ref=e191]: Est. besparing
+                - paragraph [ref=e192]: zonder batterij, 2024
+              - generic [ref=e193]: €1008/jr
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - paragraph [ref=e196]: Verlies 2027
+                - paragraph [ref=e197]: bij 0% saldering
+              - generic [ref=e198]: −€1008/jr
+            - generic [ref=e199]:
+              - generic [ref=e200]:
+                - paragraph [ref=e201]: Netcongestie
+                - paragraph [ref=e202]: Druk stroomnet
+              - generic [ref=e203]: ORANJE
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - paragraph [ref=e206]: Wijk Ranking
+                - paragraph [ref=e207]: rendement in Utrecht
+              - generic [ref=e208]: 🏆 Top 10%
+          - link "Mijn adres scannen →" [ref=e209] [cursor=pointer]:
+            - /url: /check?wijk=leidsche-rijn&stad=utrecht
+    - generic [ref=e211]:
+      - generic [ref=e212]:
+        - paragraph [ref=e213]: Veelgestelde vragen
+        - heading "Alles over zonnepanelen in Leidsche Rijn" [level=2] [ref=e214]:
+          - text: Alles over zonnepanelen
+          - text: in Leidsche Rijn
+      - generic [ref=e215]:
+        - generic [ref=e216]:
+          - heading "Wat betekent de ORANJE netcongestie status voor mijn woning in Leidsche Rijn?" [level=3] [ref=e217]
+          - paragraph [ref=e218]: De ORANJE status betekent dat het stroomnet in Leidsche Rijn overbelast raakt. Dit kan leiden tot beperkingen op de teruglevering van uw zonne-energie aan het net, waardoor de financiële voordelen van zonnepanelen verminderen. Een thuisbatterij wordt hierdoor essentieel om uw zelfverbruik te maximaliseren.
+        - generic [ref=e219]:
+          - heading "Is mijn woning uit 2001 in Leidsche Rijn geschikt voor zonnepanelen?" [level=3] [ref=e220]
+          - paragraph [ref=e221]: Absoluut. Woningen met een gemiddeld bouwjaar van 2001 in Leidsche Rijn hebben doorgaans een uitstekende dakconditie en de groepenkast is vaak al geschikt voor een omvormer. Dit maakt uw woning zeer geschikt voor zonnepanelen, met een geschatte besparing van €700–€1.100 per jaar.
+        - generic [ref=e222]:
+          - heading "Hoe beïnvloedt de afbouw van de salderingsregeling na 2027 mijn investering in Utrecht?" [level=3] [ref=e223]
+          - paragraph [ref=e224]: Na 1 januari 2027 stopt de salderingsregeling. Dit betekent dat u minder vergoeding krijgt voor teruggeleverde stroom. Voor woningen in Utrecht, inclusief Leidsche Rijn, is het daarom cruciaal om te investeren in een thuisbatterij om zoveel mogelijk van uw zelf opgewekte stroom te verbruiken en zo de jaarlijkse besparing van €700–€1.100 te behouden.
+        - generic [ref=e225]:
+          - heading "Kom ik in aanmerking voor ISDE-subsidie voor zonnepanelen of thuisbatterijen in Utrecht?" [level=3] [ref=e226]
+          - paragraph [ref=e227]: De ISDE-subsidie is primair gericht op isolatie, warmtepompen en zonneboilers. Voor zonnepanelen is er geen landelijke subsidie meer, maar voor een thuisbatterij in combinatie met een energiebeheersysteem zijn er soms lokale initiatieven of leningen. Controleer de specifieke regelingen van de gemeente Utrecht en de provincie voor de meest actuele informatie.
+        - generic [ref=e228]:
+          - heading "Waarom is een thuisbatterij zo belangrijk voor woningen in Leidsche Rijn met de huidige netcongestie?" [level=3] [ref=e229]
+          - paragraph [ref=e230]: Met de ORANJE netcongestie status in Leidsche Rijn en de naderende afbouw van de salderingsregeling, zorgt een thuisbatterij ervoor dat u uw eigen opgewekte zonne-energie kunt opslaan en gebruiken wanneer u het nodig heeft. Dit vermindert uw afhankelijkheid van het overvolle net, maximaliseert uw zelfverbruik en garandeert dat u optimaal profiteert van uw zonnepanelen, zelfs met beperkingen op teruglevering.
+    - generic [ref=e232]:
+      - heading "Bereken wat Leidsche Rijn u kunt besparen" [level=2] [ref=e233]:
+        - text: Bereken wat Leidsche Rijn
+        - text: u kunt besparen
+      - paragraph [ref=e234]: Voer uw adres in voor een analyse op maat — BAG-data, ROI-berekening en ISDE subsidie check in 3 minuten.
+      - generic [ref=e235]:
+        - textbox "Uw adres in Leidsche Rijn, bijv. Hoofdstraat 1" [ref=e237]
+        - button "Start gratis analyse" [disabled] [ref=e238]
+      - generic [ref=e239]:
+        - generic [ref=e240]: ✓ BAG-data
+        - generic [ref=e241]: ✓ AVG-compliant
+        - generic [ref=e242]: ✓ Geen account nodig
+    - contentinfo [ref=e243]:
+      - generic [ref=e244]:
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - generic [ref=e247]:
+              - img [ref=e249]
+              - generic [ref=e252]: SaldeerScan.nl
+            - paragraph [ref=e253]: Gratis energieanalyse voor Nederlandse woningeigenaren.
+          - link "Gratis analyseren" [ref=e254] [cursor=pointer]:
+            - /url: /check
+        - generic [ref=e255]:
+          - generic [ref=e256]:
+            - link "Privacyverklaring" [ref=e257] [cursor=pointer]:
+              - /url: /privacy
+            - link "Analyseer uw woning" [ref=e258] [cursor=pointer]:
+              - /url: /check
+          - paragraph [ref=e259]: © 2026 SaldeerScan.nl
+  - button "Open Next.js Dev Tools" [ref=e265] [cursor=pointer]:
+    - img [ref=e266]
+  - alert [ref=e269]
+  - generic [ref=e270]: €0

@@ -67,6 +67,10 @@ export async function POST(request: Request) {
       consent_ip: ip,
       consent_tekst: 'Ja, ik ontvang graag mijn Persoonlijke 2027-Rapport. Ik geef toestemming om mijn scandata te laten valideren door een gecertificeerde energie-expert van SaldeerScan.nl in mijn regio voor een definitief configuratie-advies.',
 
+      // Kwalificatie
+      is_eigenaar: typeof body.isEigenaar === 'boolean' ? body.isEigenaar : null,
+      heeft_panelen: typeof body.heeftPanelen === 'boolean' ? body.heeftPanelen : null,
+
       // Funnel metadata
       funnel_step: 6,
       funnel_completed: true,
