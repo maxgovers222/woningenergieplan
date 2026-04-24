@@ -84,6 +84,7 @@ async function seed() {
           gem_bouwjaar: page.gem_bouwjaar,
           netcongestie_status: page.netcongestie,
           aantal_woningen: 150,
+          status: 'published',
           generated_at: new Date().toISOString(),
         }, { onConflict: 'slug' })
 
