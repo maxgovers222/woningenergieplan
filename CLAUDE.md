@@ -282,7 +282,17 @@ Zodra er een overeenkomst is met een hoofdinkoper, moeten de volgende vage place
 
 ## Google Indexing API voortgang
 
-Limiet 200 URLs/dag. Voortgang (apr 2026): batch 0–400 gedaan → volgende: `--batch=400,600`
+Limiet 200 URLs/dag. Voortgang (apr 2026): batch 0–600 gedaan → volgende: `--batch=600,800`
+
+GSC-prioriteit URLs (morgen pingen — dagquota was op):
+```
+npx tsx scripts/ping-wijk-indexing.ts --batch=600,800
+```
+Daarna handmatig pingen (niet in wijk-batch, aparte URLs):
+- https://saldeerscan.nl/nieuws
+- https://saldeerscan.nl/flevoland
+- https://saldeerscan.nl/utrecht/rhenen
+- en de overige 40 URLs uit GSC "gecrawld niet geïndexeerd" lijst
 
 ## Handmatige DB-fixes (eenmalig uitvoeren in Supabase SQL editor)
 
