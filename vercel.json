@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.saldeerscan.nl" }],
+      "destination": "https://saldeerscan.nl/:path*",
+      "permanent": true
+    }
+  ],
   "crons": [
     {
       "path": "/api/nieuws/cron",
