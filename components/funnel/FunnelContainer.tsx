@@ -51,6 +51,7 @@ function funnelReducer(state: FunnelState, action: FunnelAction): FunnelState {
     case 'SET_DAKRICHTING': return { ...state, dakrichting: action.dakrichting }
     case 'SET_VERBRUIK_BRON': return { ...state, verbruik_bron: action.bron }
     case 'SET_HUISHOUDEN': return { ...state, huishouden_grootte: action.grootte }
+    case 'SET_IS_EIGENAAR': return { ...state, is_eigenaar: action.is_eigenaar }
     default: return state
   }
 }
@@ -71,6 +72,7 @@ function makeInitialState(initialAdres = '', initialWijk = '', initialStad = '')
     dakrichting: null,
     verbruik_bron: 'schatting',
     huishouden_grootte: null,
+    is_eigenaar: null,
     leadId: null,
     loading: false,
     error: null,

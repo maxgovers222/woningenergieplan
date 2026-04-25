@@ -181,6 +181,28 @@ export function ResultsDashboard({ state }: { state: FunnelState }) {
   return (
     <div className="print-page space-y-6 py-2">
 
+      {/* Huurder waarschuwing */}
+      {state.is_eigenaar === false && (
+        <div className="p-4 bg-amber-950/20 border border-amber-500/25 rounded-xl">
+          <p className="text-sm font-sans text-amber-300/80 leading-relaxed">
+            <strong className="text-amber-300">Let op: u heeft aangegeven huurder te zijn.</strong>{' '}
+            Overleg eerst met uw verhuurder of woningcorporatie — wij sturen uw rapport ter informatie.
+            Zonnepanelen zijn in huurwoningen steeds vaker mogelijk.
+          </p>
+        </div>
+      )}
+
+      {/* Netcongestie ROOD callout */}
+      {state.netcongestie?.status === 'ROOD' && (
+        <div className="p-4 bg-amber-950/20 border border-amber-500/25 rounded-xl">
+          <p className="text-sm font-sans text-amber-300/80 leading-relaxed">
+            <strong className="text-amber-300">Netcongestie in uw wijk.</strong>{' '}
+            Uw terugleving kan beperkt zijn door netcapaciteitstekort.
+            Een thuisbatterij is extra waardevol — u slaat overdag op wat u 's avonds gebruikt.
+          </p>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between no-print">
         <div>

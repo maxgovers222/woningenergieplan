@@ -294,7 +294,7 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
               <button
                 key={String(val)}
                 type="button"
-                onClick={() => setForm(f => ({ ...f, isEigenaar: val }))}
+                onClick={() => { setForm(f => ({ ...f, isEigenaar: val })); dispatch({ type: 'SET_IS_EIGENAAR', is_eigenaar: val }) }}
                 className={[
                   'py-2.5 rounded-lg text-sm font-sans border transition-all',
                   form.isEigenaar === val

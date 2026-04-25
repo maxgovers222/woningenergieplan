@@ -103,6 +103,7 @@ export interface FunnelState {
   dakrichting: 'Zuid' | 'Oost/West' | 'Noord' | null
   verbruik_bron: 'schatting' | 'gebruiker'
   huishouden_grootte: 1 | 2 | 3 | null
+  is_eigenaar: boolean | null
   leadId: string | null
   loading: boolean
   error: string | null
@@ -132,3 +133,4 @@ export type FunnelAction =
   | { type: 'SET_DAKRICHTING'; dakrichting: FunnelState['dakrichting'] }
   | { type: 'SET_VERBRUIK_BRON'; bron: FunnelState['verbruik_bron'] }
   | { type: 'SET_HUISHOUDEN'; grootte: FunnelState['huishouden_grootte'] }
+  | { type: 'SET_IS_EIGENAAR'; is_eigenaar: boolean | null }
