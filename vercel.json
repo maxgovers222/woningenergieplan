@@ -4,7 +4,7 @@
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.saldeerscan.nl" }],
       "destination": "https://saldeerscan.nl/:path*",
-      "permanent": true
+      "permanent": false
     }
   ],
   "crons": [
