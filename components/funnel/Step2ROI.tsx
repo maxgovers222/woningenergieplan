@@ -132,6 +132,7 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
             aantalPanelenOverride: panelen,
             kwhPerPaneel,
             netcongestieStatus: state.netcongestie?.status,
+            dakrichting: state.dakrichting,
           }),
         })
         if (res.ok) {
@@ -148,7 +149,7 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
     }, delay)
     return () => { if (debounceTimer.current) clearTimeout(debounceTimer.current) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [verbruik, dakOpp, panelen, kwhPerPaneel])
+  }, [verbruik, dakOpp, panelen, kwhPerPaneel, state.dakrichting])
 
   const roi = localRoi
 
@@ -158,7 +159,10 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
 
       <div className="bg-slate-900/40 border border-white/10 rounded-xl p-4 space-y-5">
         <div className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Parameters</div>
-        <SliderInput label="Huidig verbruik" value={verbruik} onChange={setVerbruik} min={1000} max={verbruikMax} step={100} unit="kWh/jaar"
+        <SliderInput label="Huidig verbruik" value={verbruik} onChange={(v) => {
+          setVerbruik(v)
+          dispatch({ type: 'SET_VERBRUIK_BRON', bron: 'gebruiker' })
+        }} min={1000} max={verbruikMax} step={100} unit="kWh/jaar"
           note={state.bagData?.oppervlakte ? `Geschat o.b.v. ${state.bagData.oppervlakte}m²` : undefined} />
         <SliderInput label="Dakoppervlak" value={dakOpp} onChange={setDakOpp} min={10} max={dakMax} step={1} unit="m²"
           note={state.bagData?.dakOppervlakte ? `BAG: ${state.bagData.dakOppervlakte}m²` : undefined} />
@@ -179,6 +183,48 @@ export function Step2ROI({ state, dispatch }: Step2ROIProps) {
               <option key={t.kwhPerPaneel} value={t.kwhPerPaneel}>{t.label}</option>
             ))}
           </select>
+        </div>
+
+        {/* Dakrichting */}
+        <div className="space-y-2">
+          <label className="text-xs font-mono text-white/40 uppercase tracking-widest">
+            Dakrichting <span className="normal-case">(optioneel)</span>
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {(['Zuid', 'Oost/West', 'Noord'] as const).map(richting => (
+              <button
+                key={richting}
+                type="button"
+                onClick={() => dispatch({ type: 'SET_DAKRICHTING', dakrichting: state.dakrichting === richting ? null : richting })}
+                className={[
+                  'py-2 px-2 rounded-lg text-xs font-mono border transition-colors',
+                  state.dakrichting === richting
+                    ? 'bg-amber-500 text-slate-950 border-amber-500'
+                    : 'bg-slate-800/50 text-white/50 border-white/10 hover:border-amber-500/40',
+                ].join(' ')}
+              >
+                {richting}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'SET_DAKRICHTING', dakrichting: null })}
+              className={[
+                'py-2 px-2 rounded-lg text-xs font-mono border transition-colors',
+                state.dakrichting === null
+                  ? 'bg-slate-700 text-white border-slate-500'
+                  : 'bg-slate-800/50 text-white/30 border-white/10 hover:border-white/30',
+              ].join(' ')}
+            >
+              Onbekend
+            </button>
+          </div>
+          {state.dakrichting === 'Noord' && (
+            <p className="text-[10px] font-mono text-amber-400/80">Noord-dak levert ~57% minder op. Batterij is extra waardevol.</p>
+          )}
+          {state.dakrichting === 'Zuid' && (
+            <p className="text-[10px] font-mono text-emerald-400/80">Zuid-dak: optimale opbrengst (+23% t.o.v. gemiddeld).</p>
+          )}
         </div>
       </div>
 

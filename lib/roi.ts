@@ -14,6 +14,15 @@ const KWH_PER_PANEEL = 350     // kWh/jaar per 400Wp paneel NL gemiddeld
 const M2_PER_PANEEL = 4        // m² dakoppervlak per paneel (incl. tussenruimte)
 const DAK_BENUTTING = 0.55     // 55% van dakoppervlak bruikbaar (realistisch: niet alle vlakken zijn zuidgericht)
 
+const DAKRICHTING_FACTOR: Record<string, number> = {
+  'Zuid': 1.23,
+  'Oost/West': 0.80,
+  'Noord': 0.43,
+}
+
+const EIGENGEBRUIK_BASIS: Record<number, number> = { 1: 0.22, 2: 0.30, 3: 0.45 }
+const EIGENGEBRUIK_BATTERIJ: Record<number, number> = { 1: 0.55, 2: 0.70, 3: 0.80 }
+
 export interface ROIInput {
   oppervlakte: number          // Woonoppervlak m²
   bouwjaar: number
@@ -22,6 +31,8 @@ export interface ROIInput {
   budgetEur?: number           // Optioneel: max investering
   aantalPanelenOverride?: number // Optioneel: gebruiker overschrijft paneel berekening
   kwhPerPaneel?: number        // Optioneel: paneelefficiëntie (standaard 350)
+  dakrichting?: 'Zuid' | 'Oost/West' | 'Noord' | null
+  huishouden_grootte?: 1 | 2 | 3 | null
 }
 
 export interface ShockEffect2027 {
@@ -85,15 +96,18 @@ export function berekenROI(input: ROIInput): ROIResult {
   const aantalPanelen = input.aantalPanelenOverride
     ?? Math.floor((input.dakOppervlakte * DAK_BENUTTING) / M2_PER_PANEEL)
   const kwhPerPaneel = input.kwhPerPaneel ?? KWH_PER_PANEEL
-  const productieKwh = aantalPanelen * kwhPerPaneel
+  const richtingFactor = input.dakrichting ? (DAKRICHTING_FACTOR[input.dakrichting] ?? 1.0) : 1.0
+  const productieKwh = Math.round(aantalPanelen * kwhPerPaneel * richtingFactor)
   const saldering2026 = SALDERING_SCHEMA[2026]
 
-  // Eigengebruik: direct van panelen (zonder batterij ~30% van productie)
-  const eigenGebruikBasisKwh = Math.min(productieKwh * 0.30, verbruikKwh)
+  // Eigengebruik factor op basis van huishoudenssamenstelling
+  const basisFactor = input.huishouden_grootte ? (EIGENGEBRUIK_BASIS[input.huishouden_grootte] ?? 0.30) : 0.30
+  const batterijFactor = input.huishouden_grootte ? (EIGENGEBRUIK_BATTERIJ[input.huishouden_grootte] ?? 0.70) : 0.70
+
+  const eigenGebruikBasisKwh = Math.min(productieKwh * basisFactor, verbruikKwh)
   const teruglevering = productieKwh - eigenGebruikBasisKwh
 
-  // Eigengebruik met batterij: ~70% van productie
-  const eigenGebruikBatterijKwh = Math.min(productieKwh * 0.70, verbruikKwh)
+  const eigenGebruikBatterijKwh = Math.min(productieKwh * batterijFactor, verbruikKwh)
   const terugleveringBatterij = productieKwh - eigenGebruikBatterijKwh
 
   // Scenario A: Nu installeren (2026, 28% saldering)

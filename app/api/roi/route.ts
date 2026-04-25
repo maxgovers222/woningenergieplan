@@ -8,7 +8,8 @@ export async function POST(request: Request) {
 
   const body = await request.json()
   const { oppervlakte, bouwjaar, dakOppervlakte, huidigVerbruikKwh, budgetEur,
-          energielabel, netcongestieStatus, aantalPanelenOverride, kwhPerPaneel } = body
+          energielabel, netcongestieStatus, aantalPanelenOverride, kwhPerPaneel,
+          dakrichting, huishouden_grootte } = body
 
   if (!oppervlakte || !bouwjaar || !dakOppervlakte) {
     return Response.json({ error: 'oppervlakte, bouwjaar en dakOppervlakte zijn verplicht' }, { status: 400 })
@@ -27,6 +28,8 @@ export async function POST(request: Request) {
     oppervlakte, bouwjaar, dakOppervlakte, huidigVerbruikKwh, budgetEur,
     aantalPanelenOverride: aantalPanelenOverride ? Number(aantalPanelenOverride) : undefined,
     kwhPerPaneel: kwhPerPaneel ? Number(kwhPerPaneel) : undefined,
+    dakrichting: dakrichting ?? null,
+    huishouden_grootte: huishouden_grootte ?? null,
   }
   const roi = berekenROI(roiInput)
   const health = berekenHealthScore({ bouwjaar, energielabel, dakOppervlakte, netcongestieStatus })

@@ -100,6 +100,9 @@ export interface FunnelState {
   meterkastAnalyse: MeterkastAnalyse | null
   plaatsingsAnalyse: PlaatsingsAnalyse | null
   omvormerAnalyse: OmvormerAnalyse | null
+  dakrichting: 'Zuid' | 'Oost/West' | 'Noord' | null
+  verbruik_bron: 'schatting' | 'gebruiker'
+  huishouden_grootte: 1 | 2 | 3 | null
   leadId: string | null
   loading: boolean
   error: string | null
@@ -126,3 +129,6 @@ export type FunnelAction =
   | { type: 'SET_LOADING'; loading: boolean }
   | { type: 'SET_ERROR'; error: string | null }
   | { type: 'SET_UTM_PARAMS'; utmParams: FunnelState['utmParams'] }
+  | { type: 'SET_DAKRICHTING'; dakrichting: FunnelState['dakrichting'] }
+  | { type: 'SET_VERBRUIK_BRON'; bron: FunnelState['verbruik_bron'] }
+  | { type: 'SET_HUISHOUDEN'; grootte: FunnelState['huishouden_grootte'] }

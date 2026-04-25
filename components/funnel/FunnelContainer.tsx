@@ -48,6 +48,9 @@ function funnelReducer(state: FunnelState, action: FunnelAction): FunnelState {
     case 'SET_LOADING': return { ...state, loading: action.loading }
     case 'SET_ERROR': return { ...state, error: action.error }
     case 'SET_UTM_PARAMS': return { ...state, utmParams: action.utmParams }
+    case 'SET_DAKRICHTING': return { ...state, dakrichting: action.dakrichting }
+    case 'SET_VERBRUIK_BRON': return { ...state, verbruik_bron: action.bron }
+    case 'SET_HUISHOUDEN': return { ...state, huishouden_grootte: action.grootte }
     default: return state
   }
 }
@@ -65,6 +68,9 @@ function makeInitialState(initialAdres = '', initialWijk = '', initialStad = '')
     meterkastAnalyse: null,
     plaatsingsAnalyse: null,
     omvormerAnalyse: null,
+    dakrichting: null,
+    verbruik_bron: 'schatting',
+    huishouden_grootte: null,
     leadId: null,
     loading: false,
     error: null,

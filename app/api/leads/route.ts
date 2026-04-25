@@ -70,6 +70,9 @@ export async function POST(request: Request) {
       // Kwalificatie
       is_eigenaar: typeof body.isEigenaar === 'boolean' ? body.isEigenaar : null,
       heeft_panelen: typeof body.heeftPanelen === 'boolean' ? body.heeftPanelen : null,
+      dakrichting: body.dakrichting ? String(body.dakrichting) : null,
+      verbruik_bron: body.verbruik_bron ? String(body.verbruik_bron) : 'schatting',
+      huishouden_grootte: body.huishouden_grootte ? Number(body.huishouden_grootte) : null,
 
       // Funnel metadata
       funnel_step: 6,

@@ -164,6 +164,9 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
           plaatsingsAnalyse: state.plaatsingsAnalyse, omvormerAnalyse: state.omvormerAnalyse,
           isdeSchatting: state.roiResult?.isdeSchatting, gdprConsent: form.gdprConsent,
           isEigenaar: form.isEigenaar, heeftPanelen: form.heeftPanelen,
+          dakrichting: state.dakrichting,
+          verbruik_bron: state.verbruik_bron,
+          huishouden_grootte: state.huishouden_grootte,
           utmSource: state.utmParams?.source,
           utmMedium: state.utmParams?.medium,
           utmCampaign: state.utmParams?.campaign,
@@ -321,6 +324,34 @@ export function Step6LeadCapture({ state, dispatch }: Step6LeadCaptureProps) {
                 ].join(' ')}
               >
                 {val ? 'Ja, ik heb panelen' : 'Nee, nog geen panelen'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Huishoudensgrootte */}
+        <div className="bg-slate-900/40 border border-white/8 rounded-xl p-4 space-y-3">
+          <p className="text-xs font-sans text-white/50 uppercase tracking-widest">
+            Hoeveel personen in uw woning? <span className="normal-case text-white/30">(optioneel)</span>
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {([
+              { val: 1 as const, label: '1 persoon' },
+              { val: 2 as const, label: '2 personen' },
+              { val: 3 as const, label: '3+ personen' },
+            ]).map(({ val, label }) => (
+              <button
+                key={val}
+                type="button"
+                onClick={() => dispatch({ type: 'SET_HUISHOUDEN', grootte: state.huishouden_grootte === val ? null : val })}
+                className={[
+                  'py-2.5 rounded-lg text-sm font-sans border transition-all',
+                  state.huishouden_grootte === val
+                    ? 'bg-amber-500/15 border-amber-500/60 text-amber-400 font-semibold'
+                    : 'bg-slate-800/40 border-white/8 text-white/40 hover:border-white/20 hover:text-white/60',
+                ].join(' ')}
+              >
+                {label}
               </button>
             ))}
           </div>
