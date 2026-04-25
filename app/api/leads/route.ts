@@ -7,7 +7,7 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 if (!resend) console.warn('[api/leads] RESEND_API_KEY niet ingesteld — bevestigingsmail wordt overgeslagen')
 
 export async function POST(request: Request) {
-  const limitResult = applyRateLimit(request, 10, 3_600_000) // 10 leads per IP per hour
+  const limitResult = await applyRateLimit(request, 10, 3_600_000) // 10 leads per IP per hour
   if (limitResult.response) return limitResult.response
 
   let body: Record<string, unknown>

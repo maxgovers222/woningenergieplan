@@ -2,7 +2,7 @@ import { applyRateLimit } from '@/lib/rate-limit'
 import { berekenHealthScore } from '@/lib/health-score'
 
 export async function GET(request: Request) {
-  const limitResult = applyRateLimit(request)
+  const limitResult = await applyRateLimit(request)
   if (limitResult.response) return limitResult.response
 
   const { searchParams } = new URL(request.url)

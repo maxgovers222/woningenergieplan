@@ -4,7 +4,7 @@ import { getNetcongestie } from '@/lib/netcongestie'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
-  const limitResult = applyRateLimit(request)
+  const limitResult = await applyRateLimit(request)
   if (limitResult.response) return limitResult.response
 
   const { searchParams } = new URL(request.url)

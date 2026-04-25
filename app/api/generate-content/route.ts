@@ -2,7 +2,7 @@ import { applyRateLimit } from '@/lib/rate-limit'
 import { generatePseoContent, PseoContentParams } from '@/lib/gemini'
 
 export async function POST(request: Request) {
-  const limitResult = applyRateLimit(request, 20, 3_600_000) // 20 content req/hour
+  const limitResult = await applyRateLimit(request, 20, 3_600_000) // 20 content req/hour
   if (limitResult.response) return limitResult.response
 
   let params: PseoContentParams

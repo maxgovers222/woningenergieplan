@@ -7,7 +7,7 @@ import {
 type VisionType = 'meterkast' | 'plaatsingslocatie' | 'omvormer'
 
 export async function POST(request: Request) {
-  const limitResult = applyRateLimit(request, 10, 3_600_000) // 10 vision requests per hour
+  const limitResult = await applyRateLimit(request, 10, 3_600_000) // 10 vision requests per hour
   if (limitResult.response) return limitResult.response
 
   let body: { type: VisionType; imageBase64: string }

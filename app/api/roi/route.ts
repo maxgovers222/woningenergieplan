@@ -3,7 +3,7 @@ import { berekenROI, ROIInput } from '@/lib/roi'
 import { berekenHealthScore } from '@/lib/health-score'
 
 export async function POST(request: Request) {
-  const limitResult = applyRateLimit(request, 120, 3_600_000)
+  const limitResult = await applyRateLimit(request, 120, 3_600_000)
   if (limitResult.response) return limitResult.response
 
   const body = await request.json()

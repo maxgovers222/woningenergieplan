@@ -3,7 +3,7 @@ import { getBagData } from '@/lib/bag'
 
 export async function GET(request: Request) {
   // Rate limit by IP
-  const { response: limitResponse, rl } = applyRateLimit(request)
+  const { response: limitResponse, rl } = await applyRateLimit(request)
   if (limitResponse) return limitResponse
 
   const { searchParams } = new URL(request.url)
