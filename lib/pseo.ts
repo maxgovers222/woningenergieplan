@@ -216,6 +216,21 @@ export async function getTopStratenByWijk(
   return (data ?? []).filter((r): r is { straat: string; provincie: string; stad: string; wijk: string } => r.straat !== null)
 }
 
+export async function getWijkenByPostcode(postcodePrefix: string): Promise<Array<{
+  wijk: string; stad: string; provincie: string; netcongestie_status: string | null
+}>> {
+  const { data } = await supabaseAdmin
+    .from('pseo_pages')
+    .select('wijk, stad, provincie, netcongestie_status')
+    .is('straat', null)
+    .not('wijk', 'is', null)
+    .eq('status', 'published')
+    .ilike('postcode_prefix', `${postcodePrefix}%`)
+    .order('aantal_woningen', { ascending: false })
+    .limit(20)
+  return (data ?? []).filter((r): r is { wijk: string; stad: string; provincie: string; netcongestie_status: string | null } => r.wijk !== null)
+}
+
 export async function getTopStadden(limit = 100) {
   const { data } = await supabaseAdmin
     .from('pseo_pages')
