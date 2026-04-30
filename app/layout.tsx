@@ -18,6 +18,13 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "SaldeerScan.nl — Gratis 2027 saldeercheck voor uw woning",
   description: "Ontdek in 3 minuten wat de afschaffing van salderen op 1 januari 2027 voor uw woning betekent. Gratis AI-scan, BAG-data en persoonlijk investeringsrapport.",
+  icons: {
+    icon: [
+      { url: "/icon", type: "image/png", sizes: "32x32" },
+    ],
+    shortcut: [{ url: "/icon", type: "image/png" }],
+    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
+  },
   openGraph: {
     title: "SaldeerScan.nl — Gratis 2027 saldeercheck",
     description: "Hoeveel bespaart u vóór 2027? Gratis AI-scan met BAG-data en persoonlijk investeringsrapport.",

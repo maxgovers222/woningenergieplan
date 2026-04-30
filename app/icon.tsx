@@ -12,24 +12,24 @@ export default function Icon() {
           width: 32,
           height: 32,
           borderRadius: '50%',
-          background: '#020617',
+          background: '#022c22',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          border: '1.5px solid rgba(245,158,11,0.4)',
+          border: '1.5px solid rgba(16,185,129,0.55)',
         }}
       >
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
           <path
             d="M9 2L15.5 6V13L9 17L2.5 13V6L9 2Z"
-            fill="rgba(245,158,11,0.2)"
-            stroke="#f59e0b"
+            fill="rgba(110,231,183,0.2)"
+            stroke="#34d399"
             strokeWidth="1.3"
             strokeLinejoin="round"
           />
           <path
             d="M9 6.5L12 8.5V12L9 14L6 12V8.5L9 6.5Z"
-            fill="#f59e0b"
+            fill="#6ee7b7"
           />
         </svg>
       </div>
