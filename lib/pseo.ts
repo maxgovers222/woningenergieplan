@@ -31,6 +31,7 @@ export async function getPseoPage(params: {
     .from('pseo_pages')
     .select('*')
     .eq('slug', slug)
+    .eq('status', 'published')
     .single()
 
   if (error || !data) return null
@@ -58,6 +59,7 @@ export async function getTopPseoPages(limit = 500) {
   const { data } = await supabaseAdmin
     .from('pseo_pages')
     .select('provincie, stad, wijk, straat')
+    .eq('status', 'published')
     .not('straat', 'is', null)
     .order('aantal_woningen', { ascending: false })
     .limit(limit)
@@ -75,6 +77,7 @@ export async function getWijkPage(params: {
     .from('pseo_pages')
     .select('*')
     .eq('slug', slug)
+    .eq('status', 'published')
     .single()
 
   if (error || !data) return null
@@ -102,6 +105,7 @@ export async function getTopWijken(limit = 500) {
   const { data } = await supabaseAdmin
     .from('pseo_pages')
     .select('provincie, stad, wijk')
+    .eq('status', 'published')
     .not('wijk', 'is', null)
     .is('straat', null)
     .order('aantal_woningen', { ascending: false, nullsFirst: false })

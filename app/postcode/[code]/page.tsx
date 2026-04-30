@@ -35,6 +35,32 @@ export default async function PostcodePage({ params }: Props) {
 
   return (
     <main className="min-h-screen" style={{ background: 'linear-gradient(to bottom, #020617, #0f172a)' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: `Zonnepanelen postcode ${clean}`,
+            description: `Netcongestiestatus en zonnepanelen-potentie voor postcode ${clean} en omgeving.`,
+            url: `https://saldeerscan.nl/postcode/${clean}`,
+            inLanguage: 'nl-NL',
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://saldeerscan.nl' },
+              { '@type': 'ListItem', position: 2, name: `Postcode ${clean}`, item: `https://saldeerscan.nl/postcode/${clean}` },
+            ],
+          }),
+        }}
+      />
       <div className="max-w-4xl mx-auto px-6 py-16">
         <nav className="text-xs font-sans text-slate-500 mb-6">
           <Link href="/" className="hover:text-slate-300 transition-colors">Home</Link>

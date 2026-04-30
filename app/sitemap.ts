@@ -11,6 +11,7 @@ const PROVINCIES = [
 
 export async function generateSitemaps() {
   return [
+    { id: 'core' },
     ...PROVINCIES.map(id => ({ id })),
     { id: 'kennisbank' },
     { id: 'nieuws' },
@@ -20,6 +21,17 @@ export async function generateSitemaps() {
 export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
   // id = provincie slug (e.g. 'noord-holland') — matches DB storage format
   const now = new Date()
+
+  // Core sitemap: belangrijkste site-URLs die discovery versnellen
+  if (id === 'core') {
+    return [
+      { url: 'https://saldeerscan.nl', lastModified: now, changeFrequency: 'daily' as const, priority: 1 },
+      { url: 'https://saldeerscan.nl/check', lastModified: now, changeFrequency: 'daily' as const, priority: 0.95 },
+      { url: 'https://saldeerscan.nl/privacy', lastModified: now, changeFrequency: 'monthly' as const, priority: 0.5 },
+      { url: 'https://saldeerscan.nl/kennisbank', lastModified: now, changeFrequency: 'weekly' as const, priority: 0.9 },
+      { url: 'https://saldeerscan.nl/nieuws', lastModified: now, changeFrequency: 'daily' as const, priority: 0.9 },
+    ]
+  }
 
   // Kennisbank sitemap
   if (id === 'kennisbank') {
